@@ -1,0 +1,35 @@
+<?php
+if ($transcriptionProject) {
+    $this->htmlElement('body')->appendAttribute('class', 'services transcriptions edit');
+} else {
+    $this->htmlElement('body')->appendAttribute('class', 'services transcriptions add');
+}
+$form->prepare();
+?>
+
+<?php if ($transcriptionProject): ?>
+<?php echo $this->pageTitle($this->translate('Edit transcription project'), 1, $this->translate('Services'), $transcriptionProject->label()); ?>
+<?php else: ?>
+<?php echo $this->pageTitle($this->translate('Add transcription project'), 1, $this->translate('Services')); ?>
+<?php endif; ?>
+
+<?php echo $this->form()->openTag($form); ?>
+
+<div id="page-actions">
+    <?php if ($transcriptionProject): ?>
+    <a href="#" id="delete-button" class="delete button"><?php echo $this->translate('Delete'); ?></a>
+    <?php echo $transcriptionProject->link($this->translate('Cancel'), 'show', ['class' => 'button']); ?>
+    <?php else: ?>
+    <?php echo $this->hyperlink($this->translate('Cancel'), $this->url('admin/services/transcription', ['action' => 'browse'], true), ['class' => 'button']); ?>
+    <?php endif; ?>
+    <input type="submit" value="<?php echo $this->escapeHtml($this->translate('Submit')); ?>">
+</div>
+
+<?php echo $this->formCollection($form); ?>
+
+<?php echo $this->formHidden($form->get('transcriptionprojectform_csrf')); ?>
+<?php echo $this->form()->closeTag(); ?>
+
+<?php if ($transcriptionProject): ?>
+<?php echo $this->deleteConfirm($transcriptionProject, $this->translate('transcription project')); ?>
+<?php endif; ?>

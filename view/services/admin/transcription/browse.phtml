@@ -1,0 +1,9 @@
+<?php
+$this->htmlElement('body')->appendAttribute('class', 'services transcriptions browse');
+?>
+
+<?php echo $this->pageTitle($this->translate('Transcriptions'), 1, $this->translate('Services')); ?>
+
+<div id="page-actions">
+    <?php echo $this->hyperlink($this->translate('Add transcription project'), $this->url(null, ['action' => 'add'], true), ['class' => 'button']); ?>
+</div>
