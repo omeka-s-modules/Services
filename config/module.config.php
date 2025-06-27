@@ -30,7 +30,9 @@ return [
         'factories' => [],
     ],
     'api_adapters' => [
-        'invokables' => [],
+        'invokables' => [
+            'services_transcription_project' => Api\Adapter\ServicesTranscriptionProjectAdapter::class,
+        ],
     ],
     'controllers' => [
         'factories' => [
@@ -88,7 +90,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'transcription-id' => [
+                            'transcription-project-id' => [
                                 'type' => Http\Segment::class,
                                 'options' => [
                                     'route' => '/transcription/:id[/:action]',

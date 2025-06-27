@@ -26,7 +26,7 @@ class TranscriptionController extends AbstractActionController
                 if ($response) {
                     $transcriptionProject = $response->getContent();
                     $this->messenger()->addSuccess('Transcription project successfully added.'); // @translate
-                    return $this->redirect()->toRoute('admin/services/transcription-id', ['transcription-id' => $transcriptionProject->id(), 'action' => 'show'], true);
+                    return $this->redirect()->toRoute('admin/services/transcription-project-id', ['id' => $transcriptionProject->id(), 'action' => 'show'], true);
                 }
             } else {
                 $this->messenger()->addFormErrors($form);
@@ -52,7 +52,7 @@ class TranscriptionController extends AbstractActionController
                 $response = $this->api($form)->update('services_transcription_project', $transcriptionProject->id(), $formData);
                 if ($response) {
                     $this->messenger()->addSuccess('Transcription project successfully edited.');
-                    return $this->redirect()->toRoute('admin/services/transcription-id', ['transcription-id' => $transcriptionProject->id(), 'action' => 'show'], true);
+                    return $this->redirect()->toRoute('admin/services/transcription-project-id', ['id' => $transcriptionProject->id(), 'action' => 'show'], true);
                 }
             } else {
                 $this->messenger()->addFormErrors($form);

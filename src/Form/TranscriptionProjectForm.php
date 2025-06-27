@@ -33,9 +33,6 @@ class TranscriptionProjectForm extends Form
                     'common/advanced-search/sort',
                 ],
             ],
-            'attributes' => [
-                'id' => 'category-query',
-            ],
         ]);
 
         $inputFilter = $this->getInputFilter();
