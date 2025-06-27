@@ -12,7 +12,12 @@ class ServicesTranscriptionProjectRepresentation extends AbstractEntityRepresent
 
     public function getJsonLd()
     {
-        return [];
+        $owner = $this->owner();
+        return [
+            'o:owner' => $owner ? $owner->getReference() : null,
+            'o:label' => $this->label(),
+            'o:query' => $this->queryuery(),
+        ];
     }
 
     public function adminUrl($action = null, $canonical = false)
@@ -27,5 +32,20 @@ class ServicesTranscriptionProjectRepresentation extends AbstractEntityRepresent
             ],
             ['force_canonical' => $canonical]
         );
+    }
+
+    public function owner()
+    {
+        return $this->getAdapter('users')->getRepresentation($this->resource->getOwner());
+    }
+
+    public function label()
+    {
+        return $this->resource->getLabel();
+    }
+
+    public function query()
+    {
+        return $this->resource->getQuery();
     }
 }
