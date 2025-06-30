@@ -1,16 +1,20 @@
 <?php
-namespace Services\Api\Adapter;
+namespace Services\Transcription\Api\Adapter;
 
 use Doctrine\ORM\QueryBuilder;
 use Omeka\Api\Adapter\AbstractEntityAdapter;
 use Omeka\Api\Request;
 use Omeka\Stdlib\ErrorStore;
 use Omeka\Entity\EntityInterface;
-use Services\Api\Representation\ServicesTranscriptionProjectRepresentation;
-use Services\Entity\ServicesTranscriptionProject;
+use Services\Transcription\Api\Representation\ProjectRepresentation;
+use Services\Transcription\Entity\ServicesTranscriptionProject;
 
-class ServicesTranscriptionProjectAdapter extends AbstractEntityAdapter
+class ProjectAdapter extends AbstractEntityAdapter
 {
+    protected $sortFields = [
+        'label' => 'label',
+    ];
+
     public function getResourceName()
     {
         return 'services_transcription_project';
@@ -18,7 +22,7 @@ class ServicesTranscriptionProjectAdapter extends AbstractEntityAdapter
 
     public function getRepresentationClass()
     {
-        return ServicesTranscriptionProjectRepresentation::class;
+        return ProjectRepresentation::class;
     }
 
     public function getEntityClass()

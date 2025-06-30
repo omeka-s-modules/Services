@@ -1,14 +1,14 @@
 <?php
-namespace Services\Service\Controller\Admin;
+namespace Services\Transcription\Service\Controller\Admin;
 
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Services\Controller\Admin\TranscriptionController;
+use Services\Transcription\Controller\Admin\IndexController;
 
-class TranscriptionControllerFactory implements FactoryInterface
+class IndexControllerFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $services, $requestedName, array $options = null)
     {
-        return new TranscriptionController;
+        return new IndexController;
     }
 }

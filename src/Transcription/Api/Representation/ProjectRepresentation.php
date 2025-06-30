@@ -1,9 +1,9 @@
 <?php
-namespace Services\Api\Representation;
+namespace Services\Transcription\Api\Representation;
 
 use Omeka\Api\Representation\AbstractEntityRepresentation;
 
-class ServicesTranscriptionProjectRepresentation extends AbstractEntityRepresentation
+class ProjectRepresentation extends AbstractEntityRepresentation
 {
     public function getJsonLdType()
     {
@@ -13,10 +13,13 @@ class ServicesTranscriptionProjectRepresentation extends AbstractEntityRepresent
     public function getJsonLd()
     {
         $owner = $this->owner();
+        $modified = $this->modified();
         return [
             'o:owner' => $owner ? $owner->getReference() : null,
             'o:label' => $this->label(),
-            'o:query' => $this->queryuery(),
+            'o:query' => $this->query(),
+            'o:created' => $this->getDateTime($this->created()),
+            'o:modified' => $modified ? $this->getDateTime($modified) : null,
         ];
     }
 
@@ -24,11 +27,11 @@ class ServicesTranscriptionProjectRepresentation extends AbstractEntityRepresent
     {
         $url = $this->getViewHelper('Url');
         return $url(
-            'admin/services/transcription-project-id',
+            'admin/services/transcription/id',
             [
                 'controller' => 'transcription',
                 'action' => $action,
-                'transcription-project-id' => $this->id(),
+                'id' => $this->id(),
             ],
             ['force_canonical' => $canonical]
         );
@@ -47,5 +50,15 @@ class ServicesTranscriptionProjectRepresentation extends AbstractEntityRepresent
     public function query()
     {
         return $this->resource->getQuery();
+    }
+
+    public function created()
+    {
+        return $this->resource->getCreated();
+    }
+
+    public function modified()
+    {
+        return $this->resource->getModified();
     }
 }

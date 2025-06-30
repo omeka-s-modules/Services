@@ -6,7 +6,7 @@ use Laminas\Router\Http;
 return [
     'entity_manager' => [
         'mapping_classes_paths' => [
-            dirname(__DIR__) . '/src/Entity',
+            dirname(__DIR__) . '/src/Transcription/Entity',
         ],
         'proxy_paths' => [
             dirname(__DIR__) . '/data/doctrine-proxies',
@@ -31,18 +31,28 @@ return [
     ],
     'api_adapters' => [
         'invokables' => [
-            'services_transcription_project' => Api\Adapter\ServicesTranscriptionProjectAdapter::class,
+            'services_transcription_project' => Transcription\Api\Adapter\ProjectAdapter::class,
         ],
     ],
     'controllers' => [
         'factories' => [
             'Services\Controller\Admin\Index' => Service\Controller\Admin\IndexControllerFactory::class,
-            'Services\Controller\Admin\Transcription' => Service\Controller\Admin\TranscriptionControllerFactory::class,
+            'Services\Transcription\Controller\Admin\Index' => Transcription\Service\Controller\Admin\IndexControllerFactory::class,
+        ],
+    ],
+    'controller_plugins' => [
+        'factories' => [
+            'servicesTranscription' => Transcription\Service\ControllerPlugin\ServicesTranscriptionFactory::class,
+        ],
+    ],
+    'view_helpers' => [
+        'factories' => [
+            'servicesTranscription' => Transcription\Service\ViewHelper\ServicesTranscriptionFactory::class,
         ],
     ],
     'form_elements' => [
         'factories' => [
-            'Services\Form\TranscriptionForm' => Service\Form\TranscriptionFormFactory::class,
+            'Transcription\Services\Form\TranscriptionForm' => Transcription\Service\Form\TranscriptionFormFactory::class,
         ],
     ],
     'navigation' => [
@@ -53,9 +63,16 @@ return [
                 'resource' => 'Services\Controller\Admin\Index',
                 'pages' => [
                     [
-                        'label' => 'Transcriptions', // @translate
+                        'label' => 'Transcription', // @translate
                         'route' => 'admin/services/transcription',
-                        'resource' => 'Services\Controller\Admin\Transcription',
+                        'resource' => 'Services\Transcription\Controller\Admin\Index',
+                        'action' => 'browse',
+                        'pages' => [
+                            [
+                                'route' => 'admin/services/transcription/id',
+                                'visible' => false,
+                            ],
+                        ],
                     ],
                 ],
             ],
@@ -80,27 +97,26 @@ return [
                             'transcription' => [
                                 'type' => Http\Segment::class,
                                 'options' => [
-                                    'route' => '/transcription[/:action]',
+                                    'route' => '/transcription/:action',
                                     'constraints' => [
                                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                     ],
                                     'defaults' => [
-                                        'controller' => 'transcription',
-                                        'action' => 'browse',
+                                        '__NAMESPACE__' => 'Services\Transcription\Controller\Admin',
+                                        'controller' => 'index',
                                     ],
                                 ],
-                            ],
-                            'transcription-project-id' => [
-                                'type' => Http\Segment::class,
-                                'options' => [
-                                    'route' => '/transcription/:id[/:action]',
-                                    'constraints' => [
-                                        'id' => '\d+',
-                                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                    ],
-                                    'defaults' => [
-                                        'controller' => 'transcription',
-                                        'action' => 'show',
+                                'may_terminate' => true,
+                                'child_routes' => [
+                                    'id' => [
+                                        'type' => Http\Segment::class,
+                                        'options' => [
+                                            'route' => '/:id',
+                                            'constraints' => [
+                                                'id' => '\d+',
+                                            ],
+                                            'defaults' => [],
+                                        ],
                                     ],
                                 ],
                             ],

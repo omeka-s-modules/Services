@@ -1,5 +1,5 @@
 <?php
-namespace Services\Entity;
+namespace Services\Transcription\Entity;
 
 use DateTime;
 use Doctrine\ORM\Event\LifecycleEventArgs;

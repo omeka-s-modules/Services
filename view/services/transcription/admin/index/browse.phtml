@@ -1,0 +1,63 @@
+<?php
+$this->htmlElement('body')->appendAttribute('class', 'services transcription browse');
+?>
+
+<?php echo $this->pageTitle($this->translate('Browse projects'), 1, $this->translate('Services · Transcription')); ?>
+
+<div id="page-actions">
+    <?php echo $this->hyperlink($this->translate('Add project'), $this->url(null, ['action' => 'add'], true), ['class' => 'button']); ?>
+</div>
+
+<div class="browse-controls">
+    <?php echo $this->pagination(); ?>
+    <?php echo $this->sortSelector([
+    [
+        'label' => $this->translate('Date created'),
+        'value' => 'created',
+    ],
+    [
+        'label' => $this->translate('Label'),
+        'value' => 'label',
+    ],
+]); ?>
+</div>
+
+<?php if ($projects): ?>
+
+<table class="tablesaw" data-tablesaw-mode="stack">
+    <thead>
+        <tr>
+            <th><?php echo $this->translate('Project'); ?></th>
+            <th><?php echo $this->translate('Owner'); ?></th>
+            <th><?php echo $this->translate('Created'); ?></th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($projects as $project): ?>
+    <?php $owner = $project->owner(); ?>
+        <tr>
+            <td>
+                <?php echo $this->hyperlink($project->label(), $project->url('show')); ?>
+                <ul class="actions">
+                    <li><?php echo $project->link('', 'edit', ['class' => 'fa fa-pencil-alt', 'title' => $this->translate('Edit')]) ?></li>
+                </ul>
+            </td>
+            <td><?php echo $owner ? $owner->link($owner->name()) : ''; ?></td>
+            <td><?php echo $this->i18n()->dateFormat($project->created()); ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+<div class="browse-controls">
+    <?php echo $this->pagination(); ?>
+</div>
+
+<?php else: ?>
+<div class="no-resources">
+    <p><?php echo sprintf(
+        $this->translate('No transcription projects found. %s'),
+        $this->hyperlink($this->translate('Add a new transcription project.'), $this->url('admin/service/transcription', ['action' => 'add'], true))
+    ); ?></p>
+</div>
+<?php endif; ?>
