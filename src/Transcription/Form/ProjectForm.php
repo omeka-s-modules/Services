@@ -23,6 +23,29 @@ class ProjectForm extends Form
             ],
         ]);
         $this->add([
+            'type' => LaminasElement\Text::class,
+            'name' => 'o-module-services:model-id',
+            'options' => [
+                'label' => 'Model ID', // @translate
+                'info' => 'Enter the ID of the Transkribus text recognition model. The model will be used to transcribe this project, and cannot be edited.', // @translate
+            ],
+            'attributes' => [
+                'required' => true,
+                'disabled' => $project ? true : false,
+            ],
+        ]);
+        $this->add([
+            'type' => LaminasElement\Text::class,
+            'name' => 'o-module-services:access-token',
+            'options' => [
+                'label' => 'Access token', // @translate
+                'info' => 'Enter the Mino access token.', // @translate
+            ],
+            'attributes' => [
+                'required' => true,
+            ],
+        ]);
+        $this->add([
             'type' => OmekaElement\Query::class,
             'name' => 'o:query',
             'options' => [

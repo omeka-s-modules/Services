@@ -41,13 +41,24 @@ class ProjectAdapter extends AbstractEntityAdapter
 
     public function hydrate(Request $request, EntityInterface $entity, ErrorStore $errorStore)
     {
+        $this->hydrateOwner($request, $entity);
+
+        if (Request::CREATE === $request->getOperation()) {
+            $entity->setModelId($request->getValue('o-module-services:model-id'));
+        }
+
         if (Request::UPDATE === $request->getOperation()) {
             $entity->setModified(new DateTime('now'));
         }
-        $this->hydrateOwner($request, $entity);
+
         if ($this->shouldHydrate($request, 'o:label')) {
             $entity->setLabel($request->getValue('o:label'));
         }
+
+        if ($this->shouldHydrate($request, 'o-module-services:access-token')) {
+            $entity->setAccessToken($request->getValue('o-module-services:access-token'));
+        }
+
         if ($this->shouldHydrate($request, 'o:query')) {
             $entity->setQuery($request->getValue('o:query'));
         }

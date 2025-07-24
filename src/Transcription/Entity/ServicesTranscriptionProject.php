@@ -35,27 +35,6 @@ class ServicesTranscriptionProject extends AbstractEntity
     }
 
     /**
-     * @ManyToOne(
-     *     targetEntity="Omeka\Entity\User"
-     * )
-     * @JoinColumn(
-     *     nullable=true,
-     *     onDelete="SET NULL"
-     * )
-     */
-    protected $owner;
-
-    public function setOwner(?User $owner = null) : void
-    {
-        $this->owner = $owner;
-    }
-
-    public function getOwner() : ?User
-    {
-        return $this->owner;
-    }
-
-    /**
      * @Column(
      *     type="string",
      *     length=255,
@@ -72,6 +51,44 @@ class ServicesTranscriptionProject extends AbstractEntity
     public function getLabel() : string
     {
         return $this->label;
+    }
+
+    /**
+     * @Column(
+     *     type="string",
+     *     length=255,
+     *     nullable=false
+     * )
+     */
+    protected $modelId;
+
+    public function setModelId(string $modelId) : void
+    {
+        $this->modelId = $modelId;
+    }
+
+    public function getModelId() : string
+    {
+        return $this->modelId;
+    }
+
+    /**
+     * @Column(
+     *     type="string",
+     *     length=255,
+     *     nullable=false
+     * )
+     */
+    protected $accessToken;
+
+    public function setAccessToken(string $accessToken) : void
+    {
+        $this->accessToken = $accessToken;
+    }
+
+    public function getAccessToken() : string
+    {
+        return $this->accessToken;
     }
 
     /**
@@ -96,6 +113,27 @@ class ServicesTranscriptionProject extends AbstractEntity
 
     /**
      * @ManyToOne(
+     *     targetEntity="Omeka\Entity\User"
+     * )
+     * @JoinColumn(
+     *     nullable=true,
+     *     onDelete="SET NULL"
+     * )
+     */
+    protected $owner;
+
+    public function setOwner(?User $owner = null) : void
+    {
+        $this->owner = $owner;
+    }
+
+    public function getOwner() : ?User
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @ManyToOne(
      *     targetEntity="Omeka\Entity\Job"
      * )
      * @JoinColumn(
@@ -103,16 +141,58 @@ class ServicesTranscriptionProject extends AbstractEntity
      *     onDelete="SET NULL"
      * )
      */
-    protected $snapshotJob;
+    protected $prepareJob;
 
-    public function setSnapshotJob(?Job $snapshotJob = null) : void
+    public function setPrepareJob(?Job $prepareJob = null) : void
     {
-        $this->snapshotJob = $snapshotJob;
+        $this->prepareJob = $prepareJob;
     }
 
-    public function getSnapshotJob() : ?Job
+    public function getPrepareJob() : ?Job
     {
-        return $this->snapshotJob;
+        return $this->prepareJob;
+    }
+
+    /**
+     * @ManyToOne(
+     *     targetEntity="Omeka\Entity\Job"
+     * )
+     * @JoinColumn(
+     *     nullable=true,
+     *     onDelete="SET NULL"
+     * )
+     */
+    protected $transcribeJob;
+
+    public function setTranscribeJob(?Job $transcribeJob = null) : void
+    {
+        $this->transcribeJob = $transcribeJob;
+    }
+
+    public function getTranscribeJob() : ?Job
+    {
+        return $this->transcribeJob;
+    }
+
+    /**
+     * @ManyToOne(
+     *     targetEntity="Omeka\Entity\Job"
+     * )
+     * @JoinColumn(
+     *     nullable=true,
+     *     onDelete="SET NULL"
+     * )
+     */
+    protected $fetchJob;
+
+    public function setFetchJob(?Job $fetchJob = null) : void
+    {
+        $this->fetchJob = $fetchJob;
+    }
+
+    public function getFetchJob() : ?Job
+    {
+        return $this->fetchJob;
     }
 
     /**

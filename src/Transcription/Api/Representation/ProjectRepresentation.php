@@ -17,6 +17,8 @@ class ProjectRepresentation extends AbstractEntityRepresentation
         return [
             'o:owner' => $owner ? $owner->getReference() : null,
             'o:label' => $this->label(),
+            'o-module-services:model-id' => $this->modelId(),
+            'o-module-services:access-token' => $this->accessToken(),
             'o:query' => $this->query(),
             'o:created' => $this->getDateTime($this->created()),
             'o:modified' => $modified ? $this->getDateTime($modified) : null,
@@ -45,6 +47,16 @@ class ProjectRepresentation extends AbstractEntityRepresentation
     public function label()
     {
         return $this->resource->getLabel();
+    }
+
+    public function modelId()
+    {
+        return $this->resource->getModelId();
+    }
+
+    public function accessToken()
+    {
+        return $this->resource->getAccessToken();
     }
 
     public function query()

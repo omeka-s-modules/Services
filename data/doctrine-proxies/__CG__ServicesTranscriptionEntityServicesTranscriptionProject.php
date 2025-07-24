@@ -67,10 +67,10 @@ class ServicesTranscriptionProject extends \Services\Transcription\Entity\Servic
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'owner', 'label', 'query', 'snapshotJob', 'created', 'modified'];
+            return ['__isInitialized__', 'id', 'label', 'modelId', 'accessToken', 'query', 'owner', 'prepareJob', 'transcribeJob', 'fetchJob', 'created', 'modified'];
         }
 
-        return ['__isInitialized__', 'id', 'owner', 'label', 'query', 'snapshotJob', 'created', 'modified'];
+        return ['__isInitialized__', 'id', 'label', 'modelId', 'accessToken', 'query', 'owner', 'prepareJob', 'transcribeJob', 'fetchJob', 'created', 'modified'];
     }
 
     /**
@@ -195,28 +195,6 @@ class ServicesTranscriptionProject extends \Services\Transcription\Entity\Servic
     /**
      * {@inheritDoc}
      */
-    public function setOwner(\Omeka\Entity\User $owner = NULL): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setOwner', [$owner]);
-
-        parent::setOwner($owner);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getOwner(): ?\Omeka\Entity\User
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOwner', []);
-
-        return parent::getOwner();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function setLabel(string $label): void
     {
 
@@ -234,6 +212,50 @@ class ServicesTranscriptionProject extends \Services\Transcription\Entity\Servic
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getLabel', []);
 
         return parent::getLabel();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setModelId(string $modelId): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setModelId', [$modelId]);
+
+        parent::setModelId($modelId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getModelId(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getModelId', []);
+
+        return parent::getModelId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setAccessToken(string $accessToken): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAccessToken', [$accessToken]);
+
+        parent::setAccessToken($accessToken);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAccessToken(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAccessToken', []);
+
+        return parent::getAccessToken();
     }
 
     /**
@@ -261,23 +283,89 @@ class ServicesTranscriptionProject extends \Services\Transcription\Entity\Servic
     /**
      * {@inheritDoc}
      */
-    public function setSnapshotJob(\Omeka\Entity\Job $snapshotJob = NULL): void
+    public function setOwner(\Omeka\Entity\User $owner = NULL): void
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSnapshotJob', [$snapshotJob]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setOwner', [$owner]);
 
-        parent::setSnapshotJob($snapshotJob);
+        parent::setOwner($owner);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getSnapshotJob(): ?\Omeka\Entity\Job
+    public function getOwner(): ?\Omeka\Entity\User
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSnapshotJob', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOwner', []);
 
-        return parent::getSnapshotJob();
+        return parent::getOwner();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setPrepareJob(\Omeka\Entity\Job $prepareJob = NULL): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPrepareJob', [$prepareJob]);
+
+        parent::setPrepareJob($prepareJob);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPrepareJob(): ?\Omeka\Entity\Job
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPrepareJob', []);
+
+        return parent::getPrepareJob();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTranscribeJob(\Omeka\Entity\Job $transcribeJob = NULL): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTranscribeJob', [$transcribeJob]);
+
+        parent::setTranscribeJob($transcribeJob);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTranscribeJob(): ?\Omeka\Entity\Job
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTranscribeJob', []);
+
+        return parent::getTranscribeJob();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setFetchJob(\Omeka\Entity\Job $fetchJob = NULL): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFetchJob', [$fetchJob]);
+
+        parent::setFetchJob($fetchJob);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFetchJob(): ?\Omeka\Entity\Job
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFetchJob', []);
+
+        return parent::getFetchJob();
     }
 
     /**
