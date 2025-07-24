@@ -14,11 +14,11 @@ class ServicesTranscription extends AbstractPlugin
         $this->services = $services;
     }
 
-    public function getFormDoPrepareItems($project)
+    public function getFormDoSnapshot($project)
     {
         $controller = $this->getController();
-        $formDoPrepareItems = $controller->getForm(Form\TranscriptionProjectDoPrepareItemsForm::class, ['import' => $project]);
-        $formDoPrepareItems->setAttribute('action', $controller->url()->fromRoute('admin/services/transcription', ['action' => 'do-prepare-items'], true));
-        return $formDoPrepareItems;
+        $formDoSnapshot = $controller->getForm(Form\DoSnapshotForm::class, ['project' => $project]);
+        $formDoSnapshot->setAttribute('action', $controller->url()->fromRoute('admin/transcription/id', ['action' => 'do-snapshot'], true));
+        return $formDoSnapshot;
     }
 }

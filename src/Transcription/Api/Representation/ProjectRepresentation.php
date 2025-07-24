@@ -27,7 +27,7 @@ class ProjectRepresentation extends AbstractEntityRepresentation
     {
         $url = $this->getViewHelper('Url');
         return $url(
-            'admin/services/transcription/id',
+            'admin/services/transcription-project-id',
             [
                 'controller' => 'transcription',
                 'action' => $action,

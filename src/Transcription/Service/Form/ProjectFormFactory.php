@@ -1,14 +1,14 @@
 <?php
-namespace Service\Service\Form;
+namespace Services\Transcription\Service\Form;
 
-use Service\Form\TranscriptionProjectForm;
+use Services\Transcription\Form\ProjectForm;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Interop\Container\ContainerInterface;
 
-class TranscriptionProjectFormFactory implements FactoryInterface
+class ProjectFormFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $services, $requestedName, array $options = null)
     {
-        return new TranscriptionProjectForm(null, $options);
+        return new ProjectForm(null, $options);
     }
 }

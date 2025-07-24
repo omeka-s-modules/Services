@@ -38,6 +38,7 @@ return [
         'factories' => [
             'Services\Controller\Admin\Index' => Service\Controller\Admin\IndexControllerFactory::class,
             'Services\Transcription\Controller\Admin\Index' => Transcription\Service\Controller\Admin\IndexControllerFactory::class,
+            'Services\Transcription\Controller\Admin\Project' => Transcription\Service\Controller\Admin\ProjectControllerFactory::class,
         ],
     ],
     'controller_plugins' => [
@@ -52,7 +53,10 @@ return [
     ],
     'form_elements' => [
         'factories' => [
-            'Transcription\Services\Form\TranscriptionForm' => Transcription\Service\Form\TranscriptionFormFactory::class,
+            'Services\Transcription\Form\ProjectForm' => Transcription\Service\Form\ProjectFormFactory::class,
+            // 'Transcription\Services\Form\DoPreprocessForm' => Transcription\Service\Form\DoPreprocessFormFactory::class,
+            // 'Transcription\Services\Form\DoTranscribeForm' => Transcription\Service\Form\DoTranscribeFormFactory::class,
+            // 'Transcription\Services\Form\DoFetchForm' => Transcription\Service\Form\DoFetchFormFactory::class,
         ],
     ],
     'navigation' => [
@@ -64,12 +68,12 @@ return [
                 'pages' => [
                     [
                         'label' => 'Transcription', // @translate
-                        'route' => 'admin/services/transcription',
+                        'route' => 'admin/services/transcription-project',
                         'resource' => 'Services\Transcription\Controller\Admin\Index',
                         'action' => 'browse',
                         'pages' => [
                             [
-                                'route' => 'admin/services/transcription/id',
+                                'route' => 'admin/services/transcription-project-id',
                                 'visible' => false,
                             ],
                         ],
@@ -95,28 +99,45 @@ return [
                         'may_terminate' => true,
                         'child_routes' => [
                             'transcription' => [
-                                'type' => Http\Segment::class,
+                                'type' => 'Segment',
                                 'options' => [
-                                    'route' => '/transcription/:action',
+                                    'route' => '/transcription[/:action]',
                                     'constraints' => [
                                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                     ],
                                     'defaults' => [
                                         '__NAMESPACE__' => 'Services\Transcription\Controller\Admin',
                                         'controller' => 'index',
+                                        'action' => 'index',
                                     ],
                                 ],
-                                'may_terminate' => true,
-                                'child_routes' => [
-                                    'id' => [
-                                        'type' => Http\Segment::class,
-                                        'options' => [
-                                            'route' => '/:id',
-                                            'constraints' => [
-                                                'id' => '\d+',
-                                            ],
-                                            'defaults' => [],
-                                        ],
+                            ],
+                            'transcription-project' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/transcription/project[/:action]',
+                                    'constraints' => [
+                                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                    ],
+                                    'defaults' => [
+                                        '__NAMESPACE__' => 'Services\Transcription\Controller\Admin',
+                                        'controller' => 'project',
+                                        'action' => 'browse',
+                                    ],
+                                ],
+                            ],
+                            'transcription-project-id' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/transcription/project/:id[/:action]',
+                                    'constraints' => [
+                                        'id' => '\d+',
+                                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                    ],
+                                    'defaults' => [
+                                        '__NAMESPACE__' => 'Services\Transcription\Controller\Admin',
+                                        'controller' => 'project',
+                                        'action' => 'show',
                                     ],
                                 ],
                             ],

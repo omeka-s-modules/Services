@@ -9,6 +9,6 @@ class IndexController extends AbstractActionController
 {
     public function indexAction()
     {
-        return $this->redirect()->toRoute('admin/services/transcription', ['action' => 'browse'], true);
+        return $this->redirect()->toRoute('admin/services/transcription');
     }
 }

@@ -56,8 +56,8 @@ $this->htmlElement('body')->appendAttribute('class', 'services transcription bro
 <?php else: ?>
 <div class="no-resources">
     <p><?php echo sprintf(
-        $this->translate('No transcription projects found. %s'),
-        $this->hyperlink($this->translate('Add a new transcription project.'), $this->url('admin/service/transcription', ['action' => 'add'], true))
+        $this->translate('No projects found. %s'),
+        $this->hyperlink($this->translate('Add a new project.'), $this->url('admin/services/transcription', ['action' => 'add'], true))
     ); ?></p>
 </div>
 <?php endif; ?>

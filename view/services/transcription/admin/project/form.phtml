@@ -20,14 +20,14 @@ $form->prepare();
     <a href="#" id="delete-button" class="delete button"><?php echo $this->translate('Delete'); ?></a>
     <?php echo $project->link($this->translate('Cancel'), 'show', ['class' => 'button']); ?>
     <?php else: ?>
-    <?php echo $this->hyperlink($this->translate('Cancel'), $this->url('admin/services/transcription', ['action' => 'browse'], true), ['class' => 'button']); ?>
+    <?php echo $this->hyperlink($this->translate('Cancel'), $this->url('admin/services/transcription-project', ['action' => 'browse'], true), ['class' => 'button']); ?>
     <?php endif; ?>
     <input type="submit" value="<?php echo $this->escapeHtml($this->translate('Submit')); ?>">
 </div>
 
 <?php echo $this->formCollection($form); ?>
 
-<?php echo $this->formHidden($form->get('transcriptionprojectform_csrf')); ?>
+<?php echo $this->formHidden($form->get('csrf')); ?>
 <?php echo $this->form()->closeTag(); ?>
 
 <?php if ($project): ?>

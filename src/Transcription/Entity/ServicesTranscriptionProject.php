@@ -4,6 +4,7 @@ namespace Services\Transcription\Entity;
 use DateTime;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Omeka\Entity\AbstractEntity;
+use Omeka\Entity\Job;
 use Omeka\Entity\User;
 
 /**
@@ -91,6 +92,27 @@ class ServicesTranscriptionProject extends AbstractEntity
     public function getQuery() : ?string
     {
         return $this->query;
+    }
+
+    /**
+     * @ManyToOne(
+     *     targetEntity="Omeka\Entity\Job"
+     * )
+     * @JoinColumn(
+     *     nullable=true,
+     *     onDelete="SET NULL"
+     * )
+     */
+    protected $snapshotJob;
+
+    public function setSnapshotJob(?Job $snapshotJob = null) : void
+    {
+        $this->snapshotJob = $snapshotJob;
+    }
+
+    public function getSnapshotJob() : ?Job
+    {
+        return $this->snapshotJob;
     }
 
     /**
