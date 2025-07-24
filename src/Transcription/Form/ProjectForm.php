@@ -27,7 +27,7 @@ class ProjectForm extends Form
             'name' => 'o-module-services:model-id',
             'options' => [
                 'label' => 'Model ID', // @translate
-                'info' => 'Enter the ID of the Transkribus text recognition model. The model will be used to transcribe this project, and cannot be edited.', // @translate
+                'info' => 'Enter the ID of the Transkribus text recognition model. The model cannot be modified once it is set.', // @translate
             ],
             'attributes' => [
                 'required' => true,
