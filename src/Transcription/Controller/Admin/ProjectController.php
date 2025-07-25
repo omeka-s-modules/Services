@@ -1,15 +1,23 @@
 <?php
 namespace Services\Transcription\Controller\Admin;
 
+use Doctrine\ORM\EntityManager;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 use Services\Transcription\Entity\ServicesTranscriptionProject;
 use Services\Transcription\Form\ProjectForm;
-use Services\Transcription\Form\DoSnapshotForm;
-use Services\Transcription\Job\DoSnapshot;
+use Services\Transcription\Form\DoPrepareForm;
+use Services\Transcription\Job\DoPrepare;
 
 class ProjectController extends AbstractActionController
 {
+    protected $entityManager;
+
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
     public function browseAction()
     {
         $this->setBrowseDefaults('created');
@@ -84,21 +92,22 @@ class ProjectController extends AbstractActionController
 
         $view = new ViewModel;
         $view->setVariable('project', $project);
+        $view->setVariable('formDoPrepare', $this->servicesTranscription()->getFormDoPrepare($project));
         return $view;
     }
 
-    public function doSnapshotAction()
+    public function doPrepareAction()
     {
         $project = $this->api()->read('services_transcription_project', $this->params('id'))->getContent();
         if ($this->getRequest()->isPost()) {
-            $form = $this->getForm(DoSnapshotForm::class, ['project' => $project]);
+            $form = $this->getForm(DoPrepareForm::class, ['project' => $project]);
             $form->setData($this->getRequest()->getPost());
             if ($form->isValid()) {
-                $job = $this->jobDispatcher()->dispatch(DoSnapshot::class, ['project_id' => $project->id()]);
+                $job = $this->jobDispatcher()->dispatch(DoPrepare::class, ['project_id' => $project->id()]);
                 $entity = $this->entityManager->find(ServicesTranscriptionProject::class, $project->id());
-                $entity->setSnapshotJob($job);
+                $entity->setPrepareJob($job);
                 $this->entityManager->flush();
-                $this->messenger()->addSuccess('Taking snapshot. This may take a while.'); // @translate
+                $this->messenger()->addSuccess('Preparing items for transcription. This may take a while.'); // @translate
             }
         }
         return $this->redirect()->toRoute(null, ['action' => 'show'], true);

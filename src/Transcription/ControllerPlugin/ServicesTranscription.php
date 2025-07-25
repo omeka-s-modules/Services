@@ -14,11 +14,16 @@ class ServicesTranscription extends AbstractPlugin
         $this->services = $services;
     }
 
-    public function getFormDoSnapshot($project)
+    public function getEntityManager()
+    {
+        return $this->services->get('Omeka\EntityManager');
+    }
+
+    public function getFormDoPrepare($project)
     {
         $controller = $this->getController();
-        $formDoSnapshot = $controller->getForm(Form\DoSnapshotForm::class, ['project' => $project]);
-        $formDoSnapshot->setAttribute('action', $controller->url()->fromRoute('admin/transcription/id', ['action' => 'do-snapshot'], true));
-        return $formDoSnapshot;
+        $formDoPrepare = $controller->getForm(Form\DoPrepareForm::class, ['project' => $project]);
+        $formDoPrepare->setAttribute('action', $controller->url()->fromRoute('admin/services/transcription-project-id', ['action' => 'do-prepare'], true));
+        return $formDoPrepare;
     }
 }
