@@ -1,8 +1,8 @@
 <?php
 if ($project) {
-    $this->htmlElement('body')->appendAttribute('class', 'services transcription edit');
+    $this->htmlElement('body')->appendAttribute('class', 'services transcription-project edit');
 } else {
-    $this->htmlElement('body')->appendAttribute('class', 'services transcription add');
+    $this->htmlElement('body')->appendAttribute('class', 'services transcription-project add');
 }
 $form->prepare();
 ?>

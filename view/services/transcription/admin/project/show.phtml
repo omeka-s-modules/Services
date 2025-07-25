@@ -1,6 +1,40 @@
 <?php
-$this->htmlElement('body')->appendAttribute('class', 'services transcription show');
+$this->headLink()->appendStylesheet($this->assetUrl('css/transcription/styles.css', 'Services'));
+$this->headScript()->appendFile($this->assetUrl('js/transcription/scripts.js', 'Services'));
+$this->htmlElement('body')->appendAttribute('class', 'services transcription-project show');
 ?>
 
 <?php echo $this->pageTitle($this->translate('Project'), 1, $this->translate('Services · Transcription'), $project->label()); ?>
 
+<div id="page-actions">
+    <div id="page-action-menu">
+        <a href="#" class="expand button" aria-label="<?php echo $this->translate('Expand'); ?>"><?php echo $this->translate('Actions'); ?></a>
+        <ul class="collapsible">
+            <li><?php echo $project->link($this->translate('Edit project'), 'edit'); ?></li>
+            <li><a href="#" class="sidebar-content" data-sidebar-selector="#do-prepare-sidebar"><?php echo $this->translate('Prepare items'); ?></a></li>
+            <li><a href="#" class="sidebar-content" data-sidebar-selector="#do-transcribe-sidebar"><?php echo $this->translate('Transcribe items'); ?></a></li>
+            <li><a href="#" class="sidebar-content" data-sidebar-selector="#do-fetch-sidebar"><?php echo $this->translate('Fetch transcriptions'); ?></a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="do-prepare-sidebar" class="sidebar">
+    <?php echo $this->hyperlink('', '#', ['class' => 'sidebar-close o-icon-close', 'title' => $this->translate('Close')]); ?>
+    <h3><?php echo $this->translate('Prepare items'); ?></h3>
+    <p><?php echo $this->translate('Prepare items in this project for transcription. This will...'); ?></p>
+    <?php // echo $this->form($formDoPrepare); ?>
+</div>
+
+<div id="do-transcribe-sidebar" class="sidebar">
+    <?php echo $this->hyperlink('', '#', ['class' => 'sidebar-close o-icon-close', 'title' => $this->translate('Close')]); ?>
+    <h3><?php echo $this->translate('Transcribe items'); ?></h3>
+    <p><?php echo $this->translate('Transcribe items in this project. This will...'); ?></p>
+    <?php // echo $this->form($formDoTranscribe); ?>
+</div>
+
+<div id="do-fetch-sidebar" class="sidebar">
+    <?php echo $this->hyperlink('', '#', ['class' => 'sidebar-close o-icon-close', 'title' => $this->translate('Close')]); ?>
+    <h3><?php echo $this->translate('Fetch transcriptions'); ?></h3>
+    <p><?php echo $this->translate('Fetch transcriptions from the transcription service. This will...'); ?></p>
+    <?php // echo $this->form($formDoTranscribe); ?>
+</div>

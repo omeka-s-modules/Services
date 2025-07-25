@@ -54,7 +54,7 @@ return [
     'form_elements' => [
         'factories' => [
             'Services\Transcription\Form\ProjectForm' => Transcription\Service\Form\ProjectFormFactory::class,
-            // 'Transcription\Services\Form\DoPreprocessForm' => Transcription\Service\Form\DoPreprocessFormFactory::class,
+            // 'Transcription\Services\Form\DoPrepareForm' => Transcription\Service\Form\DoPrepareFormFactory::class,
             // 'Transcription\Services\Form\DoTranscribeForm' => Transcription\Service\Form\DoTranscribeFormFactory::class,
             // 'Transcription\Services\Form\DoFetchForm' => Transcription\Service\Form\DoFetchFormFactory::class,
         ],
