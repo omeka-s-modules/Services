@@ -36,7 +36,7 @@ return [
     ],
     'controllers' => [
         'factories' => [
-            'Services\Controller\Admin\Index' => Service\Controller\Admin\IndexControllerFactory::class,
+            'Services\Services\Controller\Admin\Index' => Services\Service\Controller\Admin\IndexControllerFactory::class,
             'Services\Transcription\Controller\Admin\Index' => Transcription\Service\Controller\Admin\IndexControllerFactory::class,
             'Services\Transcription\Controller\Admin\Project' => Transcription\Service\Controller\Admin\ProjectControllerFactory::class,
         ],
@@ -54,7 +54,7 @@ return [
     'form_elements' => [
         'factories' => [
             'Services\Transcription\Form\ProjectForm' => Transcription\Service\Form\ProjectFormFactory::class,
-            // 'Transcription\Services\Form\DoPrepareForm' => Transcription\Service\Form\DoPrepareFormFactory::class,
+            'Services\Transcription\Form\DoPrepareForm' => Transcription\Service\Form\DoPrepareFormFactory::class,
             // 'Transcription\Services\Form\DoTranscribeForm' => Transcription\Service\Form\DoTranscribeFormFactory::class,
             // 'Transcription\Services\Form\DoFetchForm' => Transcription\Service\Form\DoFetchFormFactory::class,
         ],
@@ -64,7 +64,7 @@ return [
             [
                 'label' => 'Services', // @translate
                 'route' => 'admin/services',
-                'resource' => 'Services\Controller\Admin\Index',
+                'resource' => 'Services\Services\Controller\Admin\Index',
                 'pages' => [
                     [
                         'label' => 'Transcription', // @translate
@@ -91,7 +91,7 @@ return [
                         'options' => [
                             'route' => '/services',
                             'defaults' => [
-                                '__NAMESPACE__' => 'Services\Controller\Admin',
+                                '__NAMESPACE__' => 'Services\Services\Controller\Admin',
                                 'controller' => 'index',
                                 'action' => 'index',
                             ],

@@ -1,5 +1,5 @@
 <?php
-namespace Services\Controller\Admin;
+namespace Services\Services\Controller\Admin;
 
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;

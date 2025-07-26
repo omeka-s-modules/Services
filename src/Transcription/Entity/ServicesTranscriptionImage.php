@@ -11,7 +11,7 @@ use Omeka\Entity\Media;
  * @Entity
  * @HasLifecycleCallbacks
  */
-class ServicesTranscriptionImage extends AbstractEntity
+class ServicesTranscriptionPage extends AbstractEntity
 {
     public function __construct()
     {

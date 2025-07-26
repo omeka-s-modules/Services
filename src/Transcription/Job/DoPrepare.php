@@ -3,7 +3,7 @@ namespace Services\Transcription\Job;
 
 use Omeka\Job\AbstractJob;
 use Omeka\Job\Exception;
-use Services\Transcription\Entity\ServicesTranscriptionImage;
+use Services\Transcription\Entity\ServicesTranscriptionPage;
 
 class DoPrepare extends AbstractJob
 {
@@ -33,11 +33,11 @@ class DoPrepare extends AbstractJob
                     ->find($itemId);
                 // Iterate item media.
                 foreach ($item->getMedia() as $media) {
-                    $transcriptionImages = $entityManager
-                        ->getRepository('Services\Transcription\Entity\ServicesTranscriptionImage')
+                    $pages = $entityManager
+                        ->getRepository('Services\Transcription\Entity\ServicesTranscriptionPage')
                         ->findBy(['media' => $media]);
-                    if ($transcriptionImages) {
-                        // Transcription images already created.
+                    if ($pages) {
+                        // Transcription pages already created.
                         continue;
                     }
                     switch ($media->getRenderer()) {
@@ -52,12 +52,12 @@ class DoPrepare extends AbstractJob
                                 // Add cases to implement other multipage files.
                                 default:
                                     if ($media->hasThumbnails()) {
-                                        $transcriptionImage = new ServicesTranscriptionImage;
-                                        $transcriptionImage->setItem($item);
-                                        $transcriptionImage->setMedia($media);
-                                        $transcriptionImage->setStorageId($media->getStorageId());
-                                        $transcriptionImage->setPosition(1);
-                                        $entityManager->persist($transcriptionImage);
+                                        $page = new ServicesTranscriptionPage;
+                                        $page->setItem($item);
+                                        $page->setMedia($media);
+                                        $page->setStorageId($media->getStorageId());
+                                        $page->setPosition(1);
+                                        $entityManager->persist($page);
                                     }
                                     break;
                             }
