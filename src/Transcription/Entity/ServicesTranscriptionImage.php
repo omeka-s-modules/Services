@@ -35,7 +35,7 @@ class ServicesTranscriptionImage extends AbstractEntity
     }
 
     /**
-     * @OneToOne(
+     * @ManyToOne(
      *     targetEntity="Omeka\Entity\Item",
      * )
      * @JoinColumn(
@@ -56,7 +56,7 @@ class ServicesTranscriptionImage extends AbstractEntity
     }
 
     /**
-     * @OneToOne(
+     * @ManyToOne(
      *     targetEntity="Omeka\Entity\Media",
      * )
      * @JoinColumn(
