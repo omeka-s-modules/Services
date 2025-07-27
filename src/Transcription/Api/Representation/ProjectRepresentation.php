@@ -73,4 +73,14 @@ class ProjectRepresentation extends AbstractEntityRepresentation
     {
         return $this->resource->getModified();
     }
+
+    public function itemCount()
+    {
+        parse_str($this->query(), $query);
+        $query['limit'] = 0;
+        return $this->getServiceLocator()
+            ->get('Omeka\ApiManager')
+            ->search('items', $query)
+            ->getTotalResults();
+    }
 }

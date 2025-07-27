@@ -1,14 +1,14 @@
 <?php
 namespace Services\Transcription\Service\Form;
 
-use Services\Transcription\Form\DoPrepareForm;
+use Services\Transcription\Form\DoPreprocessForm;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Interop\Container\ContainerInterface;
 
-class DoPrepareFormFactory implements FactoryInterface
+class DoPreprocessFormFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $services, $requestedName, array $options = null)
     {
-        return new DoPrepareForm(null, $options);
+        return new DoPreprocessForm(null, $options);
     }
 }

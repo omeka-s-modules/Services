@@ -6,8 +6,8 @@ use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 use Services\Transcription\Entity\ServicesTranscriptionProject;
 use Services\Transcription\Form\ProjectForm;
-use Services\Transcription\Form\DoPrepareForm;
-use Services\Transcription\Job\DoPrepare;
+use Services\Transcription\Form\DoPreprocessForm;
+use Services\Transcription\Job\DoPreprocess;
 
 class ProjectController extends AbstractActionController
 {
@@ -92,20 +92,20 @@ class ProjectController extends AbstractActionController
 
         $view = new ViewModel;
         $view->setVariable('project', $project);
-        $view->setVariable('formDoPrepare', $this->servicesTranscription()->getFormDoPrepare($project));
+        $view->setVariable('formDoPreprocess', $this->servicesTranscription()->getFormDoPreprocess($project));
         return $view;
     }
 
-    public function doPrepareAction()
+    public function doPreprocessAction()
     {
         $project = $this->api()->read('services_transcription_project', $this->params('id'))->getContent();
         if ($this->getRequest()->isPost()) {
-            $form = $this->getForm(DoPrepareForm::class, ['project' => $project]);
+            $form = $this->getForm(DoPreprocessForm::class, ['project' => $project]);
             $form->setData($this->getRequest()->getPost());
             if ($form->isValid()) {
-                $job = $this->jobDispatcher()->dispatch(DoPrepare::class, ['project_id' => $project->id()]);
+                $job = $this->jobDispatcher()->dispatch(DoPreprocess::class, ['project_id' => $project->id()]);
                 $entity = $this->entityManager->find(ServicesTranscriptionProject::class, $project->id());
-                $entity->setPrepareJob($job);
+                $entity->setPreprocessJob($job);
                 $this->entityManager->flush();
                 $this->messenger()->addSuccess('Preparing items for transcription. This may take a while.'); // @translate
             }

@@ -67,10 +67,10 @@ class ServicesTranscriptionProject extends \Services\Transcription\Entity\Servic
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'label', 'modelId', 'accessToken', 'query', 'owner', 'prepareJob', 'transcribeJob', 'fetchJob', 'created', 'modified'];
+            return ['__isInitialized__', 'id', 'label', 'modelId', 'accessToken', 'query', 'owner', 'preprocessJob', 'transcribeJob', 'fetchJob', 'created', 'modified'];
         }
 
-        return ['__isInitialized__', 'id', 'label', 'modelId', 'accessToken', 'query', 'owner', 'prepareJob', 'transcribeJob', 'fetchJob', 'created', 'modified'];
+        return ['__isInitialized__', 'id', 'label', 'modelId', 'accessToken', 'query', 'owner', 'preprocessJob', 'transcribeJob', 'fetchJob', 'created', 'modified'];
     }
 
     /**
@@ -305,23 +305,23 @@ class ServicesTranscriptionProject extends \Services\Transcription\Entity\Servic
     /**
      * {@inheritDoc}
      */
-    public function setPrepareJob(\Omeka\Entity\Job $prepareJob = NULL): void
+    public function setPreprocessJob(\Omeka\Entity\Job $preprocessJob = NULL): void
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPrepareJob', [$prepareJob]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPreprocessJob', [$preprocessJob]);
 
-        parent::setPrepareJob($prepareJob);
+        parent::setPreprocessJob($preprocessJob);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getPrepareJob(): ?\Omeka\Entity\Job
+    public function getPreprocessJob(): ?\Omeka\Entity\Job
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPrepareJob', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPreprocessJob', []);
 
-        return parent::getPrepareJob();
+        return parent::getPreprocessJob();
     }
 
     /**

@@ -141,16 +141,16 @@ class ServicesTranscriptionProject extends AbstractEntity
      *     onDelete="SET NULL"
      * )
      */
-    protected $prepareJob;
+    protected $preprocessJob;
 
-    public function setPrepareJob(?Job $prepareJob = null) : void
+    public function setPreprocessJob(?Job $preprocessJob = null) : void
     {
-        $this->prepareJob = $prepareJob;
+        $this->preprocessJob = $preprocessJob;
     }
 
-    public function getPrepareJob() : ?Job
+    public function getPreprocessJob() : ?Job
     {
-        return $this->prepareJob;
+        return $this->preprocessJob;
     }
 
     /**

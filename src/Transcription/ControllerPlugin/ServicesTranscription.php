@@ -19,11 +19,11 @@ class ServicesTranscription extends AbstractPlugin
         return $this->services->get('Omeka\EntityManager');
     }
 
-    public function getFormDoPrepare($project)
+    public function getFormDoPreprocess($project)
     {
         $controller = $this->getController();
-        $formDoPrepare = $controller->getForm(Form\DoPrepareForm::class, ['project' => $project]);
-        $formDoPrepare->setAttribute('action', $controller->url()->fromRoute('admin/services/transcription-project-id', ['action' => 'do-prepare'], true));
-        return $formDoPrepare;
+        $formDoPreprocess = $controller->getForm(Form\DoPreprocessForm::class, ['project' => $project]);
+        $formDoPreprocess->setAttribute('action', $controller->url()->fromRoute('admin/services/transcription-project-id', ['action' => 'do-preprocess'], true));
+        return $formDoPreprocess;
     }
 }

@@ -5,7 +5,7 @@ use Omeka\Job\AbstractJob;
 use Omeka\Job\Exception;
 use Services\Transcription\Entity\ServicesTranscriptionPage;
 
-class DoPrepare extends AbstractJob
+class DoPreprocess extends AbstractJob
 {
     protected $project;
 
