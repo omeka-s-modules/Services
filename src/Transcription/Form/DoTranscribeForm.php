@@ -5,7 +5,7 @@ use Laminas\Form\Element as LaminasElement;
 use Laminas\Form\Form;
 use Omeka\Form\Element as OmekaElement;
 
-class DoPreprocessForm extends Form
+class DoTranscribeForm extends Form
 {
     public function init()
     {
@@ -15,7 +15,7 @@ class DoPreprocessForm extends Form
             'type' => 'submit',
             'name' => 'submit',
             'attributes' => [
-                'value' => 'Confirm preprocess items', // @translate
+                'value' => 'Confirm transcribe pages', // @translate
             ],
         ]);
 

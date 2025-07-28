@@ -15,8 +15,8 @@ $fetchJob = $project->fetchJob();
         <a href="#" class="expand button" aria-label="<?php echo $this->translate('Expand'); ?>"><?php echo $this->translate('Actions'); ?></a>
         <ul class="collapsible">
             <li><?php echo $project->link($this->translate('Edit project'), 'edit'); ?></li>
-            <li><a href="#" class="sidebar-content" data-sidebar-selector="#do-preprocess-sidebar"><?php echo $this->translate('Preprocess project'); ?></a></li>
-            <li><a href="#" class="sidebar-content" data-sidebar-selector="#do-transcribe-sidebar"><?php echo $this->translate('Transcribe project'); ?></a></li>
+            <li><a href="#" class="sidebar-content" data-sidebar-selector="#do-preprocess-sidebar"><?php echo $this->translate('Preprocess items'); ?></a></li>
+            <li><a href="#" class="sidebar-content" data-sidebar-selector="#do-transcribe-sidebar"><?php echo $this->translate('Transcribe pages'); ?></a></li>
             <li><a href="#" class="sidebar-content" data-sidebar-selector="#do-fetch-sidebar"><?php echo $this->translate('Fetch transcriptions'); ?></a></li>
         </ul>
     </div>
@@ -33,20 +33,20 @@ $fetchJob = $project->fetchJob();
     </thead>
     <tbody>
         <tr>
-            <td><?php echo $this->translate('Preprocess project'); ?></td>
-            <td><?php echo $preprocessJob ? $this->translate($preprocessJob->statusLabel()) : $this->translate('Not started'); ?></td>
+            <td><?php echo $this->translate('Preprocess items'); ?></td>
+            <td><?php echo $preprocessJob ? $preprocessJob->link($this->translate($preprocessJob->statusLabel())) : $this->translate('Not started'); ?></td>
             <td><?php echo $preprocessJob ? $this->i18n()->dateFormat($preprocessJob->started(), 'medium', 'medium') : ''; ?></td>
             <td><?php echo $preprocessJob ? $this->i18n()->dateFormat($preprocessJob->ended(), 'medium', 'medium') : ''; ?></td>
         </tr>
         <tr>
-            <td><?php echo $this->translate('Transcribe project'); ?></td>
-            <td><?php echo $transcribeJob ? $this->translate($transcribeJob ->statusLabel()) : $this->translate('Not started'); ?></td>
-            <td></td>
-            <td></td>
+            <td><?php echo $this->translate('Transcribe pages'); ?></td>
+            <td><?php echo $transcribeJob ? $transcribeJob->link($this->translate($transcribeJob ->statusLabel())) : $this->translate('Not started'); ?></td>
+            <td><?php echo $transcribeJob ? $this->i18n()->dateFormat($transcribeJob->started(), 'medium', 'medium') : ''; ?></td>
+            <td><?php echo $transcribeJob ? $this->i18n()->dateFormat($transcribeJob->ended(), 'medium', 'medium') : ''; ?></td>
         </tr>
         <tr>
             <td><?php echo $this->translate('Fetch transcriptions'); ?></td>
-            <td><?php echo $fetchJob ? $this->translate($fetchJob->statusLabel()) : $this->translate('Not started'); ?></td>
+            <td><?php echo $fetchJob ? $fetchJob->link($this->translate($fetchJob->statusLabel())) : $this->translate('Not started'); ?></td>
             <td></td>
             <td></td>
         </tr>
@@ -59,16 +59,16 @@ $fetchJob = $project->fetchJob();
 
 <div id="do-preprocess-sidebar" class="sidebar">
     <?php echo $this->hyperlink('', '#', ['class' => 'sidebar-close o-icon-close', 'title' => $this->translate('Close')]); ?>
-    <h3><?php echo $this->translate('Preprocess project'); ?></h3>
-    <p><?php echo $this->translate('Prepare this project for transcription. This will...'); ?></p>
+    <h3><?php echo $this->translate('Preprocess items'); ?></h3>
+    <p><?php echo $this->translate('Prepare items in this project for transcription. This will...'); ?></p>
     <?php echo $this->form($formDoPreprocess); ?>
 </div>
 
 <div id="do-transcribe-sidebar" class="sidebar">
     <?php echo $this->hyperlink('', '#', ['class' => 'sidebar-close o-icon-close', 'title' => $this->translate('Close')]); ?>
-    <h3><?php echo $this->translate('Transcribe project'); ?></h3>
-    <p><?php echo $this->translate('Transcribe items in this project. This will...'); ?></p>
-    <?php // echo $this->form($formDoTranscribe); ?>
+    <h3><?php echo $this->translate('Transcribe pages'); ?></h3>
+    <p><?php echo $this->translate('Transcribe pages in this project. This will...'); ?></p>
+    <?php echo $this->form($formDoTranscribe); ?>
 </div>
 
 <div id="do-fetch-sidebar" class="sidebar">

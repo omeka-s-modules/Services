@@ -52,5 +52,34 @@ SQL;
 
     public function attachListeners(SharedEventManagerInterface $sharedEventManager)
     {
+        // Enable searching media by transcription project ID (using services_transcription_project_id).
+        $sharedEventManager->attach(
+            'Omeka\Api\Adapter\MediaAdapter',
+            'api.search.query',
+            function (Event $event) {
+                $request = $event->getParam('request');
+                $qb = $event->getParam('queryBuilder');
+                if (!$request->getValue('services_transcription_project_id')) {
+                    return;
+                }
+                $entityManager = $this->getServiceLocator()->get('Omeka\EntityManager');
+                $apiManager = $this->getServiceLocator()->get('Omeka\ApiManager');
+
+                // Get the project.
+                $project = $entityManager
+                    ->getRepository('Services\Transcription\Entity\ServicesTranscriptionProject')
+                    ->find($request->getValue('services_transcription_project_id'));
+
+                // Get the item IDs.
+                parse_str($project->getQuery(), $query);
+                $itemIds = $apiManager->search('items', $query, ['returnScalar' => 'id'])->getContent();
+
+                // Filter by items in project.
+                $qb->andWhere($qb->expr()->in(
+                    'omeka_root.item',
+                    $qb->createNamedParameter($itemIds)
+                ));
+            }
+        );
     }
 }

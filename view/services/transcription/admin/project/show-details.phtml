@@ -9,5 +9,19 @@
 </div>
 <div class="meta-group">
     <h4><?php echo $this->translate('Item count'); ?></h4>
-    <div class="value"><?php echo $project->itemCount(); ?></div>
+    <div class="value"><?php echo $this->hyperlink(
+        $project->itemCount(),
+        $this->url('admin/default', ['controller' => 'item'], ['query' => $project->query()])
+    ); ?></div>
+</div>
+<div class="meta-group">
+    <h4><?php echo $this->translate('Media count'); ?></h4>
+    <div class="value"><?php echo $this->hyperlink(
+        $project->itemCount(),
+        $this->url('admin/default', ['controller' => 'media'], ['query' => ['services_transcription_project_id' => $project->id()]])
+    ); ?></div>
+</div>
+<div class="meta-group">
+    <h4><?php echo $this->translate('Page count'); ?></h4>
+    <div class="value"><?php echo $project->pageCount(); ?></div>
 </div>

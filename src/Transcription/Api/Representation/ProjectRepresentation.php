@@ -107,16 +107,23 @@ class ProjectRepresentation extends AbstractEntityRepresentation
 
     public function mediaCount()
     {
-        // @todo: Not sure this is possible
+        $query = [
+            'limit' => 0,
+            'services_transcription_project_id' => $this->id(),
+        ];
+        return $this->getServiceLocator()
+            ->get('Omeka\ApiManager')
+            ->search('media', $query)
+            ->getTotalResults();
     }
 
     public function pageCount()
     {
         $query = [
             'limit' => 0,
-            'project_id' => $this->id(),
+            'services_transcription_project_id' => $this->id(),
         ];
-        $this->getServiceLocator()
+        return $this->getServiceLocator()
             ->get('Omeka\ApiManager')
             ->search('services_transcription_pages', $query)
             ->getTotalResults();

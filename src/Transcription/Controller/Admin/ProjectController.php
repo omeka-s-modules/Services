@@ -7,7 +7,9 @@ use Laminas\View\Model\ViewModel;
 use Services\Transcription\Entity\ServicesTranscriptionProject;
 use Services\Transcription\Form\ProjectForm;
 use Services\Transcription\Form\DoPreprocessForm;
+use Services\Transcription\Form\DoTranscribeForm;
 use Services\Transcription\Job\DoPreprocess;
+use Services\Transcription\Job\DoTranscribe;
 
 class ProjectController extends AbstractActionController
 {
@@ -93,6 +95,7 @@ class ProjectController extends AbstractActionController
         $view = new ViewModel;
         $view->setVariable('project', $project);
         $view->setVariable('formDoPreprocess', $this->servicesTranscription()->getFormDoPreprocess($project));
+        $view->setVariable('formDoTranscribe', $this->servicesTranscription()->getFormDoTranscribe($project));
         return $view;
     }
 
@@ -108,6 +111,23 @@ class ProjectController extends AbstractActionController
                 $entity->setPreprocessJob($job);
                 $this->entityManager->flush();
                 $this->messenger()->addSuccess('Preparing items for transcription. This may take a while.'); // @translate
+            }
+        }
+        return $this->redirect()->toRoute(null, ['action' => 'show'], true);
+    }
+
+    public function doTranscribeAction()
+    {
+        $project = $this->api()->read('services_transcription_projects', $this->params('id'))->getContent();
+        if ($this->getRequest()->isPost()) {
+            $form = $this->getForm(DoTranscribeForm::class, ['project' => $project]);
+            $form->setData($this->getRequest()->getPost());
+            if ($form->isValid()) {
+                $job = $this->jobDispatcher()->dispatch(DoTranscribe::class, ['project_id' => $project->id()]);
+                $entity = $this->entityManager->find(ServicesTranscriptionProject::class, $project->id());
+                $entity->setTranscribeJob($job);
+                $this->entityManager->flush();
+                $this->messenger()->addSuccess('Transcribing pages. This may take a while.'); // @translate
             }
         }
         return $this->redirect()->toRoute(null, ['action' => 'show'], true);

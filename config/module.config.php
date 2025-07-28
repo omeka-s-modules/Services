@@ -32,6 +32,7 @@ return [
     'api_adapters' => [
         'invokables' => [
             'services_transcription_projects' => Transcription\Api\Adapter\ProjectAdapter::class,
+            'services_transcription_pages' => Transcription\Api\Adapter\PageAdapter::class,
         ],
     ],
     'controllers' => [
