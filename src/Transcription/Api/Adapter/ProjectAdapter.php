@@ -18,7 +18,7 @@ class ProjectAdapter extends AbstractEntityAdapter
 
     public function getResourceName()
     {
-        return 'services_transcription_project';
+        return 'services_transcription_projects';
     }
 
     public function getRepresentationClass()
