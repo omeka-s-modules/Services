@@ -37,7 +37,7 @@ class DoPreprocess extends AbstractJob
                         ->getRepository('Services\Transcription\Entity\ServicesTranscriptionPage')
                         ->findBy(['media' => $media]);
                     if ($pages) {
-                        // Transcription pages already created.
+                        // Pages already created.
                         continue;
                     }
                     switch ($media->getRenderer()) {
