@@ -25,6 +25,13 @@ class DoTranscribe extends AbstractTranscriptionJob
                 $page = $entityManager
                     ->getRepository(ServicesTranscriptionPage::class)
                     ->find($pageId);
+
+                $logger->notice(sprintf(
+                    'Initiating transcription for media ID %s page ID %s',
+                    $page->getMedia()->getId(),
+                    $page->getId()
+                ));
+
                 $transcription = $entityManager
                     ->getRepository('Services\Transcription\Entity\ServicesTranscriptionTranscription')
                     ->findOneBy(['project' => $this->getProject(), 'page' => $page]);
@@ -36,8 +43,15 @@ class DoTranscribe extends AbstractTranscriptionJob
                     $entityManager->persist($transcription);
                 }
 
-                $logger->notice(sprintf('Processing page %s in media %s', $page->getId(), $page->getMedia()->getId()));
+                if (null !== $transcription->getJobState()) {
+                    $logger->notice(sprintf(
+                        'Transcription already initiated with state "%s"',
+                        $transcription->getJobState()
+                    ));
+                    continue;
+                }
 
+                // Submit upload and transcription requests to Mino.
                 $imageUrl = $fileStore->getUri(sprintf('large/%s.jpg', $page->getStorageId()));
                 $image = $this->upload($imageUrl);
                 if (false === $image) {
@@ -104,7 +118,7 @@ class DoTranscribe extends AbstractTranscriptionJob
                     ));
                     return false;
                 }
-                $logger->notice('Image uploaded to cache');
+                $logger->notice('Image successfully uploaded to cache');
                 return sprintf('%s.jpeg', $checksum);
             default:
                 $logger->err(sprintf(
@@ -140,13 +154,13 @@ class DoTranscribe extends AbstractTranscriptionJob
         $response = $client->send();
         if (!$response->isSuccess()) {
             $logger->err(sprintf(
-                'Image transcription failed with status "%s": %s',
+                'Transcription request failed with status "%s": %s',
                 $response->getStatusCode(),
                 $response->getContent()
             ));
             return false;
         }
-        $logger->notice('Transcription request submitted');
+        $logger->notice('Transcription request successfully submitted');
         return json_decode($response->getContent(), true);
     }
 }
