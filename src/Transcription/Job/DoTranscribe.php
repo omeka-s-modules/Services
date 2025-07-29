@@ -14,7 +14,7 @@ class DoTranscribe extends AbstractJob
     {
         $entityManager = $this->getServiceLocator()->get('Omeka\EntityManager');
         $apiManager = $this->getServiceLocator()->get('Omeka\ApiManager');
-        $httpClient = $this->getServiceLocator()->get('Omeka\HttpClient');
+        $fileStore = $this->getServiceLocator()->get('Omeka\File\Store');
         $logger = $this->getServiceLocator()->get('Omeka\Logger');
 
         // Get the project.
@@ -45,11 +45,80 @@ class DoTranscribe extends AbstractJob
                     $entityManager->persist($transcription);
                 }
 
-                // @todo: upload page https://mino.tropy.org/upload
+                $uploadImage = $this->upload(
+                    $fileStore->getUri(sprintf('large/%s.jpg', $page->getStorageId())),
+                    $project->getAccessToken()
+                );
+                if (false === $uploadImage) {
+                    continue;
+                }
+                $logger->notice($uploadImage);
 
                 // @todo: initiate transcription https://mino.tropy.org/transcription
             }
             $entityManager->flush();
         }
+    }
+
+    public function upload($imageUri, $accessToken)
+    {
+        $logger = $this->getServiceLocator()->get('Omeka\Logger');
+
+        $body = file_get_contents($imageUri);
+        $checksum = md5_file($imageUri);
+        $contentMd5 = base64_encode(md5_file($imageUri, true));
+
+        $client = $this->getServiceLocator()
+            ->get('Omeka\HttpClient')
+            ->setMethod('GET')
+            ->setUri(sprintf('https://mino.tropy.org/uploads/%s.jpeg',  $checksum));
+        $headers = $client->getRequest()->getHeaders();
+        $headers->addHeaders([
+            'Authorization' => sprintf('Bearer %s', $accessToken),
+            'X-Content-Length' => strlen($body),
+            'X-Content-MD5' => $contentMd5,
+            'X-Content-Type' => 'image/jpeg',
+        ]);
+        $response = $client->send();
+
+        switch ($response->getStatusCode()) {
+            case 204:
+                $logger->notice('Image already cached');
+                return sprintf('%s.jpeg', $checksum);
+                break;
+            case 202:
+                $logger->notice('Uploading image to cache');
+                $imageCacheUrl = $response->getHeaders()->get('Location')->getFieldValue();
+                $client = $this->getServiceLocator()
+                    ->get('Omeka\HttpClient')
+                    ->setMethod('PUT')
+                    ->setUri($imageCacheUrl)
+                    ->setRawBody($body);
+                $headers = $client->getRequest()->getHeaders();
+                $headers->addHeaders([
+                    'X-Content-MD5' => $contentMd5,
+                    'X-Content-Type' => 'image/jpeg',
+                ]);
+                $response = $client->send();
+                if ($response->isSuccess()) {
+                    return sprintf('%s.jpeg', $checksum);
+                } else {
+                    $logger->err(sprintf(
+                        'Image upload failed with status "%s": %s',
+                        $response->getStatusCode(),
+                        $response->getContent()
+                    ));
+                    return false;
+                }
+                break;
+            default:
+                $logger->err(sprintf(
+                    'Image upload failed with status "%s": %s',
+                    $response->getStatusCode(),
+                    $response->getContent()
+                ));
+                return false;
+        }
+
     }
 }
