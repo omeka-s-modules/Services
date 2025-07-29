@@ -67,10 +67,10 @@ class ServicesTranscriptionTranscription extends \Services\Transcription\Entity\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'project', 'page', 'status', 'jobId', 'text', 'data', 'created', 'modified'];
+            return ['__isInitialized__', 'id', 'project', 'page', 'jobState', 'jobId', 'text', 'data', 'created', 'modified'];
         }
 
-        return ['__isInitialized__', 'id', 'project', 'page', 'status', 'jobId', 'text', 'data', 'created', 'modified'];
+        return ['__isInitialized__', 'id', 'project', 'page', 'jobState', 'jobId', 'text', 'data', 'created', 'modified'];
     }
 
     /**
@@ -239,23 +239,23 @@ class ServicesTranscriptionTranscription extends \Services\Transcription\Entity\
     /**
      * {@inheritDoc}
      */
-    public function setStatus(?int $status): void
+    public function setJobState(?string $jobState): void
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setStatus', [$status]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setJobState', [$jobState]);
 
-        parent::setStatus($status);
+        parent::setJobState($jobState);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getStatus(): ?int
+    public function getJobState(): ?string
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStatus', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getJobState', []);
 
-        return parent::getStatus();
+        return parent::getJobState();
     }
 
     /**

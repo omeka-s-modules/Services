@@ -4,8 +4,6 @@ namespace Services\Transcription\Entity;
 use DateTime;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Omeka\Entity\AbstractEntity;
-use Services\Transcription\Entity\ServicesTranscriptionPage;
-use Services\Transcription\Entity\ServicesTranscriptionProject;
 
 /**
  * @Entity
@@ -52,12 +50,12 @@ class ServicesTranscriptionTranscription extends AbstractEntity
      */
     protected $project;
 
-    public function setProject(ServicesTranscriptionProject $project) : void
+    public function setProject(ServicesTranscriptionProject $project): void
     {
         $this->project = $project;
     }
 
-    public function getProject() : ServicesTranscriptionProject
+    public function getProject(): ServicesTranscriptionProject
     {
         return $this->project;
     }
@@ -73,32 +71,33 @@ class ServicesTranscriptionTranscription extends AbstractEntity
      */
     protected $page;
 
-    public function setPage(ServicesTranscriptionPage $page) : void
+    public function setPage(ServicesTranscriptionPage $page): void
     {
         $this->page = $page;
     }
 
-    public function getPage() : ServicesTranscriptionPage
+    public function getPage(): ServicesTranscriptionPage
     {
         return $this->page;
     }
 
     /**
      * @Column(
-     *     type="smallint",
+     *     type="string",
+     *     length=255,
      *     nullable=true
      * )
      */
-    protected $status;
+    protected $jobState;
 
-    public function setStatus(?int $status) : void
+    public function setJobState(?string $jobState): void
     {
-        $this->status = $status;
+        $this->jobState = $jobState;
     }
 
-    public function getStatus() : ?int
+    public function getJobState(): ?string
     {
-        return $this->status;
+        return $this->jobState;
     }
 
     /**
@@ -110,12 +109,12 @@ class ServicesTranscriptionTranscription extends AbstractEntity
      */
     protected $jobId;
 
-    public function setJobId(?string $jobId) : void
+    public function setJobId(?string $jobId): void
     {
         $this->jobId = $jobId;
     }
 
-    public function getJobId() : ?string
+    public function getJobId(): ?string
     {
         return $this->jobId;
     }
@@ -128,12 +127,12 @@ class ServicesTranscriptionTranscription extends AbstractEntity
      */
     protected $text;
 
-    public function setText(?string $text) : void
+    public function setText(?string $text): void
     {
         $this->text = $text;
     }
 
-    public function getText() : ?string
+    public function getText(): ?string
     {
         return $this->text;
     }
@@ -146,12 +145,12 @@ class ServicesTranscriptionTranscription extends AbstractEntity
      */
     protected $data;
 
-    public function setData(?string $data) : void
+    public function setData(?string $data): void
     {
         $this->data = $data;
     }
 
-    public function getData() : ?string
+    public function getData(): ?string
     {
         return $this->data;
     }
@@ -164,12 +163,12 @@ class ServicesTranscriptionTranscription extends AbstractEntity
      */
     protected $created;
 
-    public function setCreated(DateTime $created) : void
+    public function setCreated(DateTime $created): void
     {
         $this->created = $created;
     }
 
-    public function getCreated() : DateTime
+    public function getCreated(): DateTime
     {
         return $this->created;
     }
@@ -182,12 +181,12 @@ class ServicesTranscriptionTranscription extends AbstractEntity
      */
     protected $modified;
 
-    public function setModified(?DateTime $modified) : void
+    public function setModified(?DateTime $modified): void
     {
         $this->modified = $modified;
     }
 
-    public function getModified() : ?DateTime
+    public function getModified(): ?DateTime
     {
         return $this->modified;
     }
@@ -195,7 +194,7 @@ class ServicesTranscriptionTranscription extends AbstractEntity
     /**
      * @PrePersist
      */
-    public function prePersist(LifecycleEventArgs $eventArgs) : void
+    public function prePersist(LifecycleEventArgs $eventArgs): void
     {
         $this->setCreated(new DateTime('now'));
     }

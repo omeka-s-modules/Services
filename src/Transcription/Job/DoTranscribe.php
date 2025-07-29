@@ -1,30 +1,21 @@
 <?php
 namespace Services\Transcription\Job;
 
-use Omeka\Job\AbstractJob;
-use Omeka\Job\Exception;
 use Services\Transcription\Entity\ServicesTranscriptionPage;
 use Services\Transcription\Entity\ServicesTranscriptionTranscription;
 
-class DoTranscribe extends AbstractJob
+class DoTranscribe extends AbstractTranscriptionJob
 {
-    protected $project;
-
     public function perform()
     {
-        $entityManager = $this->getServiceLocator()->get('Omeka\EntityManager');
-        $apiManager = $this->getServiceLocator()->get('Omeka\ApiManager');
-        $fileStore = $this->getServiceLocator()->get('Omeka\File\Store');
-        $logger = $this->getServiceLocator()->get('Omeka\Logger');
-
-        // Get the project.
-        $project = $entityManager
-            ->getRepository('Services\Transcription\Entity\ServicesTranscriptionProject')
-            ->find($this->getArg('project_id'));
+        $entityManager = $this->get('Omeka\EntityManager');
+        $apiManager = $this->get('Omeka\ApiManager');
+        $fileStore = $this->get('Omeka\File\Store');
+        $logger = $this->get('Omeka\Logger');
 
         $pageIds = $apiManager->search(
             'services_transcription_pages',
-            ['services_transcription_project_id' => $project->getId()],
+            ['services_transcription_project_id' => $this->getProject()->getId()],
             ['returnScalar' => 'id']
         )->getContent();
 
@@ -36,45 +27,51 @@ class DoTranscribe extends AbstractJob
                     ->find($pageId);
                 $transcription = $entityManager
                     ->getRepository('Services\Transcription\Entity\ServicesTranscriptionTranscription')
-                    ->findBy(['project' => $project, 'page' => $page]);
+                    ->findOneBy(['project' => $this->getProject(), 'page' => $page]);
                 if (!$transcription) {
-                    // The transcription does not exist. Create it.
+                    // The transcription record does not exist. Create it.
                     $transcription = new ServicesTranscriptionTranscription;
-                    $transcription->setProject($project);
+                    $transcription->setProject($this->getProject());
                     $transcription->setPage($page);
                     $entityManager->persist($transcription);
                 }
 
-                $uploadImage = $this->upload(
-                    $fileStore->getUri(sprintf('large/%s.jpg', $page->getStorageId())),
-                    $project->getAccessToken()
-                );
-                if (false === $uploadImage) {
+                $logger->notice(sprintf('Processing page %s in media %s', $page->getId(), $page->getMedia()->getId()));
+
+                $imageUrl = $fileStore->getUri(sprintf('large/%s.jpg', $page->getStorageId()));
+                $image = $this->upload($imageUrl);
+                if (false === $image) {
                     continue;
                 }
-                $logger->notice($uploadImage);
-
-                // @todo: initiate transcription https://mino.tropy.org/transcription
+                $job = $this->transcribe($image);
+                if (false === $job) {
+                    continue;
+                }
+                $transcription->setJobId($job['id']);
+                $transcription->setJobState($job['state']);
             }
             $entityManager->flush();
         }
     }
 
-    public function upload($imageUri, $accessToken)
+    /**
+     * Submit an upload request to Mino.
+     */
+    public function upload($imageUrl)
     {
-        $logger = $this->getServiceLocator()->get('Omeka\Logger');
+        $logger = $this->get('Omeka\Logger');
+        $logger->notice('Submitting upload request...');
 
-        $body = file_get_contents($imageUri);
-        $checksum = md5_file($imageUri);
-        $contentMd5 = base64_encode(md5_file($imageUri, true));
+        $body = file_get_contents($imageUrl);
+        $checksum = md5_file($imageUrl);
+        $contentMd5 = base64_encode(md5_file($imageUrl, true));
 
-        $client = $this->getServiceLocator()
-            ->get('Omeka\HttpClient')
+        $client = $this->get('Omeka\HttpClient')
             ->setMethod('GET')
-            ->setUri(sprintf('https://mino.tropy.org/uploads/%s.jpeg',  $checksum));
+            ->setUri(sprintf('https://mino.tropy.org/uploads/%s.jpeg', $checksum));
         $headers = $client->getRequest()->getHeaders();
         $headers->addHeaders([
-            'Authorization' => sprintf('Bearer %s', $accessToken),
+            'Authorization' => sprintf('Bearer %s', $this->getProject()->getAccessToken()),
             'X-Content-Length' => strlen($body),
             'X-Content-MD5' => $contentMd5,
             'X-Content-Type' => 'image/jpeg',
@@ -83,26 +80,23 @@ class DoTranscribe extends AbstractJob
 
         switch ($response->getStatusCode()) {
             case 204:
-                $logger->notice('Image already cached');
+                $logger->notice('Image already uploaded');
                 return sprintf('%s.jpeg', $checksum);
                 break;
             case 202:
-                $logger->notice('Uploading image to cache');
+                $logger->notice('Uploading image to cache...');
                 $imageCacheUrl = $response->getHeaders()->get('Location')->getFieldValue();
-                $client = $this->getServiceLocator()
-                    ->get('Omeka\HttpClient')
+                $client = $this->get('Omeka\HttpClient')
                     ->setMethod('PUT')
                     ->setUri($imageCacheUrl)
                     ->setRawBody($body);
                 $headers = $client->getRequest()->getHeaders();
                 $headers->addHeaders([
-                    'X-Content-MD5' => $contentMd5,
-                    'X-Content-Type' => 'image/jpeg',
+                    'Content-MD5' => $contentMd5,
+                    'Content-Type' => 'image/jpeg',
                 ]);
                 $response = $client->send();
-                if ($response->isSuccess()) {
-                    return sprintf('%s.jpeg', $checksum);
-                } else {
+                if (!$response->isSuccess()) {
                     $logger->err(sprintf(
                         'Image upload failed with status "%s": %s',
                         $response->getStatusCode(),
@@ -110,7 +104,8 @@ class DoTranscribe extends AbstractJob
                     ));
                     return false;
                 }
-                break;
+                $logger->notice('Image uploaded to cache');
+                return sprintf('%s.jpeg', $checksum);
             default:
                 $logger->err(sprintf(
                     'Image upload failed with status "%s": %s',
@@ -119,6 +114,39 @@ class DoTranscribe extends AbstractJob
                 ));
                 return false;
         }
+    }
 
+    /**
+     * Submit a transcription request to Mino.
+     */
+    public function transcribe($image)
+    {
+        $logger = $this->get('Omeka\Logger');
+        $logger->notice('Submitting transcription request...');
+
+        // Transcribe
+        $client = $this->get('Omeka\HttpClient')
+            ->setMethod('POST')
+            ->setUri('https://mino.tropy.org/transcription')
+            ->setRawBody(json_encode([
+                'config' => ['model' => $this->getProject()->getModelId()],
+                'images' => [$image],
+            ]));
+        $headers = $client->getRequest()->getHeaders();
+        $headers->addHeaders([
+            'Authorization' => sprintf('Bearer %s', $this->getProject()->getAccessToken()),
+            'Content-Type' => 'application/json',
+        ]);
+        $response = $client->send();
+        if (!$response->isSuccess()) {
+            $logger->err(sprintf(
+                'Image transcription failed with status "%s": %s',
+                $response->getStatusCode(),
+                $response->getContent()
+            ));
+            return false;
+        }
+        $logger->notice('Transcription request submitted');
+        return json_decode($response->getContent(), true);
     }
 }

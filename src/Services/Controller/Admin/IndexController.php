@@ -2,8 +2,6 @@
 namespace Services\Services\Controller\Admin;
 
 use Laminas\Mvc\Controller\AbstractActionController;
-use Laminas\View\Model\ViewModel;
-use Omeka\Stdlib\Message;
 
 class IndexController extends AbstractActionController
 {

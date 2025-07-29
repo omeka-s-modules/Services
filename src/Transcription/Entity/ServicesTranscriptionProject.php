@@ -43,12 +43,12 @@ class ServicesTranscriptionProject extends AbstractEntity
      */
     protected $label;
 
-    public function setLabel(string $label) : void
+    public function setLabel(string $label): void
     {
         $this->label = $label;
     }
 
-    public function getLabel() : string
+    public function getLabel(): string
     {
         return $this->label;
     }
@@ -62,12 +62,12 @@ class ServicesTranscriptionProject extends AbstractEntity
      */
     protected $modelId;
 
-    public function setModelId(string $modelId) : void
+    public function setModelId(string $modelId): void
     {
         $this->modelId = $modelId;
     }
 
-    public function getModelId() : string
+    public function getModelId(): string
     {
         return $this->modelId;
     }
@@ -81,12 +81,12 @@ class ServicesTranscriptionProject extends AbstractEntity
      */
     protected $accessToken;
 
-    public function setAccessToken(string $accessToken) : void
+    public function setAccessToken(string $accessToken): void
     {
         $this->accessToken = $accessToken;
     }
 
-    public function getAccessToken() : string
+    public function getAccessToken(): string
     {
         return $this->accessToken;
     }
@@ -99,14 +99,14 @@ class ServicesTranscriptionProject extends AbstractEntity
      */
     protected $query;
 
-    public function setQuery(?string $query) : void
+    public function setQuery(?string $query): void
     {
         $query = trim($query);
         $query = ltrim($query, '?');
         $this->query = $query ?: null;
     }
 
-    public function getQuery() : ?string
+    public function getQuery(): ?string
     {
         return $this->query;
     }
@@ -122,12 +122,12 @@ class ServicesTranscriptionProject extends AbstractEntity
      */
     protected $owner;
 
-    public function setOwner(?User $owner = null) : void
+    public function setOwner(?User $owner = null): void
     {
         $this->owner = $owner;
     }
 
-    public function getOwner() : ?User
+    public function getOwner(): ?User
     {
         return $this->owner;
     }
@@ -143,12 +143,12 @@ class ServicesTranscriptionProject extends AbstractEntity
      */
     protected $preprocessJob;
 
-    public function setPreprocessJob(?Job $preprocessJob = null) : void
+    public function setPreprocessJob(?Job $preprocessJob = null): void
     {
         $this->preprocessJob = $preprocessJob;
     }
 
-    public function getPreprocessJob() : ?Job
+    public function getPreprocessJob(): ?Job
     {
         return $this->preprocessJob;
     }
@@ -164,12 +164,12 @@ class ServicesTranscriptionProject extends AbstractEntity
      */
     protected $transcribeJob;
 
-    public function setTranscribeJob(?Job $transcribeJob = null) : void
+    public function setTranscribeJob(?Job $transcribeJob = null): void
     {
         $this->transcribeJob = $transcribeJob;
     }
 
-    public function getTranscribeJob() : ?Job
+    public function getTranscribeJob(): ?Job
     {
         return $this->transcribeJob;
     }
@@ -185,12 +185,12 @@ class ServicesTranscriptionProject extends AbstractEntity
      */
     protected $fetchJob;
 
-    public function setFetchJob(?Job $fetchJob = null) : void
+    public function setFetchJob(?Job $fetchJob = null): void
     {
         $this->fetchJob = $fetchJob;
     }
 
-    public function getFetchJob() : ?Job
+    public function getFetchJob(): ?Job
     {
         return $this->fetchJob;
     }
@@ -203,12 +203,12 @@ class ServicesTranscriptionProject extends AbstractEntity
      */
     protected $created;
 
-    public function setCreated(DateTime $created) : void
+    public function setCreated(DateTime $created): void
     {
         $this->created = $created;
     }
 
-    public function getCreated() : DateTime
+    public function getCreated(): DateTime
     {
         return $this->created;
     }
@@ -221,12 +221,12 @@ class ServicesTranscriptionProject extends AbstractEntity
      */
     protected $modified;
 
-    public function setModified(?DateTime $modified) : void
+    public function setModified(?DateTime $modified): void
     {
         $this->modified = $modified;
     }
 
-    public function getModified() : ?DateTime
+    public function getModified(): ?DateTime
     {
         return $this->modified;
     }
@@ -234,7 +234,7 @@ class ServicesTranscriptionProject extends AbstractEntity
     /**
      * @PrePersist
      */
-    public function prePersist(LifecycleEventArgs $eventArgs) : void
+    public function prePersist(LifecycleEventArgs $eventArgs): void
     {
         $this->setCreated(new DateTime('now'));
     }

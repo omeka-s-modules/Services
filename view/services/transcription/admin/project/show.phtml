@@ -34,19 +34,49 @@ $fetchJob = $project->fetchJob();
     <tbody>
         <tr>
             <td><?php echo $this->translate('Preprocess items'); ?></td>
-            <td><?php echo $preprocessJob ? $preprocessJob->link($this->translate($preprocessJob->statusLabel())) : $this->translate('Not started'); ?></td>
+            <td><?php
+                echo $preprocessJob
+                    ? sprintf(
+                        $this->translate('%s [%s]'),
+                        $preprocessJob->link($preprocessJob->statusLabel()),
+                        $preprocessJob->log()
+                            ? $this->hyperlink($this->translate('view log'), $this->url('admin/id', ['controller' => 'job', 'action' => 'log', 'id' => $preprocessJob->id()]), ['target' => '_blank'])
+                            : $this->translate('no log')
+                    )
+                    : $this->translate('Not started');
+            ?></td>
             <td><?php echo $preprocessJob ? $this->i18n()->dateFormat($preprocessJob->started(), 'medium', 'medium') : ''; ?></td>
             <td><?php echo $preprocessJob ? $this->i18n()->dateFormat($preprocessJob->ended(), 'medium', 'medium') : ''; ?></td>
         </tr>
         <tr>
             <td><?php echo $this->translate('Transcribe pages'); ?></td>
-            <td><?php echo $transcribeJob ? $transcribeJob->link($this->translate($transcribeJob ->statusLabel())) : $this->translate('Not started'); ?></td>
+            <td><?php
+                echo $transcribeJob
+                    ? sprintf(
+                        $this->translate('%s [%s]'),
+                        $transcribeJob->link($transcribeJob->statusLabel()),
+                        $transcribeJob->log()
+                            ? $this->hyperlink($this->translate('view log'), $this->url('admin/id', ['controller' => 'job', 'action' => 'log', 'id' => $transcribeJob->id()]), ['target' => '_blank'])
+                            : $this->translate('no log')
+                    )
+                    : $this->translate('Not started');
+            ?></td>
             <td><?php echo $transcribeJob ? $this->i18n()->dateFormat($transcribeJob->started(), 'medium', 'medium') : ''; ?></td>
             <td><?php echo $transcribeJob ? $this->i18n()->dateFormat($transcribeJob->ended(), 'medium', 'medium') : ''; ?></td>
         </tr>
         <tr>
             <td><?php echo $this->translate('Fetch transcriptions'); ?></td>
-            <td><?php echo $fetchJob ? $fetchJob->link($this->translate($fetchJob->statusLabel())) : $this->translate('Not started'); ?></td>
+            <td><?php
+                echo $fetchJob
+                    ? sprintf(
+                        $this->translate('%s [%s]'),
+                        $fetchJob->link($fetchJob->statusLabel()),
+                        $fetchJob->log()
+                            ? $this->hyperlink($this->translate('view log'), $this->url('admin/id', ['controller' => 'job', 'action' => 'log', 'id' => $fetchJob->id()]), ['target' => '_blank'])
+                            : $this->translate('no log')
+                    )
+                    : $this->translate('Not started');
+            ?></td>
             <td></td>
             <td></td>
         </tr>

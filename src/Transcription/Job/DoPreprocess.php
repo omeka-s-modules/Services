@@ -1,27 +1,17 @@
 <?php
 namespace Services\Transcription\Job;
 
-use Omeka\Job\AbstractJob;
-use Omeka\Job\Exception;
 use Services\Transcription\Entity\ServicesTranscriptionPage;
 
-class DoPreprocess extends AbstractJob
+class DoPreprocess extends AbstractTranscriptionJob
 {
-    protected $project;
-
     public function perform()
     {
-        $entityManager = $this->getServiceLocator()->get('Omeka\EntityManager');
-        $apiManager = $this->getServiceLocator()->get('Omeka\ApiManager');
-        $logger = $this->getServiceLocator()->get('Omeka\Logger');
-
-        // Get the project.
-        $project = $entityManager
-            ->getRepository('Services\Transcription\Entity\ServicesTranscriptionProject')
-            ->find($this->getArg('project_id'));
+        $entityManager = $this->get('Omeka\EntityManager');
+        $apiManager = $this->get('Omeka\ApiManager');
 
         // Get the item IDs.
-        parse_str($project->getQuery(), $query);
+        parse_str($this->getProject()->getQuery(), $query);
         $query['has_media'] = true;
         $itemIds = $apiManager->search('items', $query, ['returnScalar' => 'id'])->getContent();
 
@@ -49,7 +39,7 @@ class DoPreprocess extends AbstractJob
                                 case 'application/pdf':
                                     // @todo: split into pages and save to Omeka storage
                                     break;
-                                // Add cases to implement other multipage files.
+                                    // Add cases to implement other multipage files.
                                 default:
                                     if ($media->hasThumbnails()) {
                                         $page = new ServicesTranscriptionPage;
@@ -62,7 +52,7 @@ class DoPreprocess extends AbstractJob
                                     break;
                             }
                             break;
-                        // Add cases to implement other renderers.
+                            // Add cases to implement other renderers.
                         default:
                             break;
                     }

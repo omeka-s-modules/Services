@@ -1,8 +1,6 @@
 <?php
 namespace Services;
 
-use Laminas\Router\Http;
-
 return [
     'entity_manager' => [
         'mapping_classes_paths' => [

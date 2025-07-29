@@ -1,7 +1,6 @@
 <?php
 namespace Services\Transcription\Api\Adapter;
 
-use DateTime;
 use Doctrine\ORM\QueryBuilder;
 use Omeka\Api\Adapter\AbstractEntityAdapter;
 use Omeka\Api\Request;

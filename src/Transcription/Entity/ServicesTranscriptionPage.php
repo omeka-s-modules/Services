@@ -45,12 +45,12 @@ class ServicesTranscriptionPage extends AbstractEntity
      */
     protected $item;
 
-    public function setItem(Item $item) : void
+    public function setItem(Item $item): void
     {
         $this->item = $item;
     }
 
-    public function getItem() : Item
+    public function getItem(): Item
     {
         return $this->item;
     }
@@ -66,12 +66,12 @@ class ServicesTranscriptionPage extends AbstractEntity
      */
     protected $media;
 
-    public function setMedia(Media $media) : void
+    public function setMedia(Media $media): void
     {
         $this->media = $media;
     }
 
-    public function getMedia() : Media
+    public function getMedia(): Media
     {
         return $this->media;
     }
@@ -85,12 +85,12 @@ class ServicesTranscriptionPage extends AbstractEntity
      */
     protected $storageId;
 
-    public function setStorageId(string $storageId) : void
+    public function setStorageId(string $storageId): void
     {
         $this->storageId = $storageId;
     }
 
-    public function getStorageId() : string
+    public function getStorageId(): string
     {
         return $this->storageId;
     }
@@ -103,12 +103,12 @@ class ServicesTranscriptionPage extends AbstractEntity
      */
     protected $position;
 
-    public function setPosition(int $position) : void
+    public function setPosition(int $position): void
     {
         $this->position = $position;
     }
 
-    public function getPosition() : int
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -121,12 +121,12 @@ class ServicesTranscriptionPage extends AbstractEntity
      */
     protected $created;
 
-    public function setCreated(DateTime $created) : void
+    public function setCreated(DateTime $created): void
     {
         $this->created = $created;
     }
 
-    public function getCreated() : DateTime
+    public function getCreated(): DateTime
     {
         return $this->created;
     }
@@ -139,12 +139,12 @@ class ServicesTranscriptionPage extends AbstractEntity
      */
     protected $modified;
 
-    public function setModified(?DateTime $modified) : void
+    public function setModified(?DateTime $modified): void
     {
         $this->modified = $modified;
     }
 
-    public function getModified() : ?DateTime
+    public function getModified(): ?DateTime
     {
         return $this->modified;
     }
@@ -152,7 +152,7 @@ class ServicesTranscriptionPage extends AbstractEntity
     /**
      * @PrePersist
      */
-    public function prePersist(LifecycleEventArgs $eventArgs) : void
+    public function prePersist(LifecycleEventArgs $eventArgs): void
     {
         $this->setCreated(new DateTime('now'));
     }
