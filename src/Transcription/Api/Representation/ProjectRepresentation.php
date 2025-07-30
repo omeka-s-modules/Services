@@ -128,4 +128,16 @@ class ProjectRepresentation extends AbstractEntityRepresentation
             ->search('services_transcription_pages', $query)
             ->getTotalResults();
     }
+
+    public function transcriptionCount()
+    {
+        $query = [
+            'limit' => 0,
+            'services_transcription_project_id' => $this->id(),
+        ];
+        return $this->getServiceLocator()
+            ->get('Omeka\ApiManager')
+            ->search('services_transcription_transcriptions', $query)
+            ->getTotalResults();
+    }
 }

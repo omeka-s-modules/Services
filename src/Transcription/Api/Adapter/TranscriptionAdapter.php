@@ -1,0 +1,52 @@
+<?php
+namespace Services\Transcription\Api\Adapter;
+
+use Doctrine\ORM\QueryBuilder;
+use Omeka\Api\Adapter\AbstractEntityAdapter;
+use Omeka\Api\Request;
+use Omeka\Stdlib\ErrorStore;
+use Omeka\Entity\EntityInterface;
+use Services\Transcription\Api\Representation\TranscriptionRepresentation;
+use Services\Transcription\Entity\ServicesTranscriptionTranscription;
+
+class TranscriptionAdapter extends AbstractEntityAdapter
+{
+    protected $sortFields = [];
+
+    public function getResourceName()
+    {
+        return 'services_transcription_transcriptions';
+    }
+
+    public function getRepresentationClass()
+    {
+        return TranscriptionRepresentation::class;
+    }
+
+    public function getEntityClass()
+    {
+        return ServicesTranscriptionTranscription::class;
+    }
+
+    public function buildQuery(QueryBuilder $qb, array $query)
+    {
+        if (isset($query['services_transcription_project_id']) && is_numeric($query['services_transcription_project_id'])) {
+            $qb->andWhere($qb->expr()->eq(
+                'omeka_root.project',
+                $qb->createNamedParameter($query['services_transcription_project_id'])
+            ));
+        }
+    }
+
+    public function validateRequest(Request $request, ErrorStore $errorStore)
+    {
+    }
+
+    public function hydrate(Request $request, EntityInterface $entity, ErrorStore $errorStore)
+    {
+    }
+
+    public function validateEntity(EntityInterface $entity, ErrorStore $errorStore)
+    {
+    }
+}
