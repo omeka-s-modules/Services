@@ -53,12 +53,11 @@ class DoTranscribe extends AbstractTranscriptionJob
 
                 // Submit upload and transcription requests to Mino.
                 $imageUrl = $fileStore->getUri(sprintf('large/%s.jpg', $page->getStorageId()));
-                $image = $this->upload($imageUrl);
-                if (false === $image) {
-                    continue;
-                }
-                $job = $this->transcribe($image);
-                if (false === $job) {
+                try {
+                    $image = $this->upload($imageUrl);
+                    $job = $this->transcribe($image);
+                } catch (\Exception $e) {
+                    $logger->err($e->getMessage());
                     continue;
                 }
                 $transcription->setJobId($job['id']);
@@ -111,22 +110,20 @@ class DoTranscribe extends AbstractTranscriptionJob
                 ]);
                 $response = $client->send();
                 if (!$response->isSuccess()) {
-                    $logger->err(sprintf(
+                    throw new \Exception(sprintf(
                         'Image upload failed with status "%s": %s',
                         $response->getStatusCode(),
                         $response->getContent()
                     ));
-                    return false;
                 }
                 $logger->notice('Image successfully uploaded to cache');
                 return sprintf('%s.jpeg', $checksum);
             default:
-                $logger->err(sprintf(
+                throw new \Exception(sprintf(
                     'Image upload failed with status "%s": %s',
                     $response->getStatusCode(),
                     $response->getContent()
                 ));
-                return false;
         }
     }
 
@@ -153,12 +150,11 @@ class DoTranscribe extends AbstractTranscriptionJob
         ]);
         $response = $client->send();
         if (!$response->isSuccess()) {
-            $logger->err(sprintf(
+            throw new \Exception(sprintf(
                 'Transcription request failed with status "%s": %s',
                 $response->getStatusCode(),
                 $response->getContent()
             ));
-            return false;
         }
         $logger->notice('Transcription request successfully submitted');
         return json_decode($response->getContent(), true);
