@@ -35,7 +35,7 @@ class DoPreprocess extends AbstractTranscriptionJob
                     try {
                         $mediaPreprocesser = $mediaPreprocesserManager->get($media->getRenderer());
                     } catch (ServiceNotFoundException $e) {
-                        // Preprocesser not implemented.
+                        // Media preprocesser not found.
                         continue;
                     }
                     $storageIds = $mediaPreprocesser->preprocess($media);
