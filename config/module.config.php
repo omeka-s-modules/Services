@@ -2,6 +2,18 @@
 namespace Services;
 
 return [
+    'services_module' => [
+        'transcription' => [
+            'media_preprocessers' => [
+                'factories' => [
+                    'file' => Transcription\Service\Preprocesser\Media\FileFactory::class,
+                ],
+            ],
+            'file_preprocessers' => [
+                'factories' => [],
+            ],
+        ],
+    ],
     'entity_manager' => [
         'mapping_classes_paths' => [
             dirname(__DIR__) . '/src/Transcription/Entity',
@@ -25,7 +37,10 @@ return [
         ],
     ],
     'service_manager' => [
-        'factories' => [],
+        'factories' => [
+            'Services\Transcription\MediaPreprocesserManager' => Transcription\Service\Preprocesser\MediaPreprocesserManagerFactory::class,
+            'Services\Transcription\FilePreprocesserManager' => Transcription\Service\Preprocesser\FilePreprocesserManagerFactory::class,
+        ],
     ],
     'api_adapters' => [
         'invokables' => [
