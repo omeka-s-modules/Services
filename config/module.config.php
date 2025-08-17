@@ -10,7 +10,9 @@ return [
                 ],
             ],
             'file_preprocessers' => [
-                'factories' => [],
+                'factories' => [
+                    'image/tiff' => Transcription\Service\Preprocesser\File\ImageTiffFactory::class,
+                ],
             ],
         ],
     ],

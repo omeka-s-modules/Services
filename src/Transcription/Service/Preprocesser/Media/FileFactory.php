@@ -9,7 +9,8 @@ class FileFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $services, $requestedName, array $options = null)
     {
-        $filePreprocesserManager = $services->get('Services\Transcription\FilePreprocesserManager');
-        return new File($filePreprocesserManager);
+        return new File(
+            $services->get('Services\Transcription\FilePreprocesserManager')
+        );
     }
 }
