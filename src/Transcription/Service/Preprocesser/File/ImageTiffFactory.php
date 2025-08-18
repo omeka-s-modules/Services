@@ -10,7 +10,10 @@ class ImageTiffFactory implements FactoryInterface
     public function __invoke(ContainerInterface $services, $requestedName, array $options = null)
     {
         return new ImageTiff(
-            $services->get('Omeka\Cli')
+            $services->get('Omeka\ApiManager'),
+            $services->get('Omeka\File\TempFileFactory'),
+            $services->get('Omeka\Cli'),
+            $services->get('Omeka\File\Store')
         );
     }
 }

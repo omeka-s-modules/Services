@@ -16,14 +16,14 @@ class File implements MediaPreprocesserInterface
 
     public function preprocess(Media $media): array
     {
-        // @todo: Implement file preprocessers for "image/tiff" and "application/pdf"
+        // @todo: Implement file preprocessers for "application/pdf"
         try {
             $filePreprocesser = $this->filePreprocesserManager->get($media->getMediaType());
         } catch (ServiceNotFoundException $e) {
             // File preprocesser not found.
-            return $media->hasThumbnails() ? [$media->getStorageId()] : [];
+            return $media->hasThumbnails() ? [sprintf('large/%s.jpg', $media->getStorageId())] : [];
         }
-        $storageIds = $filePreprocesser->preprocess($media);
-        return $storageIds;
+        $storagePaths = $filePreprocesser->preprocess($media);
+        return $storagePaths;
     }
 }

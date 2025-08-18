@@ -83,16 +83,16 @@ class ServicesTranscriptionPage extends AbstractEntity
      *     nullable=true
      * )
      */
-    protected $storageId;
+    protected $storagePath;
 
-    public function setStorageId(string $storageId): void
+    public function setStoragePath(string $storagePath): void
     {
-        $this->storageId = $storageId;
+        $this->storagePath = $storagePath;
     }
 
-    public function getStorageId(): string
+    public function getStoragePath(): string
     {
-        return $this->storageId;
+        return $this->storagePath;
     }
 
     /**

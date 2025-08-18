@@ -38,12 +38,12 @@ class DoPreprocess extends AbstractTranscriptionJob
                         // Media preprocesser not found.
                         continue;
                     }
-                    $storageIds = $mediaPreprocesser->preprocess($media);
-                    foreach ($storageIds as $storageId) {
+                    $storagePaths = $mediaPreprocesser->preprocess($media);
+                    foreach ($storagePaths as $storagePath) {
                         $page = new ServicesTranscriptionPage;
                         $page->setItem($item);
                         $page->setMedia($media);
-                        $page->setStorageId($storageId);
+                        $page->setStoragePath($storagePath);
                         $page->setPosition(1);
                         $entityManager->persist($page);
                     }

@@ -67,10 +67,10 @@ class ServicesTranscriptionPage extends \Services\Transcription\Entity\ServicesT
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'item', 'media', 'storageId', 'position', 'created', 'modified'];
+            return ['__isInitialized__', 'id', 'item', 'media', 'storagePath', 'position', 'created', 'modified'];
         }
 
-        return ['__isInitialized__', 'id', 'item', 'media', 'storageId', 'position', 'created', 'modified'];
+        return ['__isInitialized__', 'id', 'item', 'media', 'storagePath', 'position', 'created', 'modified'];
     }
 
     /**
@@ -239,23 +239,23 @@ class ServicesTranscriptionPage extends \Services\Transcription\Entity\ServicesT
     /**
      * {@inheritDoc}
      */
-    public function setStorageId(string $storageId): void
+    public function setStoragePath(string $storagePath): void
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setStorageId', [$storageId]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setStoragePath', [$storagePath]);
 
-        parent::setStorageId($storageId);
+        parent::setStoragePath($storagePath);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getStorageId(): string
+    public function getStoragePath(): string
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStorageId', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStoragePath', []);
 
-        return parent::getStorageId();
+        return parent::getStoragePath();
     }
 
     /**

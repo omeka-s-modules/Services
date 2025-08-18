@@ -52,7 +52,7 @@ class DoTranscribe extends AbstractTranscriptionJob
                 }
 
                 // Submit upload and transcription requests to Mino.
-                $imageUrl = $fileStore->getUri(sprintf('large/%s.jpg', $page->getStorageId()));
+                $imageUrl = $fileStore->getUri($page->getStoragePath());
                 try {
                     $image = $this->upload($imageUrl);
                     $job = $this->transcribe($image);
