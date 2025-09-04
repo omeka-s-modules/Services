@@ -5,7 +5,7 @@ use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Omeka\Entity\Media;
 use Services\Transcription\Preprocesser\File\Manager;
 
-class ImageTiff implements FilePreprocesserInterface
+class MultipageSplit implements FilePreprocesserInterface
 {
     protected $api;
     protected $tempFileFactory;
