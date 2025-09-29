@@ -39,12 +39,12 @@ class DoPreprocess extends AbstractTranscriptionJob
                         continue;
                     }
                     $storagePaths = $mediaPreprocesser->preprocess($media);
-                    foreach ($storagePaths as $storagePath) {
+                    foreach ($storagePaths as $index => $storagePath) {
                         $page = new ServicesTranscriptionPage;
                         $page->setItem($item);
                         $page->setMedia($media);
                         $page->setStoragePath($storagePath);
-                        $page->setPosition(1);
+                        $page->setPosition($index);
                         $entityManager->persist($page);
                     }
                 }

@@ -16,7 +16,6 @@ class File implements MediaPreprocesserInterface
 
     public function preprocess(Media $media): array
     {
-        // @todo: Implement file preprocessers for "application/pdf"
         try {
             $filePreprocesser = $this->filePreprocesserManager->get($media->getMediaType());
         } catch (ServiceNotFoundException $e) {

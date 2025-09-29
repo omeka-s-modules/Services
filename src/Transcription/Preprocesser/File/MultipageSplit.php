@@ -41,7 +41,7 @@ class MultipageSplit implements FilePreprocesserInterface
         $storagePaths = [];
         foreach (explode("\n", $tempPaths) as $index => $tempPath) {
             $storagePath = sprintf('services_transcription_page/%s-%s.jpg', $tempFile->getStorageId(), $index);
-            $storagePaths[] = $storagePath;
+            $storagePaths[$index] = $storagePath;
             $this->fileStore->put($tempPath, $storagePath);
             unlink($tempPath);
         }
