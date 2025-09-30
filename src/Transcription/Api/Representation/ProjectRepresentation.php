@@ -123,7 +123,7 @@ class ProjectRepresentation extends AbstractEntityRepresentation
     {
         $query = [
             'limit' => 0,
-            'services_transcription_project_id' => $this->id(),
+            'project_id' => $this->id(),
         ];
         return $this->getServiceLocator()
             ->get('Omeka\ApiManager')
@@ -135,7 +135,7 @@ class ProjectRepresentation extends AbstractEntityRepresentation
     {
         $query = [
             'limit' => 0,
-            'services_transcription_project_id' => $this->id(),
+            'project_id' => $this->id(),
         ];
         return $this->getServiceLocator()
             ->get('Omeka\ApiManager')

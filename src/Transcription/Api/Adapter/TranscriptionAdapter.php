@@ -30,30 +30,30 @@ class TranscriptionAdapter extends AbstractEntityAdapter
 
     public function buildQuery(QueryBuilder $qb, array $query)
     {
-        if (isset($query['services_transcription_project_id']) && is_numeric($query['services_transcription_project_id'])) {
+        if (isset($query['project_id']) && is_numeric($query['project_id'])) {
             $qb->andWhere($qb->expr()->eq(
                 'omeka_root.project',
-                $qb->createNamedParameter($query['services_transcription_project_id'])
+                $qb->createNamedParameter($query['project_id'])
             ));
         }
-        if (isset($query['services_transcription_item_id']) && is_numeric($query['services_transcription_item_id'])) {
+        if (isset($query['item_id']) && is_numeric($query['item_id'])) {
             $pageAlias = $qb->createAlias();
             $qb->innerJoin(
                 'omeka_root.page', $pageAlias
             );
             $qb->andWhere($qb->expr()->eq(
                 sprintf('%s.item', $pageAlias),
-                $query['services_transcription_item_id']
+                $query['item_id']
             ));
         }
-        if (isset($query['services_transcription_media_id']) && is_numeric($query['services_transcription_media_id'])) {
+        if (isset($query['media_id']) && is_numeric($query['media_id'])) {
             $pageAlias = $qb->createAlias();
             $qb->innerJoin(
                 'omeka_root.page', $pageAlias
             );
             $qb->andWhere($qb->expr()->eq(
                 sprintf('%s.media', $pageAlias),
-                $query['services_transcription_media_id']
+                $query['media_id']
             ));
         }
     }

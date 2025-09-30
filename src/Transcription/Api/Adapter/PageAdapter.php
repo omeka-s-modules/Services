@@ -30,14 +30,14 @@ class PageAdapter extends AbstractEntityAdapter
 
     public function buildQuery(QueryBuilder $qb, array $query)
     {
-        if (isset($query['services_transcription_project_id']) && is_numeric($query['services_transcription_project_id'])) {
+        if (isset($query['project_id']) && is_numeric($query['project_id'])) {
             $entityManager = $this->getServiceLocator()->get('Omeka\EntityManager');
             $apiManager = $this->getServiceLocator()->get('Omeka\ApiManager');
 
             // Get the project.
             $project = $entityManager
                 ->getRepository('Services\Transcription\Entity\ServicesTranscriptionProject')
-                ->find($query['services_transcription_project_id']);
+                ->find($query['project_id']);
 
             // Get the item IDs.
             parse_str($project->getQuery(), $query);
@@ -49,16 +49,16 @@ class PageAdapter extends AbstractEntityAdapter
                 $qb->createNamedParameter($itemIds)
             ));
         }
-        if (isset($query['services_transcription_item_id']) && is_numeric($query['services_transcription_item_id'])) {
+        if (isset($query['item_id']) && is_numeric($query['item_id'])) {
             $qb->andWhere($qb->expr()->eq(
                 'omeka_root.item',
-                $query['services_transcription_item_id']
+                $query['item_id']
             ));
         }
-        if (isset($query['services_transcription_media_id']) && is_numeric($query['services_transcription_media_id'])) {
+        if (isset($query['media_id']) && is_numeric($query['media_id'])) {
             $qb->andWhere($qb->expr()->eq(
                 'omeka_root.media',
-                $query['services_transcription_media_id']
+                $query['media_id']
             ));
         }
     }

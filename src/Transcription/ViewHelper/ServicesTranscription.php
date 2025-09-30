@@ -50,9 +50,9 @@ class ServicesTranscription extends AbstractHelper
         $apiManager = $this->services->get('Omeka\ApiManager');
         $query = ['limit' => 0];
         if ($resource instanceof ItemRepresentation) {
-            $query['services_transcription_item_id'] = $resource->id();
+            $query['item_id'] = $resource->id();
         } elseif ($resource instanceof MediaRepresentation) {
-            $query['services_transcription_media_id'] = $resource->id();
+            $query['media_id'] = $resource->id();
         }
         $response = $apiManager->search('services_transcription_pages', $query);
         return $response->getTotalResults();
@@ -66,9 +66,9 @@ class ServicesTranscription extends AbstractHelper
         $apiManager = $this->services->get('Omeka\ApiManager');
         $query = ['limit' => 0];
         if ($resource instanceof ItemRepresentation) {
-            $query['services_transcription_item_id'] = $resource->id();
+            $query['item_id'] = $resource->id();
         } elseif ($resource instanceof MediaRepresentation) {
-            $query['services_transcription_media_id'] = $resource->id();
+            $query['media_id'] = $resource->id();
         }
         $response = $apiManager->search('services_transcription_transcriptions', $query);
         return $response->getTotalResults();
