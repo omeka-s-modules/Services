@@ -1,9 +1,7 @@
 <?php
 namespace Services\Transcription\Preprocesser\File;
 
-use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Omeka\Entity\Media;
-use Services\Transcription\Preprocesser\File\Manager;
 
 class MultipageSplit implements FilePreprocesserInterface
 {

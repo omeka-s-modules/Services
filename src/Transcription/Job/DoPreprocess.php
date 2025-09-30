@@ -11,6 +11,7 @@ class DoPreprocess extends AbstractTranscriptionJob
         $entityManager = $this->get('Omeka\EntityManager');
         $apiManager = $this->get('Omeka\ApiManager');
         $mediaPreprocesserManager = $this->get('Services\Transcription\MediaPreprocesserManager');
+        $logger = $this->get('Omeka\Logger');
 
         // Get the item IDs.
         parse_str($this->getProject()->getQuery(), $query);
@@ -25,17 +26,24 @@ class DoPreprocess extends AbstractTranscriptionJob
                     ->find($itemId);
                 // Iterate item media.
                 foreach ($item->getMedia() as $media) {
+                    $logger->notice(sprintf(
+                        'Initiating preprocess for item ID %s media ID %s',
+                        $item->getId(),
+                        $media->getId()
+                    ));
                     $pages = $entityManager
                         ->getRepository('Services\Transcription\Entity\ServicesTranscriptionPage')
                         ->findBy(['media' => $media]);
                     if ($pages) {
                         // Pages already created.
+                        $logger->notice(sprintf('Pages already created'));
                         continue;
                     }
                     try {
                         $mediaPreprocesser = $mediaPreprocesserManager->get($media->getRenderer());
                     } catch (ServiceNotFoundException $e) {
                         // Media preprocesser not found.
+                        $logger->notice(sprintf('Media preprocesser not available for "%s"', $media->getRenderer()));
                         continue;
                     }
                     $storagePaths = $mediaPreprocesser->preprocess($media);

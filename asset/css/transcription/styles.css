@@ -74,3 +74,19 @@
   overflow: visible;
   display: block; }
 
+.breadcrumbs > *:not(:last-child):after {
+    content: none;
+}
+
+.breadcrumbs .separator {
+    display: inline-block;
+    margin: 0 6px;
+    color: #000;
+}
+
+.breadcrumbs .separator:after {
+    content: "\f0da";
+    font-family: "Font Awesome 5 Free";
+    margin: 0;
+    font-weight: 900;
+}

@@ -1,11 +1,7 @@
 <?php
 $this->headLink()->appendStylesheet($this->assetUrl('css/transcription/styles.css', 'Services'));
 $this->headScript()->appendFile($this->assetUrl('js/transcription/scripts.js', 'Services'));
-$this->htmlElement('body')->appendAttribute('class', 'services transcription-project show');
-
-$preprocessJob = $project->preprocessJob();
-$transcribeJob = $project->transcribeJob();
-$fetchJob = $project->fetchJob();
+$this->htmlElement('body')->appendAttribute('class', 'services transcription-project show browse');
 ?>
 
 <?php echo $this->pageTitle($this->translate('Project'), 1, $this->translate('Services · Transcription'), $project->label()); ?>
@@ -22,66 +18,48 @@ $fetchJob = $project->fetchJob();
     </div>
 </div>
 
-<table class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
+<div class="browse-controls">
+    <?php echo $this->pagination(); ?>
+    <?php echo $this->sortSelector([
+    [
+        'label' => $this->translate('Date created'),
+        'value' => 'created',
+    ],
+]); ?>
+</div>
+
+<?php echo $this->servicesTranscription()->breadcrumbs(); ?>
+
+<?php if ($items): ?>
+
+<table class="tablesaw" data-tablesaw-mode="stack">
     <thead>
         <tr>
-            <th><?php echo $this->translate('Job'); ?></th>
-            <th><?php echo $this->translate('Status'); ?></th>
-            <th><?php echo $this->translate('Started'); ?></th>
-            <th><?php echo $this->translate('Ended'); ?></th>
+            <th><?php echo $this->translate('Item'); ?></th>
+            <th><?php echo $this->translate('Media count'); ?></th>
+            <th><?php echo $this->translate('Page count'); ?></th>
         </tr>
     </thead>
     <tbody>
+    <?php foreach ($items as $item): ?>
         <tr>
-            <td><?php echo $this->translate('Preprocess items'); ?></td>
-            <td><?php
-                echo $preprocessJob
-                    ? sprintf(
-                        $this->translate('%s [%s]'),
-                        $preprocessJob->link($preprocessJob->statusLabel()),
-                        $preprocessJob->log()
-                            ? $this->hyperlink($this->translate('view log'), $this->url('admin/id', ['controller' => 'job', 'action' => 'log', 'id' => $preprocessJob->id()]), ['target' => '_blank'])
-                            : $this->translate('no log')
-                    )
-                    : $this->translate('Not started');
-            ?></td>
-            <td><?php echo $preprocessJob ? $this->i18n()->dateFormat($preprocessJob->started(), 'medium', 'medium') : ''; ?></td>
-            <td><?php echo $preprocessJob ? $this->i18n()->dateFormat($preprocessJob->ended(), 'medium', 'medium') : ''; ?></td>
+            <td><?php echo $this->hyperlink($item->displayTitle(), $this->url('admin/services/transcription-project-item-id', ['item-id' => $item->id()], true)); ?></td>
+            <td><?php echo count($item->media()); ?></td>
+            <td><?php echo $this->servicesTranscription()->pageCount($item); ?></td>
         </tr>
-        <tr>
-            <td><?php echo $this->translate('Transcribe pages'); ?></td>
-            <td><?php
-                echo $transcribeJob
-                    ? sprintf(
-                        $this->translate('%s [%s]'),
-                        $transcribeJob->link($transcribeJob->statusLabel()),
-                        $transcribeJob->log()
-                            ? $this->hyperlink($this->translate('view log'), $this->url('admin/id', ['controller' => 'job', 'action' => 'log', 'id' => $transcribeJob->id()]), ['target' => '_blank'])
-                            : $this->translate('no log')
-                    )
-                    : $this->translate('Not started');
-            ?></td>
-            <td><?php echo $transcribeJob ? $this->i18n()->dateFormat($transcribeJob->started(), 'medium', 'medium') : ''; ?></td>
-            <td><?php echo $transcribeJob ? $this->i18n()->dateFormat($transcribeJob->ended(), 'medium', 'medium') : ''; ?></td>
-        </tr>
-        <tr>
-            <td><?php echo $this->translate('Fetch transcriptions'); ?></td>
-            <td><?php
-                echo $fetchJob
-                    ? sprintf(
-                        $this->translate('%s [%s]'),
-                        $fetchJob->link($fetchJob->statusLabel()),
-                        $fetchJob->log()
-                            ? $this->hyperlink($this->translate('view log'), $this->url('admin/id', ['controller' => 'job', 'action' => 'log', 'id' => $fetchJob->id()]), ['target' => '_blank'])
-                            : $this->translate('no log')
-                    )
-                    : $this->translate('Not started');
-            ?></td>
-            <td></td>
-            <td></td>
-        </tr>
+    <?php endforeach; ?>
     </tbody>
 </table>
+
+<div class="browse-controls">
+    <?php echo $this->pagination(); ?>
+</div>
+
+<?php else: ?>
+<div class="no-resources">
+    <p><?php echo $this->translate('No items found.'); ?></p>
+</div>
+<?php endif; ?>
 
 <div id="project-sidebar" class="sidebar always-open">
     <?php echo $this->partial('services/transcription/admin/project/show-details') ?>

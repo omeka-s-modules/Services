@@ -39,7 +39,7 @@ class ProjectRepresentation extends AbstractEntityRepresentation
             [
                 'controller' => 'transcription',
                 'action' => $action,
-                'id' => $this->id(),
+                'project-id' => $this->id(),
             ],
             ['force_canonical' => $canonical]
         );
@@ -97,8 +97,10 @@ class ProjectRepresentation extends AbstractEntityRepresentation
 
     public function itemCount()
     {
-        parse_str($this->query(), $query);
-        $query['limit'] = 0;
+        $query = [
+            'limit' => 0,
+            'services_transcription_project_id' => $this->id(),
+        ];
         return $this->getServiceLocator()
             ->get('Omeka\ApiManager')
             ->search('items', $query)

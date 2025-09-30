@@ -2,7 +2,6 @@
 namespace Services\Transcription\Preprocesser\File;
 
 use Omeka\ServiceManager\AbstractPluginManager;
-use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 
 class Manager extends AbstractPluginManager
 {

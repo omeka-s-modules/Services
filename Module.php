@@ -1,6 +1,8 @@
 <?php
 namespace Services;
 
+use Omeka\Api\Adapter\ItemAdapter;
+use Omeka\Api\Adapter\MediaAdapter;
 use Omeka\Module\AbstractModule;
 use Laminas\EventManager\Event;
 use Laminas\EventManager\SharedEventManagerInterface;
@@ -56,34 +58,54 @@ SQL;
 
     public function attachListeners(SharedEventManagerInterface $sharedEventManager)
     {
-        // Enable searching media by transcription project ID (using services_transcription_project_id).
+        // Enable searching items by transcription project ID.
+        $sharedEventManager->attach(
+            'Omeka\Api\Adapter\ItemAdapter',
+            'api.search.query',
+            [$this, 'addProjectIdSearchFilters']
+        );
+        // Enable searching media by transcription project ID.
         $sharedEventManager->attach(
             'Omeka\Api\Adapter\MediaAdapter',
             'api.search.query',
-            function (Event $event) {
-                $request = $event->getParam('request');
-                $qb = $event->getParam('queryBuilder');
-                if (!$request->getValue('services_transcription_project_id')) {
-                    return;
-                }
-                $entityManager = $this->getServiceLocator()->get('Omeka\EntityManager');
-                $apiManager = $this->getServiceLocator()->get('Omeka\ApiManager');
-
-                // Get the project.
-                $project = $entityManager
-                    ->getRepository('Services\Transcription\Entity\ServicesTranscriptionProject')
-                    ->find($request->getValue('services_transcription_project_id'));
-
-                // Get the item IDs.
-                parse_str($project->getQuery(), $query);
-                $itemIds = $apiManager->search('items', $query, ['returnScalar' => 'id'])->getContent();
-
-                // Filter by items in project.
-                $qb->andWhere($qb->expr()->in(
-                    'omeka_root.item',
-                    $qb->createNamedParameter($itemIds)
-                ));
-            }
+            [$this, 'addProjectIdSearchFilters']
         );
+    }
+
+    /**
+     * Enable the "services_transcription_project_id" search filter for items
+     * and media.
+     */
+    public function addProjectIdSearchFilters(Event $event)
+    {
+        $request = $event->getParam('request');
+        if (!$request->getValue('services_transcription_project_id')) {
+            return;
+        }
+        $entityManager = $this->getServiceLocator()->get('Omeka\EntityManager');
+        $apiManager = $this->getServiceLocator()->get('Omeka\ApiManager');
+
+        // Get the project.
+        $project = $entityManager
+            ->getRepository('Services\Transcription\Entity\ServicesTranscriptionProject')
+            ->find($request->getValue('services_transcription_project_id'));
+
+        // Get the item IDs.
+        if ($project) {
+            parse_str($project->getQuery(), $query);
+            $itemIds = $apiManager->search('items', $query, ['returnScalar' => 'id'])->getContent();
+        } else {
+            $itemIds = [0]; // Invalid project. Return no results.
+        }
+
+        // Filter by items in project.
+        $adapter = $event->getTarget();
+        if ($adapter instanceof ItemAdapter) {
+            $itemField = 'omeka_root.id';
+        } elseif ($adapter instanceof MediaAdapter) {
+            $itemField = 'omeka_root.item';
+        }
+        $qb = $event->getParam('queryBuilder');
+        $qb->andWhere($qb->expr()->in($itemField, $qb->createNamedParameter($itemIds)));
     }
 }

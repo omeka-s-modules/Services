@@ -46,7 +46,7 @@ class ProjectController extends AbstractActionController
                 if ($response) {
                     $project = $response->getContent();
                     $this->messenger()->addSuccess('Transcription project successfully added.'); // @translate
-                    return $this->redirect()->toRoute('admin/services/transcription-project-id', ['id' => $project->id(), 'action' => 'show'], true);
+                    return $this->redirect()->toRoute('admin/services/transcription-project-id', ['project-id' => $project->id(), 'action' => 'show'], true);
                 }
             } else {
                 $this->messenger()->addFormErrors($form);
@@ -61,7 +61,7 @@ class ProjectController extends AbstractActionController
 
     public function editAction()
     {
-        $project = $this->api()->read('services_transcription_projects', $this->params('id'))->getContent();
+        $project = $this->api()->read('services_transcription_projects', $this->params('project-id'))->getContent();
         $form = $this->getForm(ProjectForm::class, ['project' => $project]);
 
         if ($this->getRequest()->isPost()) {
@@ -72,7 +72,7 @@ class ProjectController extends AbstractActionController
                 $response = $this->api($form)->update('services_transcription_projects', $project->id(), $formData);
                 if ($response) {
                     $this->messenger()->addSuccess('Transcription project successfully edited.');
-                    return $this->redirect()->toRoute('admin/services/transcription-project-id', ['id' => $project->id(), 'action' => 'show'], true);
+                    return $this->redirect()->toRoute('admin/services/transcription-project-id', ['project-id' => $project->id(), 'action' => 'show'], true);
                 }
             } else {
                 $this->messenger()->addFormErrors($form);
@@ -90,10 +90,18 @@ class ProjectController extends AbstractActionController
 
     public function showAction()
     {
-        $project = $this->api()->read('services_transcription_projects', $this->params('id'))->getContent();
+        $project = $this->api()->read('services_transcription_projects', $this->params('project-id'))->getContent();
+
+        $this->setBrowseDefaults('created');
+        $query = $this->params()->fromQuery();
+        $query['services_transcription_project_id'] = $project->id();
+        $response = $this->api()->search('items', $query);
+        $this->paginator($response->getTotalResults(), $this->params()->fromQuery('page'));
+        $items = $response->getContent();
 
         $view = new ViewModel;
         $view->setVariable('project', $project);
+        $view->setVariable('items', $items);
         $view->setVariable('formDoPreprocess', $this->servicesTranscription()->getFormDoPreprocess($project));
         $view->setVariable('formDoTranscribe', $this->servicesTranscription()->getFormDoTranscribe($project));
         return $view;
@@ -101,7 +109,7 @@ class ProjectController extends AbstractActionController
 
     public function doPreprocessAction()
     {
-        $project = $this->api()->read('services_transcription_projects', $this->params('id'))->getContent();
+        $project = $this->api()->read('services_transcription_projects', $this->params('project-id'))->getContent();
         if ($this->getRequest()->isPost()) {
             $form = $this->getForm(DoPreprocessForm::class, ['project' => $project]);
             $form->setData($this->getRequest()->getPost());
@@ -118,7 +126,7 @@ class ProjectController extends AbstractActionController
 
     public function doTranscribeAction()
     {
-        $project = $this->api()->read('services_transcription_projects', $this->params('id'))->getContent();
+        $project = $this->api()->read('services_transcription_projects', $this->params('project-id'))->getContent();
         if ($this->getRequest()->isPost()) {
             $form = $this->getForm(DoTranscribeForm::class, ['project' => $project]);
             $form->setData($this->getRequest()->getPost());

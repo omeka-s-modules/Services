@@ -1,9 +1,9 @@
 <?php
-namespace Services\Service\ViewHelper;
+namespace Services\Transcription\Service\ViewHelper;
 
 use Interop\Container\ContainerInterface;
-use Services\ViewHelper\ServicesTranscription;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Services\Transcription\ViewHelper\ServicesTranscription;
 
 class ServicesTranscriptionFactory implements FactoryInterface
 {

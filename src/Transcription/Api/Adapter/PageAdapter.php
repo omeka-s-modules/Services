@@ -49,6 +49,18 @@ class PageAdapter extends AbstractEntityAdapter
                 $qb->createNamedParameter($itemIds)
             ));
         }
+        if (isset($query['services_transcription_item_id']) && is_numeric($query['services_transcription_item_id'])) {
+            $qb->andWhere($qb->expr()->eq(
+                'omeka_root.item',
+                $query['services_transcription_item_id']
+            ));
+        }
+        if (isset($query['services_transcription_media_id']) && is_numeric($query['services_transcription_media_id'])) {
+            $qb->andWhere($qb->expr()->eq(
+                'omeka_root.media',
+                $query['services_transcription_media_id']
+            ));
+        }
     }
 
     public function validateRequest(Request $request, ErrorStore $errorStore)

@@ -2,8 +2,8 @@
 namespace Services\Transcription\Service\ControllerPlugin;
 
 use Interop\Container\ContainerInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Services\Transcription\ControllerPlugin\ServicesTranscription;
-use Zend\ServiceManager\Factory\FactoryInterface;
 
 class ServicesTranscriptionFactory implements FactoryInterface
 {
