@@ -180,6 +180,23 @@ return [
                                     ],
                                 ],
                             ],
+                            'transcription-project-media-id' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/transcription/project/:project-id/item/:item-id/media/:media-id[/:action]',
+                                    'constraints' => [
+                                        'project-id' => '\d+',
+                                        'item-id' => '\d+',
+                                        'media-id' => '\d+',
+                                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                    ],
+                                    'defaults' => [
+                                        '__NAMESPACE__' => 'Services\Transcription\Controller\Admin',
+                                        'controller' => 'media',
+                                        'action' => 'show',
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                 ],

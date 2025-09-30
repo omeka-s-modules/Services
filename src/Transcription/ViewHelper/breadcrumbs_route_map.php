@@ -8,6 +8,11 @@ return [
     'admin/services/transcription-project-id' => [
         'breadcrumbs' => ['admin/services/transcription-project'],
         'text' => 'Project', // @translate
-        'params' => [],
+        'params' => ['project-id'],
+    ],
+    'admin/services/transcription-project-item-id' => [
+        'breadcrumbs' => ['admin/services/transcription-project', 'admin/services/transcription-project-id'],
+        'text' => 'Item', // @translate
+        'params' => ['project-id'],
     ],
 ];

@@ -60,7 +60,7 @@ $jobs = [
 <div class="meta-group">
     <h4><?php echo $this->translate('Media count'); ?></h4>
     <div class="value"><?php echo $this->hyperlink(
-        $project->itemCount(),
+        $project->mediaCount(),
         $this->url('admin/default', ['controller' => 'media'], ['query' => ['services_transcription_project_id' => $project->id()]])
     ); ?></div>
 </div>

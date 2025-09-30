@@ -1,0 +1,54 @@
+<?php
+$this->headLink()->appendStylesheet($this->assetUrl('css/transcription/styles.css', 'Services'));
+$this->headScript()->appendFile($this->assetUrl('js/transcription/scripts.js', 'Services'));
+$this->htmlElement('body')->appendAttribute('class', 'services transcription-project show browse');
+?>
+
+<?php echo $this->pageTitle($this->translate('Item'), 1, $this->translate('Services · Transcription'), $item->displayTitle()); ?>
+
+<div class="browse-controls">
+    <?php echo $this->pagination(); ?>
+    <?php echo $this->sortSelector([
+    [
+        'label' => $this->translate('Date created'),
+        'value' => 'created',
+    ],
+]); ?>
+</div>
+
+<?php echo $this->servicesTranscription()->breadcrumbs(); ?>
+
+<?php if ($medias): ?>
+
+<table class="tablesaw" data-tablesaw-mode="stack">
+    <thead>
+        <tr>
+            <th><?php echo $this->translate('Media'); ?></th>
+            <th><?php echo $this->translate('Page count'); ?></th>
+            <th><?php echo $this->translate('Transcription count'); ?></th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($medias as $media): ?>
+        <tr>
+            <td><?php echo $this->hyperlink($media->displayTitle(), $this->url('admin/services/transcription-project-media-id', ['media-id' => $media->id()], true)); ?></td>
+            <td><?php echo $this->servicesTranscription()->pageCount($media); ?></td>
+            <td><?php echo $this->servicesTranscription()->transcriptionCount($media); ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+<div class="browse-controls">
+    <?php echo $this->pagination(); ?>
+</div>
+
+<?php else: ?>
+<div class="no-resources">
+    <p><?php echo $this->translate('No media found.'); ?></p>
+</div>
+<?php endif; ?>
+
+<div id="project-sidebar" class="sidebar always-open">
+    <?php echo $this->partial('services/transcription/admin/item/show-details') ?>
+</div>

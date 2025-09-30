@@ -19,6 +19,9 @@ class ServicesTranscription extends AbstractHelper
         $this->bcRouteMap = include 'breadcrumbs_route_map.php';
     }
 
+    /**
+     * Get breadcrumbs markup.
+     */
     public function breadcrumbs(): string
     {
         $bc = [];
@@ -39,6 +42,9 @@ class ServicesTranscription extends AbstractHelper
         return sprintf('<div class="breadcrumbs">%s</div>', implode('<div class="separator"></div>', $bc));
     }
 
+    /**
+     * Get the page count for an item or media.
+     */
     public function pageCount(AbstractResourceEntityRepresentation $resource): int
     {
         $apiManager = $this->services->get('Omeka\ApiManager');
@@ -49,6 +55,22 @@ class ServicesTranscription extends AbstractHelper
             $query['services_transcription_media_id'] = $resource->id();
         }
         $response = $apiManager->search('services_transcription_pages', $query);
+        return $response->getTotalResults();
+    }
+
+    /**
+     * Get the transcription count for an item or media.
+     */
+    public function transcriptionCount(AbstractResourceEntityRepresentation $resource): int
+    {
+        $apiManager = $this->services->get('Omeka\ApiManager');
+        $query = ['limit' => 0];
+        if ($resource instanceof ItemRepresentation) {
+            $query['services_transcription_item_id'] = $resource->id();
+        } elseif ($resource instanceof MediaRepresentation) {
+            $query['services_transcription_media_id'] = $resource->id();
+        }
+        $response = $apiManager->search('services_transcription_transcriptions', $query);
         return $response->getTotalResults();
     }
 }

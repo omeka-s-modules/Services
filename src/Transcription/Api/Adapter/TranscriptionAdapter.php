@@ -36,6 +36,26 @@ class TranscriptionAdapter extends AbstractEntityAdapter
                 $qb->createNamedParameter($query['services_transcription_project_id'])
             ));
         }
+        if (isset($query['services_transcription_item_id']) && is_numeric($query['services_transcription_item_id'])) {
+            $pageAlias = $qb->createAlias();
+            $qb->innerJoin(
+                'omeka_root.page', $pageAlias
+            );
+            $qb->andWhere($qb->expr()->eq(
+                sprintf('%s.item', $pageAlias),
+                $query['services_transcription_item_id']
+            ));
+        }
+        if (isset($query['services_transcription_media_id']) && is_numeric($query['services_transcription_media_id'])) {
+            $pageAlias = $qb->createAlias();
+            $qb->innerJoin(
+                'omeka_root.page', $pageAlias
+            );
+            $qb->andWhere($qb->expr()->eq(
+                sprintf('%s.media', $pageAlias),
+                $query['services_transcription_media_id']
+            ));
+        }
     }
 
     public function validateRequest(Request $request, ErrorStore $errorStore)
