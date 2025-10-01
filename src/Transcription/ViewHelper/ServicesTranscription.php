@@ -3,9 +3,11 @@ namespace Services\Transcription\ViewHelper;
 
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Helper\AbstractHelper;
-use Omeka\Api\Representation\AbstractResourceEntityRepresentation;
+use Omeka\Api\Representation\RepresentationInterface;
 use Omeka\Api\Representation\ItemRepresentation;
 use Omeka\Api\Representation\MediaRepresentation;
+use Services\Transcription\Api\Representation\ProjectRepresentation;
+use Services\Transcription\Api\Representation\PageRepresentation;
 
 class ServicesTranscription extends AbstractHelper
 {
@@ -45,7 +47,7 @@ class ServicesTranscription extends AbstractHelper
     /**
      * Get the page count for an item or media.
      */
-    public function pageCount(AbstractResourceEntityRepresentation $resource): int
+    public function pageCount(RepresentationInterface $resource): int
     {
         $apiManager = $this->services->get('Omeka\ApiManager');
         $query = ['limit' => 0];
@@ -59,16 +61,21 @@ class ServicesTranscription extends AbstractHelper
     }
 
     /**
-     * Get the transcription count for an item or media.
+     * Get the transcription count for an item, media, or page.
      */
-    public function transcriptionCount(AbstractResourceEntityRepresentation $resource): int
+    public function transcriptionCount(RepresentationInterface $resource, ProjectRepresentation $project): int
     {
         $apiManager = $this->services->get('Omeka\ApiManager');
-        $query = ['limit' => 0];
+        $query = [
+            'limit' => 0,
+            'project_id' => $project->id(),
+        ];
         if ($resource instanceof ItemRepresentation) {
             $query['item_id'] = $resource->id();
         } elseif ($resource instanceof MediaRepresentation) {
             $query['media_id'] = $resource->id();
+        } elseif ($resource instanceof PageRepresentation) {
+            $query['page_id'] = $resource->id();
         }
         $response = $apiManager->search('services_transcription_transcriptions', $query);
         return $response->getTotalResults();

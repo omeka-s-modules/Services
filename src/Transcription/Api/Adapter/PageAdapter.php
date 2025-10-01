@@ -11,7 +11,9 @@ use Services\Transcription\Entity\ServicesTranscriptionPage;
 
 class PageAdapter extends AbstractEntityAdapter
 {
-    protected $sortFields = [];
+    protected $sortFields = [
+        'position' => 'position',
+    ];
 
     public function getResourceName()
     {
@@ -40,8 +42,9 @@ class PageAdapter extends AbstractEntityAdapter
                 ->find($query['project_id']);
 
             // Get the item IDs.
-            parse_str($project->getQuery(), $query);
-            $itemIds = $apiManager->search('items', $query, ['returnScalar' => 'id'])->getContent();
+            $projectQuery = $query;
+            parse_str($project->getQuery(), $projectQuery);
+            $itemIds = $apiManager->search('items', $projectQuery, ['returnScalar' => 'id'])->getContent();
 
             // Filter by items in project.
             $qb->andWhere($qb->expr()->in(

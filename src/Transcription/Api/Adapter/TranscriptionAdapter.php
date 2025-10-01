@@ -56,6 +56,12 @@ class TranscriptionAdapter extends AbstractEntityAdapter
                 $query['media_id']
             ));
         }
+        if (isset($query['page_id']) && is_numeric($query['page_id'])) {
+            $qb->andWhere($qb->expr()->eq(
+                'omeka_root.page',
+                $qb->createNamedParameter($query['page_id'])
+            ));
+        }
     }
 
     public function validateRequest(Request $request, ErrorStore $errorStore)

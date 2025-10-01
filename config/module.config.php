@@ -58,6 +58,7 @@ return [
             'Services\Transcription\Controller\Admin\Index' => Transcription\Service\Controller\Admin\IndexControllerFactory::class,
             'Services\Transcription\Controller\Admin\Project' => Transcription\Service\Controller\Admin\ProjectControllerFactory::class,
             'Services\Transcription\Controller\Admin\Item' => Transcription\Service\Controller\Admin\ItemControllerFactory::class,
+            'Services\Transcription\Controller\Admin\Media' => Transcription\Service\Controller\Admin\MediaControllerFactory::class,
         ],
     ],
     'controller_plugins' => [
@@ -193,6 +194,24 @@ return [
                                     'defaults' => [
                                         '__NAMESPACE__' => 'Services\Transcription\Controller\Admin',
                                         'controller' => 'media',
+                                        'action' => 'show',
+                                    ],
+                                ],
+                            ],
+                            'transcription-project-page-id' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/transcription/project/:project-id/item/:item-id/media/:media-id/page/:page-id[/:action]',
+                                    'constraints' => [
+                                        'project-id' => '\d+',
+                                        'item-id' => '\d+',
+                                        'media-id' => '\d+',
+                                        'page-id' => '\d+',
+                                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                    ],
+                                    'defaults' => [
+                                        '__NAMESPACE__' => 'Services\Transcription\Controller\Admin',
+                                        'controller' => 'page',
                                         'action' => 'show',
                                     ],
                                 ],
