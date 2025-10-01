@@ -18,6 +18,8 @@ $this->htmlElement('body')->appendAttribute('class', 'services transcription-pro
     </div>
 </div>
 
+<?php echo $this->servicesTranscription()->breadcrumbs(); ?>
+
 <div class="browse-controls">
     <?php echo $this->pagination(); ?>
     <?php echo $this->sortSelector([
@@ -27,8 +29,6 @@ $this->htmlElement('body')->appendAttribute('class', 'services transcription-pro
     ],
 ]); ?>
 </div>
-
-<?php echo $this->servicesTranscription()->breadcrumbs(); ?>
 
 <?php if ($items): ?>
 

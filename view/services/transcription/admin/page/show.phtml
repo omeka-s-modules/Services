@@ -1,0 +1,13 @@
+<?php
+$this->headLink()->appendStylesheet($this->assetUrl('css/transcription/styles.css', 'Services'));
+$this->headScript()->appendFile($this->assetUrl('js/transcription/scripts.js', 'Services'));
+$this->htmlElement('body')->appendAttribute('class', 'services transcription-project show browse');
+?>
+
+<?php echo $this->pageTitle($this->translate('Page'), 1, $this->translate('Services · Transcription'), sprintf($this->translate('Page %s'), $page->position() + 1)); ?>
+
+<?php echo $this->servicesTranscription()->breadcrumbs(); ?>
+
+<div id="project-sidebar" class="sidebar always-open">
+    <?php echo $this->partial('services/transcription/admin/page/show-details') ?>
+</div>

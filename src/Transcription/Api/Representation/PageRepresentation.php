@@ -15,6 +15,9 @@ class PageRepresentation extends AbstractEntityRepresentation
         $modified = $this->modified();
         return [
             'o:item' => $this->item()->getReference(),
+            'o:media' => $this->media()->getReference(),
+            'o-module-services:storage_path' => $this->storagePath(),
+            'o:position' => $this->position(),
             'o:created' => $this->getDateTime($this->created()),
             'o:modified' => $modified ? $this->getDateTime($modified) : null,
         ];
@@ -23,6 +26,21 @@ class PageRepresentation extends AbstractEntityRepresentation
     public function item()
     {
         return $this->getAdapter('items')->getRepresentation($this->resource->getItem());
+    }
+
+    public function media()
+    {
+        return $this->getAdapter('media')->getRepresentation($this->resource->getMedia());
+    }
+
+    public function storagePath()
+    {
+        return $this->resource->getStoragePath();
+    }
+
+    public function position()
+    {
+        return $this->resource->getPosition();
     }
 
     public function created()

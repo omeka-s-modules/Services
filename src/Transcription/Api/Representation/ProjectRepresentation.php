@@ -20,12 +20,12 @@ class ProjectRepresentation extends AbstractEntityRepresentation
         return [
             'o:owner' => $owner ? $owner->getReference() : null,
             'o:label' => $this->label(),
-            'o-module-services:model-id' => $this->modelId(),
-            'o-module-services:access-token' => $this->accessToken(),
-            'o-module-services:preprocess-job' => $preprocessJob ? $preprocessJob->getReference() : null,
-            'o-module-services:transcribe-job' => $transcribeJob ? $transcribeJob->getReference() : null,
-            'o-module-services:fetch-job' => $fetchJob ? $fetchJob->getReference() : null,
             'o:query' => $this->query(),
+            'o-module-services:model_id' => $this->modelId(),
+            'o-module-services:access_token' => $this->accessToken(),
+            'o-module-services:preprocess_job' => $preprocessJob ? $preprocessJob->getReference() : null,
+            'o-module-services:transcribe_job' => $transcribeJob ? $transcribeJob->getReference() : null,
+            'o-module-services:fetch_job' => $fetchJob ? $fetchJob->getReference() : null,
             'o:created' => $this->getDateTime($this->created()),
             'o:modified' => $modified ? $this->getDateTime($modified) : null,
         ];

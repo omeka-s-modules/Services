@@ -6,6 +6,8 @@ $this->htmlElement('body')->appendAttribute('class', 'services transcription-pro
 
 <?php echo $this->pageTitle($this->translate('Media'), 1, $this->translate('Services · Transcription'), $media->displayTitle()); ?>
 
+<?php echo $this->servicesTranscription()->breadcrumbs(); ?>
+
 <div class="browse-controls">
     <?php echo $this->pagination(); ?>
     <?php echo $this->sortSelector([
@@ -20,8 +22,6 @@ $this->htmlElement('body')->appendAttribute('class', 'services transcription-pro
 ]); ?>
 </div>
 
-<?php echo $this->servicesTranscription()->breadcrumbs(); ?>
-
 <?php if ($pages): ?>
 
 <table class="tablesaw" data-tablesaw-mode="stack">
@@ -34,7 +34,7 @@ $this->htmlElement('body')->appendAttribute('class', 'services transcription-pro
     <tbody>
     <?php foreach ($pages as $page): ?>
         <tr>
-            <td><?php echo $this->hyperlink($page->id(), $this->url('admin/services/transcription-project-page-id', ['page-id' => $page->id()], true)); ?></td>
+            <td><?php echo $this->hyperlink(sprintf($this->translate('Page %s'), $page->position() + 1), $this->url('admin/services/transcription-project-page-id', ['page-id' => $page->id()], true)); ?></td>
             <td><?php echo $this->servicesTranscription()->transcriptionCount($page, $project); ?></td>
         </tr>
     <?php endforeach; ?>

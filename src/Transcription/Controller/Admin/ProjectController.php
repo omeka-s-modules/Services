@@ -13,13 +13,6 @@ use Services\Transcription\Job\DoTranscribe;
 
 class ProjectController extends AbstractActionController
 {
-    protected $entityManager;
-
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
-
     public function browseAction()
     {
         $this->setBrowseDefaults('created');
@@ -109,15 +102,16 @@ class ProjectController extends AbstractActionController
 
     public function doPreprocessAction()
     {
+        $entityManager = $this->servicesTranscription()->getEntityManager();
         $project = $this->api()->read('services_transcription_projects', $this->params('project-id'))->getContent();
         if ($this->getRequest()->isPost()) {
             $form = $this->getForm(DoPreprocessForm::class, ['project' => $project]);
             $form->setData($this->getRequest()->getPost());
             if ($form->isValid()) {
                 $job = $this->jobDispatcher()->dispatch(DoPreprocess::class, ['project_id' => $project->id()]);
-                $entity = $this->entityManager->find(ServicesTranscriptionProject::class, $project->id());
+                $entity = $entityManager->find(ServicesTranscriptionProject::class, $project->id());
                 $entity->setPreprocessJob($job);
-                $this->entityManager->flush();
+                $entityManager->flush();
                 $this->messenger()->addSuccess('Preparing items for transcription. This may take a while.'); // @translate
             }
         }
@@ -126,15 +120,16 @@ class ProjectController extends AbstractActionController
 
     public function doTranscribeAction()
     {
+        $entityManager = $this->servicesTranscription()->getEntityManager();
         $project = $this->api()->read('services_transcription_projects', $this->params('project-id'))->getContent();
         if ($this->getRequest()->isPost()) {
             $form = $this->getForm(DoTranscribeForm::class, ['project' => $project]);
             $form->setData($this->getRequest()->getPost());
             if ($form->isValid()) {
                 $job = $this->jobDispatcher()->dispatch(DoTranscribe::class, ['project_id' => $project->id()]);
-                $entity = $this->entityManager->find(ServicesTranscriptionProject::class, $project->id());
+                $entity = $entityManager->find(ServicesTranscriptionProject::class, $project->id());
                 $entity->setTranscribeJob($job);
-                $this->entityManager->flush();
+                $entityManager->flush();
                 $this->messenger()->addSuccess('Transcribing pages. This may take a while.'); // @translate
             }
         }

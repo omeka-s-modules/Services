@@ -18,6 +18,11 @@ return [
     'admin/services/transcription-project-media-id' => [
         'breadcrumbs' => ['admin/services/transcription-project', 'admin/services/transcription-project-id', 'admin/services/transcription-project-item-id'],
         'text' => 'Media', // @translate
-        'params' => ['project-id', 'item-id'],
+        'params' => ['project-id', 'item-id', 'media-id'],
+    ],
+    'admin/services/transcription-project-page-id' => [
+        'breadcrumbs' => ['admin/services/transcription-project', 'admin/services/transcription-project-id', 'admin/services/transcription-project-item-id', 'admin/services/transcription-project-media-id'],
+        'text' => 'Page', // @translate
+        'params' => ['project-id', 'item-id', 'media-id'],
     ],
 ];

@@ -16,10 +16,10 @@ class TranscriptionRepresentation extends AbstractEntityRepresentation
         return [
             'o-module-services:project' => $this->project()->getReference(),
             'o-module-services:page' => $this->page()->getReference(),
-            'o-module-services:job-state' => $this->jobState(),
-            'o-module-services:job-id' => $this->jobId(),
+            'o-module-services:job_state' => $this->jobState(),
+            'o-module-services:job_id' => $this->jobId(),
             'o-module-services:text' => $this->text(),
-            'o-module-services:data' => $this->data(),
+            'o:data' => $this->data(),
             'o:created' => $this->getDateTime($this->created()),
             'o:modified' => $modified ? $this->getDateTime($modified) : null,
         ];

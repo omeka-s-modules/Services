@@ -53,12 +53,13 @@ return [
         ],
     ],
     'controllers' => [
-        'factories' => [
-            'Services\Services\Controller\Admin\Index' => Services\Service\Controller\Admin\IndexControllerFactory::class,
-            'Services\Transcription\Controller\Admin\Index' => Transcription\Service\Controller\Admin\IndexControllerFactory::class,
-            'Services\Transcription\Controller\Admin\Project' => Transcription\Service\Controller\Admin\ProjectControllerFactory::class,
-            'Services\Transcription\Controller\Admin\Item' => Transcription\Service\Controller\Admin\ItemControllerFactory::class,
-            'Services\Transcription\Controller\Admin\Media' => Transcription\Service\Controller\Admin\MediaControllerFactory::class,
+        'invokables' => [
+            'Services\Services\Controller\Admin\Index' => Services\Controller\Admin\IndexController::class,
+            'Services\Transcription\Controller\Admin\Index' => Transcription\Controller\Admin\IndexController::class,
+            'Services\Transcription\Controller\Admin\Project' => Transcription\Controller\Admin\ProjectController::class,
+            'Services\Transcription\Controller\Admin\Item' => Transcription\Controller\Admin\ItemController::class,
+            'Services\Transcription\Controller\Admin\Media' => Transcription\Controller\Admin\MediaController::class,
+            'Services\Transcription\Controller\Admin\Page' => Transcription\Controller\Admin\PageController::class,
         ],
     ],
     'controller_plugins' => [
@@ -168,7 +169,7 @@ return [
                             'transcription-project-item-id' => [
                                 'type' => 'Segment',
                                 'options' => [
-                                    'route' => '/transcription/project/:project-id/item/:item-id[/:action]',
+                                    'route' => '/transcription/project/:project-id/:item-id[/:action]',
                                     'constraints' => [
                                         'project-id' => '\d+',
                                         'item-id' => '\d+',
@@ -184,7 +185,7 @@ return [
                             'transcription-project-media-id' => [
                                 'type' => 'Segment',
                                 'options' => [
-                                    'route' => '/transcription/project/:project-id/item/:item-id/media/:media-id[/:action]',
+                                    'route' => '/transcription/project/:project-id/:item-id/:media-id[/:action]',
                                     'constraints' => [
                                         'project-id' => '\d+',
                                         'item-id' => '\d+',
@@ -201,7 +202,7 @@ return [
                             'transcription-project-page-id' => [
                                 'type' => 'Segment',
                                 'options' => [
-                                    'route' => '/transcription/project/:project-id/item/:item-id/media/:media-id/page/:page-id[/:action]',
+                                    'route' => '/transcription/project/:project-id/:item-id/:media-id/:page-id[/:action]',
                                     'constraints' => [
                                         'project-id' => '\d+',
                                         'item-id' => '\d+',
