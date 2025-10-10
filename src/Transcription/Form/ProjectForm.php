@@ -24,7 +24,7 @@ class ProjectForm extends Form
         ]);
         $this->add([
             'type' => LaminasElement\Text::class,
-            'name' => 'o-module-services:model-id',
+            'name' => 'o-module-services:model_id',
             'options' => [
                 'label' => 'Model ID', // @translate
                 'info' => 'Enter the ID of the Transkribus text recognition model. The model cannot be modified once it is set.', // @translate
@@ -36,7 +36,7 @@ class ProjectForm extends Form
         ]);
         $this->add([
             'type' => LaminasElement\Text::class,
-            'name' => 'o-module-services:access-token',
+            'name' => 'o-module-services:access_token',
             'options' => [
                 'label' => 'Access token', // @translate
                 'info' => 'Enter the Mino access token.', // @translate

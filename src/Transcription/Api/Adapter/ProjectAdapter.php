@@ -44,7 +44,7 @@ class ProjectAdapter extends AbstractEntityAdapter
         $this->hydrateOwner($request, $entity);
 
         if (Request::CREATE === $request->getOperation()) {
-            $entity->setModelId($request->getValue('o-module-services:model-id'));
+            $entity->setModelId($request->getValue('o-module-services:model_id'));
         }
 
         if (Request::UPDATE === $request->getOperation()) {
@@ -55,8 +55,8 @@ class ProjectAdapter extends AbstractEntityAdapter
             $entity->setLabel($request->getValue('o:label'));
         }
 
-        if ($this->shouldHydrate($request, 'o-module-services:access-token')) {
-            $entity->setAccessToken($request->getValue('o-module-services:access-token'));
+        if ($this->shouldHydrate($request, 'o-module-services:access_token')) {
+            $entity->setAccessToken($request->getValue('o-module-services:access_token'));
         }
 
         if ($this->shouldHydrate($request, 'o:query')) {
