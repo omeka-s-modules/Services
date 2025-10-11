@@ -43,6 +43,12 @@ class PageRepresentation extends AbstractEntityRepresentation
         return $this->resource->getPosition();
     }
 
+    public function imageUrl(): string
+    {
+        $store = $this->getServiceLocator()->get('Omeka\File\Store');
+        return $store->getUri($this->storagePath());
+    }
+
     public function created()
     {
         return $this->resource->getCreated();

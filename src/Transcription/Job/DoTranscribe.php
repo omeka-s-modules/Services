@@ -15,7 +15,7 @@ class DoTranscribe extends AbstractTranscriptionJob
 
         $pageIds = $apiManager->search(
             'services_transcription_pages',
-            ['services_transcription_project_id' => $this->getProject()->getId()],
+            ['project_id' => $this->getProject()->getId()],
             ['returnScalar' => 'id']
         )->getContent();
 
@@ -62,6 +62,8 @@ class DoTranscribe extends AbstractTranscriptionJob
                 }
                 $transcription->setJobId($job['id']);
                 $transcription->setJobState($job['state']);
+                // Sleep for 2 seconds to account for Mino's rate limit.
+                sleep(2);
             }
             $entityManager->flush();
         }
