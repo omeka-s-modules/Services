@@ -2,8 +2,6 @@
 namespace Services\Transcription\Api\Representation;
 
 use Omeka\Api\Representation\AbstractEntityRepresentation;
-use Services\Transcription\Api\Representation\ProjectRepresentation;
-use Services\Transcription\Api\Representation\TranscriptionRepresentation;
 
 class PageRepresentation extends AbstractEntityRepresentation
 {

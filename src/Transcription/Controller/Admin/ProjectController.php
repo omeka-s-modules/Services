@@ -1,13 +1,14 @@
 <?php
 namespace Services\Transcription\Controller\Admin;
 
-use Doctrine\ORM\EntityManager;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 use Services\Transcription\Entity\ServicesTranscriptionProject;
 use Services\Transcription\Form\ProjectForm;
+use Services\Transcription\Form\DoFetchForm;
 use Services\Transcription\Form\DoPreprocessForm;
 use Services\Transcription\Form\DoTranscribeForm;
+use Services\Transcription\Job\DoFetch;
 use Services\Transcription\Job\DoPreprocess;
 use Services\Transcription\Job\DoTranscribe;
 
@@ -97,6 +98,7 @@ class ProjectController extends AbstractActionController
         $view->setVariable('items', $items);
         $view->setVariable('formDoPreprocess', $this->servicesTranscription()->getFormDoPreprocess($project));
         $view->setVariable('formDoTranscribe', $this->servicesTranscription()->getFormDoTranscribe($project));
+        $view->setVariable('formDoFetch', $this->servicesTranscription()->getFormDoFetch($project));
         return $view;
     }
 
@@ -131,6 +133,24 @@ class ProjectController extends AbstractActionController
                 $entity->setTranscribeJob($job);
                 $entityManager->flush();
                 $this->messenger()->addSuccess('Transcribing pages. This may take a while.'); // @translate
+            }
+        }
+        return $this->redirect()->toRoute(null, ['action' => 'show'], true);
+    }
+
+    public function doFetchAction()
+    {
+        $entityManager = $this->servicesTranscription()->getEntityManager();
+        $project = $this->api()->read('services_transcription_projects', $this->params('project-id'))->getContent();
+        if ($this->getRequest()->isPost()) {
+            $form = $this->getForm(DoFetchForm::class, ['project' => $project]);
+            $form->setData($this->getRequest()->getPost());
+            if ($form->isValid()) {
+                $job = $this->jobDispatcher()->dispatch(DoFetch::class, ['project_id' => $project->id()]);
+                $entity = $entityManager->find(ServicesTranscriptionProject::class, $project->id());
+                $entity->setFetchJob($job);
+                $entityManager->flush();
+                $this->messenger()->addSuccess('Fetching transcriptions. This may take a while.'); // @translate
             }
         }
         return $this->redirect()->toRoute(null, ['action' => 'show'], true);

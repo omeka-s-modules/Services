@@ -72,14 +72,6 @@ return [
             'servicesTranscription' => Transcription\Service\ViewHelper\ServicesTranscriptionFactory::class,
         ],
     ],
-    'form_elements' => [
-        'factories' => [
-            'Services\Transcription\Form\ProjectForm' => Transcription\Service\Form\ProjectFormFactory::class,
-            'Services\Transcription\Form\DoPreprocessForm' => Transcription\Service\Form\DoPreprocessFormFactory::class,
-            // 'Transcription\Services\Form\DoTranscribeForm' => Transcription\Service\Form\DoTranscribeFormFactory::class,
-            // 'Transcription\Services\Form\DoFetchForm' => Transcription\Service\Form\DoFetchFormFactory::class,
-        ],
-    ],
     'navigation' => [
         'AdminModule' => [
             [

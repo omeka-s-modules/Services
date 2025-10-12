@@ -1,10 +1,14 @@
 <?php
 namespace Services\Transcription\ControllerPlugin;
 
+use Doctrine\ORM\EntityManager;
+use Laminas\Form\Form;
+use Laminas\Mvc\Controller\Plugin\AbstractPlugin;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Services\Transcription\Api\Representation\ProjectRepresentation;
+use Services\Transcription\Form\DoFetchForm;
 use Services\Transcription\Form\DoPreprocessForm;
 use Services\Transcription\Form\DoTranscribeForm;
-use Zend\Mvc\Controller\Plugin\AbstractPlugin;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 class ServicesTranscription extends AbstractPlugin
 {
@@ -15,12 +19,15 @@ class ServicesTranscription extends AbstractPlugin
         $this->services = $services;
     }
 
-    public function getEntityManager()
+    public function getEntityManager(): EntityManager
     {
         return $this->services->get('Omeka\EntityManager');
     }
 
-    public function getFormDoPreprocess($project)
+    /**
+     * Prepare and return the DoPreprocessForm form.
+     */
+    public function getFormDoPreprocess(ProjectRepresentation $project): Form
     {
         $controller = $this->getController();
         $formDoPreprocess = $controller->getForm(DoPreprocessForm::class, ['project' => $project]);
@@ -28,11 +35,25 @@ class ServicesTranscription extends AbstractPlugin
         return $formDoPreprocess;
     }
 
-    public function getFormDoTranscribe($project)
+    /**
+     * Prepare and return the DoTranscribeForm form.
+     */
+    public function getFormDoTranscribe(ProjectRepresentation $project): Form
     {
         $controller = $this->getController();
         $formDoTranscribe = $controller->getForm(DoTranscribeForm::class, ['project' => $project]);
         $formDoTranscribe->setAttribute('action', $controller->url()->fromRoute('admin/services/transcription-project-id', ['action' => 'do-transcribe'], true));
         return $formDoTranscribe;
+    }
+
+    /**
+     * Prepare and return the DoFetchForm form.
+     */
+    public function getFormDoFetch(ProjectRepresentation $project): Form
+    {
+        $controller = $this->getController();
+        $formDoFetch = $controller->getForm(DoFetchForm::class, ['project' => $project]);
+        $formDoFetch->setAttribute('action', $controller->url()->fromRoute('admin/services/transcription-project-id', ['action' => 'do-fetch'], true));
+        return $formDoFetch;
     }
 }
