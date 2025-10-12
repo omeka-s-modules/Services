@@ -72,20 +72,20 @@ $this->htmlElement('body')->appendAttribute('class', 'services transcription-pro
 <div id="do-preprocess-sidebar" class="sidebar">
     <?php echo $this->hyperlink('', '#', ['class' => 'sidebar-close o-icon-close', 'title' => $this->translate('Close')]); ?>
     <h3><?php echo $this->translate('Preprocess items'); ?></h3>
-    <p><?php echo $this->translate('Prepare items in this project for transcription. This will...'); ?></p>
+    <p><?php echo $this->translate('Prepare items in this project for transcription.'); ?></p>
     <?php echo $this->form($formDoPreprocess); ?>
 </div>
 
 <div id="do-transcribe-sidebar" class="sidebar">
     <?php echo $this->hyperlink('', '#', ['class' => 'sidebar-close o-icon-close', 'title' => $this->translate('Close')]); ?>
     <h3><?php echo $this->translate('Transcribe pages'); ?></h3>
-    <p><?php echo $this->translate('Transcribe pages in this project. This will...'); ?></p>
+    <p><?php echo $this->translate('Transcribe pages in this project.'); ?></p>
     <?php echo $this->form($formDoTranscribe); ?>
 </div>
 
 <div id="do-fetch-sidebar" class="sidebar">
     <?php echo $this->hyperlink('', '#', ['class' => 'sidebar-close o-icon-close', 'title' => $this->translate('Close')]); ?>
     <h3><?php echo $this->translate('Fetch transcriptions'); ?></h3>
-    <p><?php echo $this->translate('Fetch transcriptions from the transcription service. This will...'); ?></p>
+    <p><?php echo $this->translate('Fetch transcriptions from the transcription service.'); ?></p>
     <?php // echo $this->form($formDoTranscribe); ?>
 </div>

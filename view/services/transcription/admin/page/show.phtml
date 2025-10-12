@@ -8,7 +8,7 @@ $this->htmlElement('body')->appendAttribute('class', 'services transcription-pro
 
 <?php echo $this->servicesTranscription()->breadcrumbs(); ?>
 
-<img src="<?php echo $this->escapeHtml($page->imageUrl()); ?>">
+<img src="<?php echo $this->escapeHtml($page->imageUrl()); ?>" style="width: 100%; height: auto;">
 
 <div id="project-sidebar" class="sidebar always-open">
     <?php echo $this->partial('services/transcription/admin/page/show-details') ?>

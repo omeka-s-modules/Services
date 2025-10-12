@@ -2,6 +2,8 @@
 namespace Services\Transcription\Api\Representation;
 
 use Omeka\Api\Representation\AbstractEntityRepresentation;
+use Services\Transcription\Api\Representation\ProjectRepresentation;
+use Services\Transcription\Api\Representation\TranscriptionRepresentation;
 
 class PageRepresentation extends AbstractEntityRepresentation
 {
@@ -47,6 +49,22 @@ class PageRepresentation extends AbstractEntityRepresentation
     {
         $store = $this->getServiceLocator()->get('Omeka\File\Store');
         return $store->getUri($this->storagePath());
+    }
+
+    /**
+     * Get this page's corresponding transcription for a specific project.
+     */
+    public function transcription(ProjectRepresentation $project): ?TranscriptionRepresentation
+    {
+        $query = [
+            'project_id' => $project->id(),
+            'page_id' => $this->id(),
+        ];
+        $pages = $this->getServiceLocator()
+            ->get('Omeka\ApiManager')
+            ->search('services_transcription_transcriptions', $query)
+            ->getContent();
+        return $pages ? $pages[0] : null;
     }
 
     public function created()
