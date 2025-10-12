@@ -30,7 +30,7 @@ $this->htmlElement('body')->appendAttribute('class', 'services transcription-pro
     <thead>
         <tr>
             <th><?php echo $this->translate('Page'); ?></th>
-            <th><?php echo $this->translate('Transcription status'); ?></th>
+            <th><?php echo $this->translate('Transcription state'); ?></th>
         </tr>
     </thead>
     <tbody>
@@ -38,7 +38,7 @@ $this->htmlElement('body')->appendAttribute('class', 'services transcription-pro
         <?php $transcription = $page->transcription($project); ?>
         <tr>
             <td><?php echo $this->hyperlink(sprintf($this->translate('Page %s'), $page->position() + 1), $this->url('admin/services/transcription-project-page-id', ['page-id' => $page->id()], true)); ?></td>
-            <td><?php echo $transcription ? ($transcription->jobState() ? $transcription->jobState() : $this->translate('[no status]')) : $this->translate('[not started]'); ?></td>
+            <td><?php echo $transcription ? ($transcription->jobState() ?? $this->translate('[no state]')) : $this->translate('[not started]'); ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
