@@ -183,16 +183,16 @@ class ServicesTranscriptionProject extends AbstractEntity
      *     onDelete="SET NULL"
      * )
      */
-    protected $fetchJob;
+    protected $pollJob;
 
-    public function setFetchJob(?Job $fetchJob = null): void
+    public function setPollJob(?Job $pollJob = null): void
     {
-        $this->fetchJob = $fetchJob;
+        $this->pollJob = $pollJob;
     }
 
-    public function getFetchJob(): ?Job
+    public function getPollJob(): ?Job
     {
-        return $this->fetchJob;
+        return $this->pollJob;
     }
 
     /**

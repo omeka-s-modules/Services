@@ -16,7 +16,7 @@ class ProjectRepresentation extends AbstractEntityRepresentation
         $modified = $this->modified();
         $preprocessJob = $this->preprocessJob();
         $transcribeJob = $this->transcribeJob();
-        $fetchJob = $this->fetchJob();
+        $pollJob = $this->pollJob();
         return [
             'o:owner' => $owner ? $owner->getReference() : null,
             'o:label' => $this->label(),
@@ -25,7 +25,7 @@ class ProjectRepresentation extends AbstractEntityRepresentation
             'o-module-services:access_token' => $this->accessToken(),
             'o-module-services:preprocess_job' => $preprocessJob ? $preprocessJob->getReference() : null,
             'o-module-services:transcribe_job' => $transcribeJob ? $transcribeJob->getReference() : null,
-            'o-module-services:fetch_job' => $fetchJob ? $fetchJob->getReference() : null,
+            'o-module-services:poll_job' => $pollJob ? $pollJob->getReference() : null,
             'o:created' => $this->getDateTime($this->created()),
             'o:modified' => $modified ? $this->getDateTime($modified) : null,
         ];
@@ -80,9 +80,9 @@ class ProjectRepresentation extends AbstractEntityRepresentation
         return $this->getAdapter('jobs')->getRepresentation($this->resource->getTranscribeJob());
     }
 
-    public function fetchJob()
+    public function pollJob()
     {
-        return $this->getAdapter('jobs')->getRepresentation($this->resource->getFetchJob());
+        return $this->getAdapter('jobs')->getRepresentation($this->resource->getPollJob());
     }
 
     public function created()

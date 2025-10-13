@@ -6,7 +6,7 @@ use Laminas\Form\Form;
 use Laminas\Mvc\Controller\Plugin\AbstractPlugin;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Services\Transcription\Api\Representation\ProjectRepresentation;
-use Services\Transcription\Form\DoFetchForm;
+use Services\Transcription\Form\DoPollForm;
 use Services\Transcription\Form\DoPreprocessForm;
 use Services\Transcription\Form\DoTranscribeForm;
 
@@ -47,13 +47,13 @@ class ServicesTranscription extends AbstractPlugin
     }
 
     /**
-     * Prepare and return the DoFetchForm form.
+     * Prepare and return the DoPollForm form.
      */
-    public function getFormDoFetch(ProjectRepresentation $project): Form
+    public function getFormDoPoll(ProjectRepresentation $project): Form
     {
         $controller = $this->getController();
-        $formDoFetch = $controller->getForm(DoFetchForm::class, ['project' => $project]);
-        $formDoFetch->setAttribute('action', $controller->url()->fromRoute('admin/services/transcription-project-id', ['action' => 'do-fetch'], true));
-        return $formDoFetch;
+        $formDoPoll = $controller->getForm(DoPollForm::class, ['project' => $project]);
+        $formDoPoll->setAttribute('action', $controller->url()->fromRoute('admin/services/transcription-project-id', ['action' => 'do-poll'], true));
+        return $formDoPoll;
     }
 }

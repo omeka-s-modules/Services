@@ -5,10 +5,10 @@ use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 use Services\Transcription\Entity\ServicesTranscriptionProject;
 use Services\Transcription\Form\ProjectForm;
-use Services\Transcription\Form\DoFetchForm;
+use Services\Transcription\Form\DoPollForm;
 use Services\Transcription\Form\DoPreprocessForm;
 use Services\Transcription\Form\DoTranscribeForm;
-use Services\Transcription\Job\DoFetch;
+use Services\Transcription\Job\DoPoll;
 use Services\Transcription\Job\DoPreprocess;
 use Services\Transcription\Job\DoTranscribe;
 
@@ -98,7 +98,7 @@ class ProjectController extends AbstractActionController
         $view->setVariable('items', $items);
         $view->setVariable('formDoPreprocess', $this->servicesTranscription()->getFormDoPreprocess($project));
         $view->setVariable('formDoTranscribe', $this->servicesTranscription()->getFormDoTranscribe($project));
-        $view->setVariable('formDoFetch', $this->servicesTranscription()->getFormDoFetch($project));
+        $view->setVariable('formDoPoll', $this->servicesTranscription()->getFormDoPoll($project));
         return $view;
     }
 
@@ -138,19 +138,19 @@ class ProjectController extends AbstractActionController
         return $this->redirect()->toRoute(null, ['action' => 'show'], true);
     }
 
-    public function doFetchAction()
+    public function doPollAction()
     {
         $entityManager = $this->servicesTranscription()->getEntityManager();
         $project = $this->api()->read('services_transcription_projects', $this->params('project-id'))->getContent();
         if ($this->getRequest()->isPost()) {
-            $form = $this->getForm(DoFetchForm::class, ['project' => $project]);
+            $form = $this->getForm(DoPollForm::class, ['project' => $project]);
             $form->setData($this->getRequest()->getPost());
             if ($form->isValid()) {
-                $job = $this->jobDispatcher()->dispatch(DoFetch::class, ['project_id' => $project->id()]);
+                $job = $this->jobDispatcher()->dispatch(DoPoll::class, ['project_id' => $project->id()]);
                 $entity = $entityManager->find(ServicesTranscriptionProject::class, $project->id());
-                $entity->setFetchJob($job);
+                $entity->setPollJob($job);
                 $entityManager->flush();
-                $this->messenger()->addSuccess('Fetching transcriptions. This may take a while.'); // @translate
+                $this->messenger()->addSuccess('Polling transcriptions. This may take a while.'); // @translate
             }
         }
         return $this->redirect()->toRoute(null, ['action' => 'show'], true);

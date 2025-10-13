@@ -3,7 +3,7 @@ namespace Services\Transcription\Form;
 
 use Laminas\Form\Form;
 
-class DoFetchForm extends Form
+class DoPollForm extends Form
 {
     public function init()
     {
@@ -13,7 +13,7 @@ class DoFetchForm extends Form
             'type' => 'submit',
             'name' => 'submit',
             'attributes' => [
-                'value' => 'Confirm fetch transcriptions', // @translate
+                'value' => 'Confirm poll transcriptions', // @translate
             ],
         ]);
 
