@@ -11,8 +11,8 @@ return [
             ],
             'file_preprocessers' => [
                 'factories' => [
-                    'application/pdf' => Transcription\Service\Preprocesser\File\MultipageSplitFactory::class,
-                    'image/tiff' => Transcription\Service\Preprocesser\File\MultipageSplitFactory::class,
+                    'application/pdf' => Transcription\Service\Preprocesser\File\ApplicationPdfFactory::class,
+                    'image/tiff' => Transcription\Service\Preprocesser\File\ImageTiffFactory::class,
                 ],
             ],
         ],
