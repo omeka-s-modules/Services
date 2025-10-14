@@ -13,7 +13,7 @@ class DoPreprocessForm extends Form
             'type' => 'submit',
             'name' => 'submit',
             'attributes' => [
-                'value' => 'Confirm preprocess items', // @translate
+                'value' => 'Confirm create pages', // @translate
             ],
         ]);
 
