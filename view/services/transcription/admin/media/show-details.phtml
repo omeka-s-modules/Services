@@ -12,6 +12,8 @@
     <div class="value"><?php echo $this->servicesTranscription()->pageCount($media); ?></div>
 </div>
 <div class="meta-group">
-    <h4><?php echo $this->translate('Transcription count'); ?></h4>
-    <div class="value"><?php echo $this->servicesTranscription()->transcriptionCount($media, $project); ?></div>
+    <h4><?php echo $this->translate('Transcription requests'); ?></h4>
+    <div class="value"><?php echo sprintf('Completed: %s', $this->servicesTranscription()->transcriptionCount($media, $project, 'completed')); ?></div>
+    <div class="value"><?php echo sprintf('Failed: %s', $this->servicesTranscription()->transcriptionCount($media, $project, 'failed')); ?></div>
+    <div class="value"><?php echo sprintf('Pending: %s', $this->servicesTranscription()->transcriptionCount($media, $project, 'pending')); ?></div>
 </div>

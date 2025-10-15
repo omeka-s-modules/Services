@@ -1,6 +1,3 @@
-<?php
-$transcription = $page->transcription($project);
-?>
 <h3><?php echo $this->translate('Page metadata'); ?></h3>
 <div class="meta-group">
     <h4><?php echo $this->translate('Item'); ?></h4>
@@ -11,6 +8,6 @@ $transcription = $page->transcription($project);
     <div class="value"><?php echo $media->linkPretty(); ?></div>
 </div>
 <div class="meta-group">
-    <h4><?php echo $this->translate('Transcription state'); ?></h4>
-    <div class="value"><?php echo $transcription ? ($transcription->jobState() ?? $this->translate('[no state]')) : $this->translate('[not started]'); ?></td></div>
+    <h4><?php echo $this->translate('Transcription status'); ?></h4>
+    <div class="value"><?php echo $page->transcription($project)->status(); ?></td></div>
 </div>

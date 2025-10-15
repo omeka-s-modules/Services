@@ -62,6 +62,25 @@ class TranscriptionAdapter extends AbstractEntityAdapter
                 $qb->createNamedParameter($query['page_id'])
             ));
         }
+        if (isset($query['status']) && is_string($query['status'])) {
+            switch ($query['status']) {
+                case 'pending':
+                    $jobStates = ['created', 'active', 'suspended'];
+                    break;
+                case 'failed':
+                    $jobStates = ['failed', 'retry', 'cancelled'];
+                    break;
+                case 'completed':
+                    $jobStates = ['completed'];
+                    break;
+                default:
+                    $jobStates = [];
+            }
+            $qb->andWhere($qb->expr()->in(
+                'omeka_root.jobState',
+                $qb->createNamedParameter($jobStates)
+            ));
+        }
     }
 
     public function validateRequest(Request $request, ErrorStore $errorStore)

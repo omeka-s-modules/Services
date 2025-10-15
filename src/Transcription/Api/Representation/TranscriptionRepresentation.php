@@ -55,6 +55,23 @@ class TranscriptionRepresentation extends AbstractEntityRepresentation
         return $this->resource->getData();
     }
 
+    public function status()
+    {
+        switch ($this->jobState()) {
+            case 'created':
+            case 'active':
+            case 'suspended':
+                return 'pending';
+            case 'completed':
+                return 'completed';
+            case 'failed':
+            case 'retry':
+            case 'cancelled':
+            default:
+                return 'failed';
+        }
+    }
+
     public function created()
     {
         return $this->resource->getCreated();

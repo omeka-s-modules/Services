@@ -63,12 +63,16 @@ class ServicesTranscription extends AbstractHelper
     /**
      * Get the transcription count for an item, media, or page.
      */
-    public function transcriptionCount(RepresentationInterface $resource, ProjectRepresentation $project): int
-    {
+    public function transcriptionCount(
+        RepresentationInterface $resource,
+        ProjectRepresentation $project,
+        ?string $status = null
+    ): int {
         $apiManager = $this->services->get('Omeka\ApiManager');
         $query = [
             'limit' => 0,
             'project_id' => $project->id(),
+            'status' => $status,
         ];
         if ($resource instanceof ItemRepresentation) {
             $query['item_id'] = $resource->id();

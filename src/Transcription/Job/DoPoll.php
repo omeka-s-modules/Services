@@ -36,7 +36,7 @@ class DoPoll extends AbstractTranscriptionJob
                     $logger->notice('Not possible when transcription not initiated');
                     continue;
                 }
-                if (in_array($transcription->getJobState(), ['completed', 'failed', 'cancelled'])) {
+                if (in_array($transcription->getJobState(), ['completed', 'retry', 'failed', 'cancelled'])) {
                     $logger->notice(sprintf(
                         'Already polled with status "%s"',
                         $transcription->getJobState()

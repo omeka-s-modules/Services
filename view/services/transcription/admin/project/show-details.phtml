@@ -1,20 +1,3 @@
-<?php
-$jobs = [
-    [
-        'label' => 'Create pages job', // @translate
-        'job' => $project->preprocessJob(),
-    ],
-    [
-        'label' => 'Transcribe pages job', // @translate
-        'job' => $project->transcribeJob(),
-    ],
-    [
-        'label' => 'Poll transcriptions job', // @translate
-        'job' => $project->pollJob(),
-    ],
-];
-?>
-
 <h3><?php echo $this->translate('Project metadata'); ?></h3>
 <div class="meta-group">
     <h4><?php echo $this->translate('Project'); ?></h4>
@@ -24,32 +7,6 @@ $jobs = [
     <h4><?php echo $this->translate('Model ID'); ?></h4>
     <div class="value"><?php echo $project->modelId(); ?></div>
 </div>
-
-<?php foreach ($jobs as $job): ?>
-<div class="meta-group">
-    <h4><?php echo $this->translate($job['label']); ?></h4>
-    <?php if ($job['job']): ?>
-    <div class="value"><?php
-        if ($this->userIsAllowed('Omeka\Controller\Admin\Job', 'show')) {
-            echo sprintf(
-                $this->translate('Status: %s [%s]'),
-                $job['job']->link($job['job']->statusLabel()),
-                $job['job']->log()
-                    ? $this->hyperlink($this->translate('view log'), $this->url('admin/id', ['controller' => 'job', 'action' => 'log', 'id' => $job['job']->id()]), ['target' => '_blank'])
-                    : $this->translate('no log')
-            );
-        } else {
-            echo sprintf($this->translate('Status: %s'), $job['job']->statusLabel());
-        }
-        ?></div>
-    <div class="value"><?php echo sprintf($this->translate('Started: %s'), $this->i18n()->dateFormat($job['job']->started(), 'medium', 'medium')); ?></div>
-    <div class="value"><?php echo sprintf($this->translate('Ended: %s'), $this->i18n()->dateFormat($job['job']->ended(), 'medium', 'medium')); ?></div>
-    <?php else: ?>
-    <div class="value"><?php echo $this->translate('Not started'); ?></div>
-    <?php endif; ?>
-</div>
-<?php endforeach; ?>
-
 <div class="meta-group">
     <h4><?php echo $this->translate('Item count'); ?></h4>
     <div class="value"><?php echo $this->hyperlink(
@@ -69,6 +26,48 @@ $jobs = [
     <div class="value"><?php echo $project->pageCount(); ?></div>
 </div>
 <div class="meta-group">
-    <h4><?php echo $this->translate('Transcription count'); ?></h4>
-    <div class="value"><?php echo $project->transcriptionCount(); ?></div>
+    <h4><?php echo $this->translate('Transcription requests'); ?></h4>
+    <div class="value"><?php echo sprintf('Completed: %s', $project->transcriptionCount('completed')); ?></div>
+    <div class="value"><?php echo sprintf('Failed: %s', $project->transcriptionCount('failed')); ?></div>
+    <div class="value"><?php echo sprintf('Pending: %s', $project->transcriptionCount('pending')); ?></div>
 </div>
+<?php
+$jobs = [
+    [
+        'label' => 'Create pages job', // @translate
+        'job' => $project->preprocessJob(),
+    ],
+    [
+        'label' => 'Request transcriptions job', // @translate
+        'job' => $project->transcribeJob(),
+    ],
+    [
+        'label' => 'Poll transcriptions job', // @translate
+        'job' => $project->pollJob(),
+    ],
+];
+?>
+<?php foreach ($jobs as $job): ?>
+<div class="meta-group">
+    <h4><?php echo $this->translate($job['label']); ?></h4>
+    <?php if ($job['job']): ?>
+    <div class="value"><?php
+        if ($this->userIsAllowed('Omeka\Controller\Admin\Job', 'show')) {
+            echo sprintf(
+                $this->translate('%s [%s]'),
+                $job['job']->link($job['job']->statusLabel()),
+                $job['job']->log()
+                    ? $this->hyperlink($this->translate('view log'), $this->url('admin/id', ['controller' => 'job', 'action' => 'log', 'id' => $job['job']->id()]), ['target' => '_blank'])
+                    : $this->translate('no log')
+            );
+        } else {
+            echo sprintf($this->translate('Status: %s'), $job['job']->statusLabel());
+        }
+        ?></div>
+    <div class="value"><?php echo sprintf($this->translate('Started: %s'), $this->i18n()->dateFormat($job['job']->started(), 'medium', 'medium')); ?></div>
+    <div class="value"><?php echo sprintf($this->translate('Ended: %s'), $this->i18n()->dateFormat($job['job']->ended(), 'medium', 'medium')); ?></div>
+    <?php else: ?>
+    <div class="value"><?php echo $this->translate('Not started'); ?></div>
+    <?php endif; ?>
+</div>
+<?php endforeach; ?>
