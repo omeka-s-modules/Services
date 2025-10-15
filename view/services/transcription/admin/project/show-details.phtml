@@ -41,10 +41,6 @@ $jobs = [
         'label' => 'Request transcriptions job', // @translate
         'job' => $project->transcribeJob(),
     ],
-    [
-        'label' => 'Poll transcriptions job', // @translate
-        'job' => $project->pollJob(),
-    ],
 ];
 ?>
 <?php foreach ($jobs as $job): ?>

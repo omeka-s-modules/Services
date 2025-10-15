@@ -35,38 +35,71 @@ class DoTranscribe extends AbstractTranscriptionJob
                 $transcription = $entityManager
                     ->getRepository('Services\Transcription\Entity\ServicesTranscriptionTranscription')
                     ->findOneBy(['project' => $this->getProject(), 'page' => $page]);
-                if (!$transcription) {
-                    // The transcription record does not exist. Create it.
+
+                if ($transcription) {
+                    if ('completed' === $transcription->getJobState()) {
+                        continue;
+                    }
+                    try {
+                        $content = $this->poll($transcription->getJobId());
+                    } catch (\Exception $e) {
+                        $logger->err($e->getMessage());
+                        continue;
+                    }
+                    $transcription->setJobState($content['state']);
+                    $transcription->setText($content['output']['text']);
+                    $transcription->setData($content['output']['alto']);
+
+                } else {
+                    // Submit upload and transcription requests to Mino.
+                    $imageUrl = $fileStore->getUri($page->getStoragePath());
+                    try {
+                        $image = $this->upload($imageUrl);
+                        $job = $this->transcribe($image);
+                    } catch (\Exception $e) {
+                        $logger->err($e->getMessage());
+                        continue;
+                    }
+
+                    // Create the transcription record.
                     $transcription = new ServicesTranscriptionTranscription;
                     $transcription->setProject($this->getProject());
                     $transcription->setPage($page);
+                    $transcription->setJobId($job['id']);
+                    $transcription->setJobState($job['state']);
+
                     $entityManager->persist($transcription);
-                }
 
-                if (null !== $transcription->getJobState()) {
-                    $logger->notice(sprintf(
-                        'Transcription already initiated with state "%s"',
-                        $transcription->getJobState()
-                    ));
-                    continue;
+                    // Sleep for 2 seconds to account for Mino's rate limit.
+                    sleep(2);
                 }
-
-                // Submit upload and transcription requests to Mino.
-                $imageUrl = $fileStore->getUri($page->getStoragePath());
-                try {
-                    $image = $this->upload($imageUrl);
-                    $job = $this->transcribe($image);
-                } catch (\Exception $e) {
-                    $logger->err($e->getMessage());
-                    continue;
-                }
-                $transcription->setJobId($job['id']);
-                $transcription->setJobState($job['state']);
-                // Sleep for 2 seconds to account for Mino's rate limit.
-                sleep(2);
             }
             $entityManager->flush();
         }
+    }
+
+    /**
+     * Poll Mino for transcription status.
+     */
+    public function poll(string $jobId)
+    {
+        // Poll Mino for the transcription.
+        $client = $this->get('Omeka\HttpClient')
+            ->setMethod('GET')
+            ->setUri(sprintf('https://mino.tropy.org/transcription/%s', $jobId));
+        $headers = $client->getRequest()->getHeaders();
+        $headers->addHeaders([
+            'Authorization' => sprintf('Bearer %s', $this->getProject()->getAccessToken()),
+        ]);
+        $response = $client->send();
+        if (!$response->isSuccess()) {
+            throw new \Exception(sprintf(
+                'Poll failed with status "%s": %s',
+                $response->getStatusCode(),
+                $response->getContent()
+            ));
+        }
+        return json_decode($response->getContent(), true);
     }
 
     /**

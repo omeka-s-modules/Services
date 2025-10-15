@@ -67,10 +67,10 @@ class ServicesTranscriptionProject extends \Services\Transcription\Entity\Servic
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'label', 'modelId', 'accessToken', 'query', 'owner', 'preprocessJob', 'transcribeJob', 'pollJob', 'created', 'modified'];
+            return ['__isInitialized__', 'id', 'label', 'modelId', 'accessToken', 'query', 'owner', 'preprocessJob', 'transcribeJob', 'created', 'modified'];
         }
 
-        return ['__isInitialized__', 'id', 'label', 'modelId', 'accessToken', 'query', 'owner', 'preprocessJob', 'transcribeJob', 'pollJob', 'created', 'modified'];
+        return ['__isInitialized__', 'id', 'label', 'modelId', 'accessToken', 'query', 'owner', 'preprocessJob', 'transcribeJob', 'created', 'modified'];
     }
 
     /**
@@ -344,28 +344,6 @@ class ServicesTranscriptionProject extends \Services\Transcription\Entity\Servic
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTranscribeJob', []);
 
         return parent::getTranscribeJob();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setPollJob(\Omeka\Entity\Job $pollJob = NULL): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPollJob', [$pollJob]);
-
-        parent::setPollJob($pollJob);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getPollJob(): ?\Omeka\Entity\Job
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPollJob', []);
-
-        return parent::getPollJob();
     }
 
     /**

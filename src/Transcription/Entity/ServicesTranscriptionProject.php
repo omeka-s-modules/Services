@@ -175,27 +175,6 @@ class ServicesTranscriptionProject extends AbstractEntity
     }
 
     /**
-     * @ManyToOne(
-     *     targetEntity="Omeka\Entity\Job"
-     * )
-     * @JoinColumn(
-     *     nullable=true,
-     *     onDelete="SET NULL"
-     * )
-     */
-    protected $pollJob;
-
-    public function setPollJob(?Job $pollJob = null): void
-    {
-        $this->pollJob = $pollJob;
-    }
-
-    public function getPollJob(): ?Job
-    {
-        return $this->pollJob;
-    }
-
-    /**
      * @Column(
      *     type="datetime",
      *     nullable=false

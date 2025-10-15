@@ -13,7 +13,6 @@ $this->htmlElement('body')->appendAttribute('class', 'services transcription-pro
             <li><?php echo $project->link($this->translate('Edit project'), 'edit'); ?></li>
             <li><a href="#" class="sidebar-content" data-sidebar-selector="#do-preprocess-sidebar"><?php echo $this->translate('Create pages'); ?></a></li>
             <li><a href="#" class="sidebar-content" data-sidebar-selector="#do-transcribe-sidebar"><?php echo $this->translate('Request transcriptions'); ?></a></li>
-            <li><a href="#" class="sidebar-content" data-sidebar-selector="#do-poll-sidebar"><?php echo $this->translate('Poll transcriptions'); ?></a></li>
         </ul>
     </div>
 </div>
@@ -79,11 +78,4 @@ $this->htmlElement('body')->appendAttribute('class', 'services transcription-pro
     <h3><?php echo $this->translate('Request transcriptions'); ?></h3>
     <p><?php echo $this->translate('Request transcriptions for  pages in this project.'); ?></p>
     <?php echo $this->form($formDoTranscribe); ?>
-</div>
-
-<div id="do-poll-sidebar" class="sidebar">
-    <?php echo $this->hyperlink('', '#', ['class' => 'sidebar-close o-icon-close', 'title' => $this->translate('Close')]); ?>
-    <h3><?php echo $this->translate('Poll transcriptions'); ?></h3>
-    <p><?php echo $this->translate('Poll transcriptions from the transcription service.'); ?></p>
-    <?php echo $this->form($formDoPoll); ?>
 </div>
