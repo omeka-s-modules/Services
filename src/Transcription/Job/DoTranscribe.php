@@ -1,6 +1,7 @@
 <?php
 namespace Services\Transcription\Job;
 
+use Exception;
 use Services\Transcription\Entity\ServicesTranscriptionPage;
 use Services\Transcription\Entity\ServicesTranscriptionTranscription;
 
@@ -43,7 +44,7 @@ class DoTranscribe extends AbstractTranscriptionJob
                     }
                     try {
                         $content = $this->poll($transcription->getJobId());
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         $logger->err($e->getMessage());
                         continue;
                     }
@@ -58,7 +59,7 @@ class DoTranscribe extends AbstractTranscriptionJob
                     try {
                         $image = $this->upload($imageUrl);
                         $job = $this->transcribe($image);
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         $logger->err($e->getMessage());
                         continue;
                     }
@@ -97,7 +98,7 @@ class DoTranscribe extends AbstractTranscriptionJob
         ]);
         $response = $client->send();
         if (!$response->isSuccess()) {
-            throw new \Exception(sprintf(
+            throw new Exception(sprintf(
                 'Poll failed with status "%s": %s',
                 $response->getStatusCode(),
                 $response->getContent()
@@ -152,7 +153,7 @@ class DoTranscribe extends AbstractTranscriptionJob
                 ]);
                 $response = $client->send();
                 if (!$response->isSuccess()) {
-                    throw new \Exception(sprintf(
+                    throw new Exception(sprintf(
                         'Image upload failed with status "%s": %s',
                         $response->getStatusCode(),
                         $response->getContent()
@@ -161,7 +162,7 @@ class DoTranscribe extends AbstractTranscriptionJob
                 $logger->notice('Image successfully uploaded to cache');
                 return sprintf('%s.jpeg', $checksum);
             default:
-                throw new \Exception(sprintf(
+                throw new Exception(sprintf(
                     'Image upload failed with status "%s": %s',
                     $response->getStatusCode(),
                     $response->getContent()
@@ -191,7 +192,7 @@ class DoTranscribe extends AbstractTranscriptionJob
         ]);
         $response = $client->send();
         if (!$response->isSuccess()) {
-            throw new \Exception(sprintf(
+            throw new Exception(sprintf(
                 'Transcription request failed with status "%s": %s',
                 $response->getStatusCode(),
                 $response->getContent()

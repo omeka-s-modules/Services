@@ -13,7 +13,7 @@ class DoTranscribeForm extends Form
             'type' => 'submit',
             'name' => 'submit',
             'attributes' => [
-                'value' => 'Confirm transcribe pages', // @translate
+                'value' => 'Confirm request transcriptions', // @translate
             ],
         ]);
 
