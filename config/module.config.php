@@ -41,6 +41,7 @@ return [
     ],
     'service_manager' => [
         'factories' => [
+            'Services\Mino' => Services\Service\Mino\MinoFactory::class,
             'Services\Transcription\MediaPreprocesserManager' => Transcription\Service\Preprocesser\MediaPreprocesserManagerFactory::class,
             'Services\Transcription\FilePreprocesserManager' => Transcription\Service\Preprocesser\FilePreprocesserManagerFactory::class,
         ],
