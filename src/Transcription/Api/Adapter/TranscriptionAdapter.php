@@ -65,10 +65,10 @@ class TranscriptionAdapter extends AbstractEntityAdapter
         if (isset($query['status']) && is_string($query['status'])) {
             switch ($query['status']) {
                 case 'pending':
-                    $jobStates = ['created', 'active', 'suspended'];
+                    $jobStates = ['created', 'retry', 'active', 'suspended'];
                     break;
                 case 'failed':
-                    $jobStates = ['failed', 'retry', 'cancelled'];
+                    $jobStates = ['cancelled', 'failed'];
                     break;
                 case 'completed':
                     $jobStates = ['completed'];

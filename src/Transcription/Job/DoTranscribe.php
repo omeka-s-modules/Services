@@ -87,7 +87,7 @@ class DoTranscribe extends AbstractTranscriptionJob
     public function poll(string $jobId)
     {
         $logger = $this->get('Omeka\Logger');
-        $logger->notice('Polling for transcription...');
+        $logger->notice('Polling for transcription ...');
 
         $client = $this->get('Omeka\HttpClient')
             ->setMethod('GET')
@@ -116,7 +116,7 @@ class DoTranscribe extends AbstractTranscriptionJob
     public function upload($imageUrl)
     {
         $logger = $this->get('Omeka\Logger');
-        $logger->notice('Submitting upload request...');
+        $logger->notice('Submitting upload request ...');
 
         $body = file_get_contents($imageUrl);
         $checksum = md5_file($imageUrl);
@@ -176,7 +176,7 @@ class DoTranscribe extends AbstractTranscriptionJob
     public function transcribe($image)
     {
         $logger = $this->get('Omeka\Logger');
-        $logger->notice('Submitting transcription request...');
+        $logger->notice('Submitting transcription request ...');
 
         $client = $this->get('Omeka\HttpClient')
             ->setMethod('POST')
