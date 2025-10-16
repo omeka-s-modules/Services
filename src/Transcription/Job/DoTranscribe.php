@@ -27,7 +27,7 @@ class DoTranscribe extends AbstractTranscriptionJob
                     ->find($pageId);
 
                 $logger->notice(sprintf(
-                    'Initiating transcription for media ID %s page ID %s',
+                    'Requesting transcription for media %s page %s ...',
                     $page->getMedia()->getId(),
                     $page->getId()
                 ));
@@ -38,6 +38,7 @@ class DoTranscribe extends AbstractTranscriptionJob
 
                 if ($transcription) {
                     if ('completed' === $transcription->getJobState()) {
+                        $logger->notice('Transcription already completed');
                         continue;
                     }
                     try {
@@ -46,6 +47,7 @@ class DoTranscribe extends AbstractTranscriptionJob
                         $logger->err($e->getMessage());
                         continue;
                     }
+
                     $transcription->setJobState($content['state']);
                     $transcription->setText($content['output']['text']);
                     $transcription->setData($content['output']['alto']);
@@ -83,7 +85,9 @@ class DoTranscribe extends AbstractTranscriptionJob
      */
     public function poll(string $jobId)
     {
-        // Poll Mino for the transcription.
+        $logger = $this->get('Omeka\Logger');
+        $logger->notice('Polling for transcription...');
+
         $client = $this->get('Omeka\HttpClient')
             ->setMethod('GET')
             ->setUri(sprintf('https://mino.tropy.org/transcription/%s', $jobId));
@@ -99,7 +103,10 @@ class DoTranscribe extends AbstractTranscriptionJob
                 $response->getContent()
             ));
         }
-        return json_decode($response->getContent(), true);
+        $content = json_decode($response->getContent(), true);
+
+        $logger->notice(sprintf('Polling done with state "%s"', $content['state']));
+        return $content;
     }
 
     /**
@@ -132,7 +139,7 @@ class DoTranscribe extends AbstractTranscriptionJob
                 return sprintf('%s.jpeg', $checksum);
                 break;
             case 202:
-                $logger->notice('Uploading image to cache...');
+                $logger->notice('Uploading image to cache ...');
                 $imageCacheUrl = $response->getHeaders()->get('Location')->getFieldValue();
                 $client = $this->get('Omeka\HttpClient')
                     ->setMethod('PUT')
@@ -170,7 +177,6 @@ class DoTranscribe extends AbstractTranscriptionJob
         $logger = $this->get('Omeka\Logger');
         $logger->notice('Submitting transcription request...');
 
-        // Transcribe
         $client = $this->get('Omeka\HttpClient')
             ->setMethod('POST')
             ->setUri('https://mino.tropy.org/transcription')
