@@ -8,6 +8,10 @@ use Exception;
  */
 class Mino
 {
+    const PENDING_JOB_STATES = ['created', 'active', 'suspended'];
+    const FAILED_JOB_STATES = ['failed', 'retry', 'cancelled'];
+    const COMPLETED_JOB_STATES = ['completed'];
+
     protected $services;
 
     public function __construct($services)

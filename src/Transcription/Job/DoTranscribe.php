@@ -2,6 +2,7 @@
 namespace Services\Transcription\Job;
 
 use Exception;
+use Services\Services\Mino\Mino;
 use Services\Transcription\Entity\ServicesTranscriptionPage;
 use Services\Transcription\Entity\ServicesTranscriptionTranscription;
 
@@ -33,7 +34,7 @@ class DoTranscribe extends AbstractTranscriptionJob
             $query = $queryBuilder
                 ->delete('Services\Transcription\Entity\ServicesTranscriptionTranscription', 't')
                 ->where($queryBuilder->expr()->eq('t.project', $this->getProject()->getId()))
-                ->andWhere($queryBuilder->expr()->in('t.jobState', ['failed', 'retry', 'cancelled']))
+                ->andWhere($queryBuilder->expr()->in('t.jobState', Mino::FAILED_JOB_STATES))
                 ->getQuery()
                 ->execute();
         }

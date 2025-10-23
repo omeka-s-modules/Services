@@ -2,6 +2,7 @@
 namespace Services\Transcription\Api\Representation;
 
 use Omeka\Api\Representation\AbstractEntityRepresentation;
+use Services\Services\Mino\Mino;
 
 class TranscriptionRepresentation extends AbstractEntityRepresentation
 {
@@ -57,19 +58,17 @@ class TranscriptionRepresentation extends AbstractEntityRepresentation
 
     public function status()
     {
-        switch ($this->jobState()) {
-            case 'created':
-            case 'active':
-            case 'suspended':
-                return 'pending';
-            case 'completed':
-                return 'completed';
-            case 'failed':
-            case 'retry':
-            case 'cancelled':
-            default:
-                return 'failed';
+        if (in_array($this->jobState(), Mino::COMPLETED_JOB_STATES)) {
+            return 'completed';
         }
+        if (in_array($this->jobState(), Mino::PENDING_JOB_STATES)) {
+            return 'pending';
+        }
+        if (in_array($this->jobState(), Mino::FAILED_JOB_STATES)) {
+            return 'failed';
+        }
+        // Unknown transcription job state. Assume failed.
+        return 'failed';
     }
 
     public function created()
