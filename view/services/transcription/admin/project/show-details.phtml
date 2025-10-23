@@ -26,7 +26,7 @@
     <div class="value"><?php echo $project->pageCount(); ?></div>
 </div>
 <div class="meta-group">
-    <h4><?php echo $this->translate('Transcription requests'); ?></h4>
+    <h4><?php echo $this->translate('Transcriptions'); ?></h4>
     <div class="value"><?php echo sprintf('Completed: %s', $project->transcriptionCount('completed')); ?></div>
     <div class="value"><?php echo sprintf('Failed: %s', $project->transcriptionCount('failed')); ?></div>
     <div class="value"><?php echo sprintf('Pending: %s', $project->transcriptionCount('pending')); ?></div>
@@ -38,7 +38,7 @@ $jobs = [
         'job' => $project->preprocessJob(),
     ],
     [
-        'label' => 'Request transcriptions job', // @translate
+        'label' => 'Transcribe pages job', // @translate
         'job' => $project->transcribeJob(),
     ],
 ];

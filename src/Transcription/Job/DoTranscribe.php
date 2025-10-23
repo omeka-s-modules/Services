@@ -15,6 +15,30 @@ class DoTranscribe extends AbstractTranscriptionJob
         $logger = $this->get('Omeka\Logger');
         $mino = $this->get('Services\Mino');
 
+        $action = $this->getArg('action');
+
+        if ('transcribe_all' === $action) {
+            $logger->notice('Deleting all transcriptions in project ...');
+            $queryBuilder = $entityManager->createQueryBuilder();
+            $query = $queryBuilder
+                ->delete('Services\Transcription\Entity\ServicesTranscriptionTranscription', 't')
+                ->where($queryBuilder->expr()->eq('t.project', $this->getProject()->getId()))
+                ->getQuery()
+                ->execute();
+        }
+
+        if ('transcribe_failed' === $action) {
+            $logger->notice('Deleting failed transcriptions in project ...');
+            $queryBuilder = $entityManager->createQueryBuilder();
+            $query = $queryBuilder
+                ->delete('Services\Transcription\Entity\ServicesTranscriptionTranscription', 't')
+                ->where($queryBuilder->expr()->eq('t.project', $this->getProject()->getId()))
+                ->andWhere($queryBuilder->expr()->in('t.jobState', ['failed', 'retry', 'cancelled']))
+                ->getQuery()
+                ->execute();
+        }
+
+        // Get all page IDs in this project and iterate them.
         $pageIds = $apiManager->search(
             'services_transcription_pages',
             ['project_id' => $this->getProject()->getId()],
@@ -22,8 +46,9 @@ class DoTranscribe extends AbstractTranscriptionJob
         )->getContent();
 
         foreach (array_chunk($pageIds, 100) as $pageIdsChunk) {
-            // Iterate pages.
             foreach ($pageIdsChunk as $pageId) {
+
+                // Get the page.
                 $page = $entityManager
                     ->getRepository(ServicesTranscriptionPage::class)
                     ->find($pageId);
@@ -34,11 +59,14 @@ class DoTranscribe extends AbstractTranscriptionJob
                     $page->getId()
                 ));
 
+                // Get the page's transcription, if any.
                 $transcription = $entityManager
                     ->getRepository('Services\Transcription\Entity\ServicesTranscriptionTranscription')
                     ->findOneBy(['project' => $this->getProject(), 'page' => $page]);
 
                 if ($transcription) {
+                    // The transcription exists. If needed, poll Mino for
+                    // transcription updates.
                     if ('completed' === $transcription->getJobState()) {
                         $logger->notice('Transcription already completed');
                         continue;
@@ -58,7 +86,8 @@ class DoTranscribe extends AbstractTranscriptionJob
                     $transcription->setData($content['output']['alto']);
 
                 } else {
-                    // Submit upload and transcription requests to Mino.
+                    // The transcription does not exist. Submit upload and
+                    // transcription requests to Mino.
                     $imageUrl = $fileStore->getUri($page->getStoragePath());
                     try {
                         $image = $mino->upload(

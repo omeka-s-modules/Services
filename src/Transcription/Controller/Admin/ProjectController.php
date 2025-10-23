@@ -112,6 +112,8 @@ class ProjectController extends AbstractActionController
                 $entity->setPreprocessJob($job);
                 $entityManager->flush();
                 $this->messenger()->addSuccess('Preparing items for transcription. This may take a while.'); // @translate
+            } else {
+                $this->messenger()->addFormErrors($form);
             }
         }
         return $this->redirect()->toRoute(null, ['action' => 'show'], true);
@@ -125,11 +127,17 @@ class ProjectController extends AbstractActionController
             $form = $this->getForm(DoTranscribeForm::class, ['project' => $project]);
             $form->setData($this->getRequest()->getPost());
             if ($form->isValid()) {
-                $job = $this->jobDispatcher()->dispatch(DoTranscribe::class, ['project_id' => $project->id()]);
+                $formData = $form->getData();
+                $job = $this->jobDispatcher()->dispatch(DoTranscribe::class, [
+                    'project_id' => $project->id(),
+                    'action' => $formData['action'],
+                ]);
                 $entity = $entityManager->find(ServicesTranscriptionProject::class, $project->id());
                 $entity->setTranscribeJob($job);
                 $entityManager->flush();
                 $this->messenger()->addSuccess('Transcribing pages. This may take a while.'); // @translate
+            } else {
+                $this->messenger()->addFormErrors($form);
             }
         }
         return $this->redirect()->toRoute(null, ['action' => 'show'], true);

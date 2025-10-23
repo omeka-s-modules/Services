@@ -10,13 +10,30 @@ class DoTranscribeForm extends Form
         $project = $this->getOption('project');
 
         $this->add([
+            'type' => 'select',
+            'name' => 'action',
+            'options' => [
+                'label' => 'Transcribe action', // @translate
+                'info' => 'Select an action to perform when transcribing pages. Whatever you select, this will always submit transcription requests for new pages, and poll the transcription server for updates.', // @translate
+                'empty_option' => 'Default action', // @translate
+                'value_options' => [
+                    'transcribe_failed' => 'Re-attempt failed transcriptions', // @translate
+                    'transcribe_all' => 'Re-transcribe all pages', // @translate
+                ],
+            ],
+        ]);
+        $this->add([
             'type' => 'submit',
             'name' => 'submit',
             'attributes' => [
-                'value' => 'Confirm request transcriptions', // @translate
+                'value' => 'Confirm transcribe pages', // @translate
             ],
         ]);
 
         $inputFilter = $this->getInputFilter();
+        $inputFilter->add([
+            'name' => 'action',
+            'required' => false,
+        ]);
     }
 }
