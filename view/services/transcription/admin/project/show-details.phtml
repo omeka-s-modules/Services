@@ -41,6 +41,10 @@ $jobs = [
         'label' => 'Transcribe pages job', // @translate
         'job' => $project->transcribeJob(),
     ],
+    [
+        'label' => 'Save transcriptions job', // @translate
+        'job' => $project->saveJob(),
+    ],
 ];
 ?>
 <?php foreach ($jobs as $job): ?>

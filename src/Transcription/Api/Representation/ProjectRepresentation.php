@@ -14,16 +14,21 @@ class ProjectRepresentation extends AbstractEntityRepresentation
     {
         $owner = $this->owner();
         $modified = $this->modified();
+        $property = $this->property();
         $preprocessJob = $this->preprocessJob();
         $transcribeJob = $this->transcribeJob();
+        $saveJob = $this->saveJob();
         return [
             'o:owner' => $owner ? $owner->getReference() : null,
             'o:label' => $this->label(),
             'o:query' => $this->query(),
             'o-module-services:model_id' => $this->modelId(),
             'o-module-services:access_token' => $this->accessToken(),
+            'o:property' => $property ? $property->getReference() : null,
+            'o-module-services:target' => $this->target(),
             'o-module-services:preprocess_job' => $preprocessJob ? $preprocessJob->getReference() : null,
             'o-module-services:transcribe_job' => $transcribeJob ? $transcribeJob->getReference() : null,
+            'o-module-services:save_job' => $saveJob ? $saveJob->getReference() : null,
             'o:created' => $this->getDateTime($this->created()),
             'o:modified' => $modified ? $this->getDateTime($modified) : null,
         ];
@@ -68,6 +73,16 @@ class ProjectRepresentation extends AbstractEntityRepresentation
         return $this->resource->getQuery();
     }
 
+    public function property()
+    {
+        return $this->getAdapter('properties')->getRepresentation($this->resource->getProperty());
+    }
+
+    public function target()
+    {
+        return $this->resource->getTarget();
+    }
+
     public function preprocessJob()
     {
         return $this->getAdapter('jobs')->getRepresentation($this->resource->getPreprocessJob());
@@ -76,6 +91,11 @@ class ProjectRepresentation extends AbstractEntityRepresentation
     public function transcribeJob()
     {
         return $this->getAdapter('jobs')->getRepresentation($this->resource->getTranscribeJob());
+    }
+
+    public function saveJob()
+    {
+        return $this->getAdapter('jobs')->getRepresentation($this->resource->getSaveJob());
     }
 
     public function created()

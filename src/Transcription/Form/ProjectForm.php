@@ -57,7 +57,35 @@ class ProjectForm extends Form
                 ],
             ],
         ]);
+        $this->add([
+            'type' => OmekaElement\PropertySelect::class,
+            'name' => 'o:property',
+            'options' => [
+                'label' => 'Transcription property', // @translate
+                'info' => 'Select the property used to store saved transcriptions.', // @translate
+            ],
+            'attributes' => [
+                'class' => 'chosen-select',
+            ],
+        ]);
+        $this->add([
+            'type' => LaminasElement\Select::class,
+            'name' => 'o-module-services:target',
+            'options' => [
+                'label' => 'Transcription target', // @translate
+                'info' => 'Select the target resources where saved transcriptions will be stored.', // @translate
+                'empty_option' => 'Items and media', // @translate
+                'value_options' => [
+                    'items' => 'Items', // @translate
+                    'media' => 'Media', // @translate
+                ],
+            ],
+        ]);
 
         $inputFilter = $this->getInputFilter();
+        $inputFilter->add([
+            'name' => 'o-module-services:target',
+            'required' => false,
+        ]);
     }
 }

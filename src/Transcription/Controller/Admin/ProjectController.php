@@ -6,8 +6,10 @@ use Laminas\View\Model\ViewModel;
 use Services\Transcription\Entity\ServicesTranscriptionProject;
 use Services\Transcription\Form\ProjectForm;
 use Services\Transcription\Form\DoPreprocessForm;
+use Services\Transcription\Form\DoSaveForm;
 use Services\Transcription\Form\DoTranscribeForm;
 use Services\Transcription\Job\DoPreprocess;
+use Services\Transcription\Job\DoSave;
 use Services\Transcription\Job\DoTranscribe;
 
 class ProjectController extends AbstractActionController
@@ -71,6 +73,7 @@ class ProjectController extends AbstractActionController
             }
         } else {
             $data = $project->getJsonLd();
+            $data['o:property'] = $data['o:property'] ? $data['o:property']->id() : null;
             $form->setData($data);
         }
 
@@ -96,6 +99,7 @@ class ProjectController extends AbstractActionController
         $view->setVariable('items', $items);
         $view->setVariable('formDoPreprocess', $this->servicesTranscription()->getFormDoPreprocess($project));
         $view->setVariable('formDoTranscribe', $this->servicesTranscription()->getFormDoTranscribe($project));
+        $view->setVariable('formDoSave', $this->servicesTranscription()->getFormDoSave($project));
         return $view;
     }
 
@@ -136,6 +140,29 @@ class ProjectController extends AbstractActionController
                 $entity->setTranscribeJob($job);
                 $entityManager->flush();
                 $this->messenger()->addSuccess('Transcribing pages. This may take a while.'); // @translate
+            } else {
+                $this->messenger()->addFormErrors($form);
+            }
+        }
+        return $this->redirect()->toRoute(null, ['action' => 'show'], true);
+    }
+
+    public function doSaveAction()
+    {
+        $entityManager = $this->servicesTranscription()->getEntityManager();
+        $project = $this->api()->read('services_transcription_projects', $this->params('project-id'))->getContent();
+        if ($this->getRequest()->isPost()) {
+            $form = $this->getForm(DoSaveForm::class, ['project' => $project]);
+            $form->setData($this->getRequest()->getPost());
+            if ($form->isValid()) {
+                $formData = $form->getData();
+                $job = $this->jobDispatcher()->dispatch(DoSave::class, [
+                    'project_id' => $project->id(),
+                ]);
+                $entity = $entityManager->find(ServicesTranscriptionProject::class, $project->id());
+                $entity->setSaveJob($job);
+                $entityManager->flush();
+                $this->messenger()->addSuccess('Saving transcriptions. This may take a while.'); // @translate
             } else {
                 $this->messenger()->addFormErrors($form);
             }

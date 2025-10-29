@@ -1,0 +1,27 @@
+<?php
+namespace Services\Transcription\Form;
+
+use Laminas\Form\Form;
+use Omeka\Form\Element\PropertySelect;
+
+class DoSaveForm extends Form
+{
+    public function init()
+    {
+        $project = $this->getOption('project');
+
+        $this->add([
+            'type' => 'submit',
+            'name' => 'submit',
+            'attributes' => [
+                'value' => 'Confirm save transcriptions', // @translate
+            ],
+        ]);
+
+        $inputFilter = $this->getInputFilter();
+        $inputFilter->add([
+            'name' => 'action',
+            'required' => false,
+        ]);
+    }
+}

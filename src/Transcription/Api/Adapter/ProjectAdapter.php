@@ -62,6 +62,16 @@ class ProjectAdapter extends AbstractEntityAdapter
         if ($this->shouldHydrate($request, 'o:query')) {
             $entity->setQuery($request->getValue('o:query'));
         }
+
+        if ($this->shouldHydrate($request, 'o:property')) {
+            $propertyAdapter = $this->getAdapter('properties');
+            $property = $propertyAdapter->findEntity($request->getValue('o:property'));
+            $entity->setProperty($property);
+        }
+
+        if ($this->shouldHydrate($request, 'o-module-services:target')) {
+            $entity->setTarget($request->getValue('o-module-services:target'));
+        }
     }
 
     public function validateEntity(EntityInterface $entity, ErrorStore $errorStore)

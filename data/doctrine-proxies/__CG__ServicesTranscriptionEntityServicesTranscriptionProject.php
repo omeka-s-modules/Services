@@ -67,10 +67,10 @@ class ServicesTranscriptionProject extends \Services\Transcription\Entity\Servic
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'label', 'modelId', 'accessToken', 'query', 'owner', 'preprocessJob', 'transcribeJob', 'created', 'modified'];
+            return ['__isInitialized__', 'id', 'label', 'modelId', 'accessToken', 'query', 'owner', 'property', 'target', 'preprocessJob', 'transcribeJob', 'saveJob', 'created', 'modified'];
         }
 
-        return ['__isInitialized__', 'id', 'label', 'modelId', 'accessToken', 'query', 'owner', 'preprocessJob', 'transcribeJob', 'created', 'modified'];
+        return ['__isInitialized__', 'id', 'label', 'modelId', 'accessToken', 'query', 'owner', 'property', 'target', 'preprocessJob', 'transcribeJob', 'saveJob', 'created', 'modified'];
     }
 
     /**
@@ -305,6 +305,50 @@ class ServicesTranscriptionProject extends \Services\Transcription\Entity\Servic
     /**
      * {@inheritDoc}
      */
+    public function setProperty(\Omeka\Entity\Property $property = NULL): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setProperty', [$property]);
+
+        parent::setProperty($property);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getProperty(): ?\Omeka\Entity\Property
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getProperty', []);
+
+        return parent::getProperty();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTarget(?string $target): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTarget', [$target]);
+
+        parent::setTarget($target);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTarget(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTarget', []);
+
+        return parent::getTarget();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setPreprocessJob(\Omeka\Entity\Job $preprocessJob = NULL): void
     {
 
@@ -344,6 +388,28 @@ class ServicesTranscriptionProject extends \Services\Transcription\Entity\Servic
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTranscribeJob', []);
 
         return parent::getTranscribeJob();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setSaveJob(\Omeka\Entity\Job $saveJob = NULL): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSaveJob', [$saveJob]);
+
+        parent::setSaveJob($saveJob);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSaveJob(): ?\Omeka\Entity\Job
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSaveJob', []);
+
+        return parent::getSaveJob();
     }
 
     /**

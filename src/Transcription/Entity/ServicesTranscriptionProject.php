@@ -5,6 +5,7 @@ use DateTime;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Omeka\Entity\AbstractEntity;
 use Omeka\Entity\Job;
+use Omeka\Entity\Property;
 use Omeka\Entity\User;
 
 /**
@@ -134,6 +135,46 @@ class ServicesTranscriptionProject extends AbstractEntity
 
     /**
      * @ManyToOne(
+     *     targetEntity="Omeka\Entity\Property"
+     * )
+     * @JoinColumn(
+     *     nullable=true,
+     *     onDelete="SET NULL"
+     * )
+     */
+    protected $property;
+
+    public function setProperty(?Property $property = null): void
+    {
+        $this->property = $property;
+    }
+
+    public function getProperty(): ?Property
+    {
+        return $this->property;
+    }
+
+    /**
+     * @Column(
+     *     type="string",
+     *     length=255,
+     *     nullable=true
+     * )
+     */
+    protected $target;
+
+    public function setTarget(?string $target): void
+    {
+        $this->target = in_array($target, ['items', 'media']) ? $target : null;
+    }
+
+    public function getTarget(): ?string
+    {
+        return $this->target;
+    }
+
+    /**
+     * @ManyToOne(
      *     targetEntity="Omeka\Entity\Job"
      * )
      * @JoinColumn(
@@ -172,6 +213,27 @@ class ServicesTranscriptionProject extends AbstractEntity
     public function getTranscribeJob(): ?Job
     {
         return $this->transcribeJob;
+    }
+
+    /**
+     * @ManyToOne(
+     *     targetEntity="Omeka\Entity\Job"
+     * )
+     * @JoinColumn(
+     *     nullable=true,
+     *     onDelete="SET NULL"
+     * )
+     */
+    protected $saveJob;
+
+    public function setSaveJob(?Job $saveJob = null): void
+    {
+        $this->saveJob = $saveJob;
+    }
+
+    public function getSaveJob(): ?Job
+    {
+        return $this->saveJob;
     }
 
     /**
