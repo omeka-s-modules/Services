@@ -24,11 +24,11 @@ $this->htmlElement('body')->appendAttribute('class', 'services transcription-pro
 <div class="browse-controls">
     <?php echo $this->pagination(); ?>
     <?php echo $this->sortSelector([
-    [
-        'label' => $this->translate('Date created'),
-        'value' => 'created',
-    ],
-]); ?>
+        [
+            'label' => $this->translate('Date created'),
+            'value' => 'created',
+        ],
+    ]); ?>
 </div>
 
 <?php if ($items): ?>
@@ -76,6 +76,6 @@ $this->htmlElement('body')->appendAttribute('class', 'services transcription-pro
 <div id="do-transcribe-sidebar" class="sidebar">
     <?php echo $this->hyperlink('', '#', ['class' => 'sidebar-close o-icon-close', 'title' => $this->translate('Close')]); ?>
     <h3><?php echo $this->translate('Transcribe pages'); ?></h3>
-    <p><?php echo $this->translate('Transcribe pages in this project.'); ?></p>
+    <p><?php echo $this->translate('Transcribe pages in this project. This will submit transcription requests for untranscribed pages, and poll the transcription service for updates.'); ?></p>
     <?php echo $this->form($formDoTranscribe); ?>
 </div>

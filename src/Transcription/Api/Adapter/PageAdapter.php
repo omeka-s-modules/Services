@@ -32,17 +32,16 @@ class PageAdapter extends AbstractEntityAdapter
 
     public function buildQuery(QueryBuilder $qb, array $query)
     {
+        $apiManager = $this->getServiceLocator()->get('Omeka\ApiManager');
+
         if (isset($query['project_id']) && is_numeric($query['project_id'])) {
             // Filter by items in project.
-            $apiManager = $this->getServiceLocator()->get('Omeka\ApiManager');
-            $itemIds = $apiManager->search(
-                'items',
-                ['services_transcription_project_id' => $query['project_id']],
-                ['returnScalar' => 'id']
-            )->getContent();
+            $project = $apiManager
+                ->read('services_transcription_projects', $query['project_id'])
+                ->getContent();
             $qb->andWhere($qb->expr()->in(
                 'omeka_root.item',
-                $qb->createNamedParameter($itemIds)
+                $qb->createNamedParameter($project->itemIds())
             ));
         }
         if (isset($query['item_id']) && is_numeric($query['item_id'])) {

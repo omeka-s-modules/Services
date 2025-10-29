@@ -9,6 +9,8 @@ use Laminas\EventManager\SharedEventManagerInterface;
 use Laminas\Mvc\Controller\AbstractController;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Renderer\PhpRenderer;
+use Services\Services\Mino\Mino;
+use Services\Transcription\Entity;
 
 class Module extends AbstractModule
 {
@@ -61,13 +63,13 @@ SQL;
         $sharedEventManager->attach(
             'Omeka\Api\Adapter\ItemAdapter',
             'api.search.query',
-            [$this, 'addProjectIdSearchFilters']
+            [$this, 'buildQueryItem']
         );
         // Enable searching media by transcription project ID.
         $sharedEventManager->attach(
             'Omeka\Api\Adapter\MediaAdapter',
             'api.search.query',
-            [$this, 'addProjectIdSearchFilters']
+            [$this, 'buildQueryMedia']
         );
     }
 
@@ -75,36 +77,36 @@ SQL;
      * Enable the "services_transcription_project_id" search filter for items
      * and media.
      */
-    public function addProjectIdSearchFilters(Event $event)
+    public function buildQueryItem(Event $event)
     {
+        $qb = $event->getParam('queryBuilder');
         $request = $event->getParam('request');
-        if (!$request->getValue('services_transcription_project_id')) {
-            return;
-        }
-        $entityManager = $this->getServiceLocator()->get('Omeka\EntityManager');
         $apiManager = $this->getServiceLocator()->get('Omeka\ApiManager');
 
-        // Get the project.
-        $project = $entityManager
-            ->getRepository('Services\Transcription\Entity\ServicesTranscriptionProject')
-            ->find($request->getValue('services_transcription_project_id'));
-
-        // Get the item IDs.
-        if ($project) {
-            parse_str($project->getQuery(), $query);
-            $itemIds = $apiManager->search('items', $query, ['returnScalar' => 'id'])->getContent();
-        } else {
-            $itemIds = [0]; // Invalid project. Return no results.
-        }
-
         // Filter by items in project.
-        $adapter = $event->getTarget();
-        if ($adapter instanceof ItemAdapter) {
-            $itemField = 'omeka_root.id';
-        } elseif ($adapter instanceof MediaAdapter) {
-            $itemField = 'omeka_root.item';
+        if ($request->getValue('services_transcription_project_id')) {
+            $project = $apiManager->read(
+                'services_transcription_projects',
+                $request->getValue('services_transcription_project_id')
+            )->getContent();
+            $qb->andWhere($qb->expr()->in('omeka_root.id', $qb->createNamedParameter($project->itemIds())));
         }
+
+    }
+
+    public function buildQueryMedia(Event $event)
+    {
         $qb = $event->getParam('queryBuilder');
-        $qb->andWhere($qb->expr()->in($itemField, $qb->createNamedParameter($itemIds)));
+        $request = $event->getParam('request');
+        $apiManager = $this->getServiceLocator()->get('Omeka\ApiManager');
+
+        // Filter by media in project.
+        if ($request->getValue('services_transcription_project_id')) {
+            $project = $apiManager->read(
+                'services_transcription_projects',
+                $request->getValue('services_transcription_project_id')
+            )->getContent();
+            $qb->andWhere($qb->expr()->in('omeka_root.item', $qb->createNamedParameter($project->itemIds())));
+        }
     }
 }

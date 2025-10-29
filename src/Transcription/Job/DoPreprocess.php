@@ -14,9 +14,10 @@ class DoPreprocess extends AbstractTranscriptionJob
         $logger = $this->get('Omeka\Logger');
 
         // Get the item IDs.
-        parse_str($this->getProject()->getQuery(), $query);
-        $query['has_media'] = true;
-        $itemIds = $apiManager->search('items', $query, ['returnScalar' => 'id'])->getContent();
+        $itemIds = $apiManager
+            ->read('services_transcription_projects', $this->getProject()->getId())
+            ->getContent()
+            ->itemIds();
 
         foreach (array_chunk($itemIds, 100) as $itemIdsChunk) {
             // Iterate items.
