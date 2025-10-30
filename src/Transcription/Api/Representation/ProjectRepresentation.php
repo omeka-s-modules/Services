@@ -111,6 +111,14 @@ class ProjectRepresentation extends AbstractEntityRepresentation
             ->getContent();
     }
 
+    public function mediaIds()
+    {
+        return $this->getServiceLocator()
+            ->get('Omeka\ApiManager')
+            ->search('media', ['services_transcription_project_id' => $this->id()], ['returnScalar' => 'id'])
+            ->getContent();
+    }
+
     public function itemCount()
     {
         $query = [
