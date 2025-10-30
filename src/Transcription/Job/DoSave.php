@@ -15,17 +15,25 @@ class DoSave extends AbstractTranscriptionJob
         $apiManager = $this->get('Omeka\ApiManager');
         $logger = $this->get('Omeka\Logger');
 
-        $property = $this->getProject()->getProperty();
-
         $project = $apiManager
             ->read('services_transcription_projects', $this->getProject()->getId())
             ->getContent();
 
         $itemIds = $project->itemIds();
         $mediaIds = $project->mediaIds();
+        $resourceIds = array_merge($itemIds, $mediaIds);
 
-        // @todo: For all items in this project, delete all values using the configured property
-        // @todo: For all media in this project, delete all values using the configured property
+        // Delete all resource values that match the project's property. Prevent
+        // slow execution by deleting in chunks.
+        $property = $this->getProject()->getProperty();
+        foreach (array_chunk($resourceIds, 100) as $resourceIdsChunk) {
+            $qb = $entityManager->createQueryBuilder();
+            $qb->delete('Omeka\Entity\Value', 'v')
+                ->andWhere($qb->expr()->in('v.resource', $resourceIdsChunk))
+                ->andWhere('v.property = :property_id')
+                ->setParameter('property_id', $property->getId());
+            $qb->getQuery()->execute();
+        }
 
         foreach (array_chunk($itemIds, 100) as $itemIdsChunk) {
             // Iterate items.
