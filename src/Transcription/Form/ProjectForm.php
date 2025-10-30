@@ -27,7 +27,7 @@ class ProjectForm extends Form
             'name' => 'o-module-services:model_id',
             'options' => [
                 'label' => 'Model ID', // @translate
-                'info' => 'Enter the ID of the Transkribus text recognition model. The model cannot be modified once it is set.', // @translate
+                'info' => 'Enter the ID of the Transkribus text recognition model. The model cannot be modified once it is set. Enter 356425 for the "Text Titan" model. Enter 39995 for the "Print M1" model.', // @translate
             ],
             'attributes' => [
                 'required' => true,
@@ -61,31 +61,17 @@ class ProjectForm extends Form
             'type' => OmekaElement\PropertySelect::class,
             'name' => 'o:property',
             'options' => [
-                'label' => 'Transcription property', // @translate
+                'label' => 'Property', // @translate
                 'info' => 'Select the property used to store saved transcriptions.', // @translate
+                'empty_option' => '',
+                'show_required' => true,
             ],
             'attributes' => [
                 'class' => 'chosen-select',
-            ],
-        ]);
-        $this->add([
-            'type' => LaminasElement\Select::class,
-            'name' => 'o-module-services:target',
-            'options' => [
-                'label' => 'Transcription target', // @translate
-                'info' => 'Select the target resources where saved transcriptions will be stored.', // @translate
-                'empty_option' => 'Items and media', // @translate
-                'value_options' => [
-                    'items' => 'Items', // @translate
-                    'media' => 'Media', // @translate
-                ],
+                'data-placeholder' => 'Select property', // @translate
             ],
         ]);
 
         $inputFilter = $this->getInputFilter();
-        $inputFilter->add([
-            'name' => 'o-module-services:target',
-            'required' => false,
-        ]);
     }
 }

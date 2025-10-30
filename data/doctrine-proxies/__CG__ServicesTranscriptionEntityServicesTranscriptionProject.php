@@ -67,10 +67,10 @@ class ServicesTranscriptionProject extends \Services\Transcription\Entity\Servic
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'label', 'modelId', 'accessToken', 'query', 'owner', 'property', 'target', 'preprocessJob', 'transcribeJob', 'saveJob', 'created', 'modified'];
+            return ['__isInitialized__', 'id', 'label', 'modelId', 'accessToken', 'query', 'owner', 'property', 'preprocessJob', 'transcribeJob', 'saveJob', 'created', 'modified'];
         }
 
-        return ['__isInitialized__', 'id', 'label', 'modelId', 'accessToken', 'query', 'owner', 'property', 'target', 'preprocessJob', 'transcribeJob', 'saveJob', 'created', 'modified'];
+        return ['__isInitialized__', 'id', 'label', 'modelId', 'accessToken', 'query', 'owner', 'property', 'preprocessJob', 'transcribeJob', 'saveJob', 'created', 'modified'];
     }
 
     /**
@@ -322,28 +322,6 @@ class ServicesTranscriptionProject extends \Services\Transcription\Entity\Servic
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getProperty', []);
 
         return parent::getProperty();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setTarget(?string $target): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTarget', [$target]);
-
-        parent::setTarget($target);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getTarget(): string
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTarget', []);
-
-        return parent::getTarget();
     }
 
     /**

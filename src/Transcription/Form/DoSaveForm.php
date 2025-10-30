@@ -2,7 +2,6 @@
 namespace Services\Transcription\Form;
 
 use Laminas\Form\Form;
-use Omeka\Form\Element\PropertySelect;
 
 class DoSaveForm extends Form
 {

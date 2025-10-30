@@ -11,17 +11,6 @@ $propertyValue = $property
         $this->translate($property->label())
     )
     : '';
-switch ($project->target()) {
-    case 'items':
-        $targetValue = $this->translate('Items');
-        break;
-    case 'media':
-        $targetValue = $this->translate('Media');
-        break;
-    default:
-        $targetValue = $this->translate('Items and media');
-        break;
-}
 ?>
 
 <?php echo $this->pageTitle($this->translate('Project'), 1, $this->translate('Services · Transcription'), $project->label()); ?>
@@ -108,14 +97,10 @@ switch ($project->target()) {
 <div id="do-save-sidebar" class="sidebar">
     <?php echo $this->hyperlink('', '#', ['class' => 'sidebar-close o-icon-close', 'title' => $this->translate('Close')]); ?>
     <h3><?php echo $this->translate('Save transcriptions'); ?></h3>
-    <p><?php echo $this->translate('Save transcriptions to their target resources.'); ?></p>
+    <p><?php echo $this->translate('Save transcriptions to their related resources.'); ?></p>
     <div class="meta-group">
-        <h4><?php echo $this->translate('Transcription property'); ?></h4>
+        <h4><?php echo $this->translate('Property'); ?></h4>
         <div class="value"><?php echo $propertyValue; ?></div>
-    </div>
-    <div class="meta-group">
-        <h4><?php echo $this->translate('Transcription target'); ?></h4>
-        <div class="value"><?php echo $targetValue; ?></div>
     </div>
     <?php echo $this->form($formDoSave); ?>
 </div>

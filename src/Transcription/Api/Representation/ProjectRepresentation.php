@@ -22,10 +22,9 @@ class ProjectRepresentation extends AbstractEntityRepresentation
             'o:owner' => $owner ? $owner->getReference() : null,
             'o:label' => $this->label(),
             'o:query' => $this->query(),
+            'o:property' => $property ? $property->getReference() : null,
             'o-module-services:model_id' => $this->modelId(),
             'o-module-services:access_token' => $this->accessToken(),
-            'o:property' => $property ? $property->getReference() : null,
-            'o-module-services:target' => $this->target(),
             'o-module-services:preprocess_job' => $preprocessJob ? $preprocessJob->getReference() : null,
             'o-module-services:transcribe_job' => $transcribeJob ? $transcribeJob->getReference() : null,
             'o-module-services:save_job' => $saveJob ? $saveJob->getReference() : null,
@@ -76,11 +75,6 @@ class ProjectRepresentation extends AbstractEntityRepresentation
     public function property()
     {
         return $this->getAdapter('properties')->getRepresentation($this->resource->getProperty());
-    }
-
-    public function target()
-    {
-        return $this->resource->getTarget();
     }
 
     public function preprocessJob()

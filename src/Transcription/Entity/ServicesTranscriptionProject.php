@@ -155,25 +155,6 @@ class ServicesTranscriptionProject extends AbstractEntity
     }
 
     /**
-     * @Column(
-     *     type="string",
-     *     length=255,
-     *     nullable=true
-     * )
-     */
-    protected $target;
-
-    public function setTarget(?string $target): void
-    {
-        $this->target = in_array($target, ['items', 'media']) ? $target : null;
-    }
-
-    public function getTarget(): ?string
-    {
-        return $this->target;
-    }
-
-    /**
      * @ManyToOne(
      *     targetEntity="Omeka\Entity\Job"
      * )

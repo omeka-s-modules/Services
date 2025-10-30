@@ -2,6 +2,7 @@
 namespace Services\Transcription\Job;
 
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Omeka\Entity\Item;
 use Services\Transcription\Entity\ServicesTranscriptionPage;
 
 class DoPreprocess extends AbstractTranscriptionJob
@@ -23,7 +24,7 @@ class DoPreprocess extends AbstractTranscriptionJob
             // Iterate items.
             foreach ($itemIdsChunk as $itemId) {
                 $item = $entityManager
-                    ->getRepository('Omeka\Entity\Item')
+                    ->getRepository(Item::class)
                     ->find($itemId);
                 // Iterate item media.
                 foreach ($item->getMedia() as $media) {
@@ -33,7 +34,7 @@ class DoPreprocess extends AbstractTranscriptionJob
                         $media->getId()
                     ));
                     $pages = $entityManager
-                        ->getRepository('Services\Transcription\Entity\ServicesTranscriptionPage')
+                        ->getRepository(ServicesTranscriptionPage::class)
                         ->findBy(['media' => $media]);
                     if ($pages) {
                         // Pages already created.
