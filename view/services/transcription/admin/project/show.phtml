@@ -97,7 +97,11 @@ switch ($project->target()) {
 <div id="do-transcribe-sidebar" class="sidebar">
     <?php echo $this->hyperlink('', '#', ['class' => 'sidebar-close o-icon-close', 'title' => $this->translate('Close')]); ?>
     <h3><?php echo $this->translate('Transcribe pages'); ?></h3>
-    <p><?php echo $this->translate('Transcribe pages in this project. This will submit transcription requests for untranscribed pages, and poll the transcription service for updates.'); ?></p>
+    <p><?php echo $this->translate('Transcribe pages in this project. In addition to an action selected below, this will submit transcription requests for untranscribed pages, and poll the transcription service for updates.'); ?></p>
+    <div class="meta-group">
+        <h4><?php echo $this->translate('Model ID'); ?></h4>
+        <div class="value"><?php echo $project->modelId(); ?></div>
+    </div>
     <?php echo $this->form($formDoTranscribe); ?>
 </div>
 

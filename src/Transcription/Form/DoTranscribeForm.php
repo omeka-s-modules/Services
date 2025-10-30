@@ -14,7 +14,7 @@ class DoTranscribeForm extends Form
             'name' => 'action',
             'options' => [
                 'label' => 'Transcribe action', // @translate
-                'info' => 'Select an action to perform when transcribing pages.', // @translate
+                'info' => 'Select an additional action to perform when transcribing pages.', // @translate
                 'empty_option' => 'Default action', // @translate
                 'value_options' => [
                     'transcribe_failed' => 'Re-attempt failed transcriptions', // @translate

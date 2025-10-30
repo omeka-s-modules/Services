@@ -4,10 +4,6 @@
     <div class="value"><?php echo $project->link($project->label()); ?></div>
 </div>
 <div class="meta-group">
-    <h4><?php echo $this->translate('Model ID'); ?></h4>
-    <div class="value"><?php echo $project->modelId(); ?></div>
-</div>
-<div class="meta-group">
     <h4><?php echo $this->translate('Item count'); ?></h4>
     <div class="value"><?php echo $this->hyperlink(
         $project->itemCount(),
