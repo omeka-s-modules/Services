@@ -87,7 +87,12 @@ SQL;
                 'services_transcription_projects',
                 $request->getValue('services_transcription_project_id')
             )->getContent();
-            $qb->andWhere($qb->expr()->in('omeka_root.id', $qb->createNamedParameter($project->itemIds())));
+            parse_str($project->query(), $query);
+            $itemIds = $this->getServiceLocator()
+                ->get('Omeka\ApiManager')
+                ->search('items', $query, ['returnScalar' => 'id'])
+                ->getContent();
+            $qb->andWhere($qb->expr()->in('omeka_root.id', $qb->createNamedParameter($itemIds)));
         }
 
     }

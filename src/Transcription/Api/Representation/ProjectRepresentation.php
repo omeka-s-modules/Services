@@ -104,7 +104,7 @@ class ProjectRepresentation extends AbstractEntityRepresentation
 
     public function itemIds()
     {
-        parse_str($this->query(), $query);
+        $query = ['services_transcription_project_id' => $this->id()];
         return $this->getServiceLocator()
             ->get('Omeka\ApiManager')
             ->search('items', $query, ['returnScalar' => 'id'])
@@ -113,9 +113,10 @@ class ProjectRepresentation extends AbstractEntityRepresentation
 
     public function mediaIds()
     {
+        $query = ['services_transcription_project_id' => $this->id()];
         return $this->getServiceLocator()
             ->get('Omeka\ApiManager')
-            ->search('media', ['services_transcription_project_id' => $this->id()], ['returnScalar' => 'id'])
+            ->search('media', $query, ['returnScalar' => 'id'])
             ->getContent();
     }
 
