@@ -22,7 +22,7 @@ class DoTranscribe extends AbstractTranscriptionJob
             $logger->notice('Deleting all transcriptions in project ...');
             $queryBuilder = $entityManager->createQueryBuilder();
             $query = $queryBuilder
-                ->delete('Services\Transcription\Entity\ServicesTranscriptionTranscription', 't')
+                ->delete(ServicesTranscriptionTranscription::class, 't')
                 ->where($queryBuilder->expr()->eq('t.project', $this->getProject()->getId()))
                 ->getQuery()
                 ->execute();
@@ -32,7 +32,7 @@ class DoTranscribe extends AbstractTranscriptionJob
             $logger->notice('Deleting failed transcriptions in project ...');
             $queryBuilder = $entityManager->createQueryBuilder();
             $query = $queryBuilder
-                ->delete('Services\Transcription\Entity\ServicesTranscriptionTranscription', 't')
+                ->delete(ServicesTranscriptionTranscription::class, 't')
                 ->where($queryBuilder->expr()->eq('t.project', $this->getProject()->getId()))
                 ->andWhere($queryBuilder->expr()->in('t.jobState', Mino::FAILED_JOB_STATES))
                 ->getQuery()
@@ -62,14 +62,15 @@ class DoTranscribe extends AbstractTranscriptionJob
 
                 // Get the page's transcription, if any.
                 $transcription = $entityManager
-                    ->getRepository('Services\Transcription\Entity\ServicesTranscriptionTranscription')
+                    ->getRepository(ServicesTranscriptionTranscription::class)
                     ->findOneBy(['project' => $this->getProject(), 'page' => $page]);
 
                 if ($transcription) {
                     // The transcription exists. If needed, poll Mino for
                     // transcription updates.
-                    if ('completed' === $transcription->getJobState()) {
-                        $logger->notice('Transcription already completed');
+
+                    if (!in_array($transcription->getJobState(), Mino::PENDING_JOB_STATES)) {
+                        $logger->notice(sprintf('Transcription already done with state "%s"', $transcription->getJobState()));
                         continue;
                     }
                     try {
@@ -89,6 +90,7 @@ class DoTranscribe extends AbstractTranscriptionJob
                 } else {
                     // The transcription does not exist. Submit upload and
                     // transcription requests to Mino.
+
                     $imageUrl = $fileStore->getUri($page->getStoragePath());
                     try {
                         $image = $mino->upload(
